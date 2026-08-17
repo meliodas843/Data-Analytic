@@ -1,0 +1,252 @@
+.sales-content {
+  width: 100%;
+  max-width: 1380px;
+}
+
+.sales-kpi-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.sales-kpi-grid .kpi-card {
+  min-width: 0;
+  min-height: 165px;
+  padding: 22px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  background: #ffffff;
+  border: 1px solid #e5eaf1;
+  border-radius: 16px;
+  box-shadow: 0 2px 7px rgba(20, 40, 75, 0.1);
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease,
+    border-color 0.2s ease;
+}
+
+.sales-kpi-grid .kpi-card:hover {
+  transform: translateY(-2px);
+  border-color: #dce3ec;
+  box-shadow: 0 7px 18px rgba(20, 40, 75, 0.11);
+}
+
+.sales-kpi-grid .kpi-title-row {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  color: #94a3b8;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.sales-kpi-grid .kpi-title-row > span:first-child {
+  color: #94a3b8;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.sales-kpi-grid .kpi-icon {
+  width: 28px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  border-radius: 8px;
+  background: #f4f7fb;
+  font-size: 16px;
+}
+
+.sales-kpi-grid .kpi-card h2 {
+  margin: 22px 0 20px;
+  color: #173766;
+  font-size: 31px;
+  line-height: 1;
+  font-weight: 800;
+  letter-spacing: -0.6px;
+}
+
+.sales-kpi-grid .kpi-change {
+  margin-top: auto;
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  color: #71819c;
+  font-size: 11px;
+  font-weight: 600;
+}
+
+.sales-kpi-grid .kpi-change span {
+  display: inline-flex;
+  align-items: center;
+  padding: 5px 10px;
+  border-radius: 999px;
+  background: #eaf9ef;
+  color: #16a34a;
+  font-size: 11px;
+  font-weight: 800;
+  white-space: nowrap;
+}
+
+.sales-kpi-grid .kpi-change.negative span {
+  background: #fff0f0;
+  color: #dc2626;
+}
+
+.sales-kpi-grid .kpi-change small {
+  color: #71819c;
+  font-size: 11px;
+  font-weight: 600;
+}
+
+.sales-chart-grid {
+  display: grid;
+  grid-template-columns: 1.35fr 1fr;
+  gap: 16px;
+  margin-bottom: 16px;
+}
+
+.sales-chart-panel {
+  min-width: 0;
+  min-height: 355px;
+  padding: 22px;
+  background: #ffffff;
+  border: 1px solid #e4e8f0;
+  border-radius: 17px;
+  box-shadow: 0 2px 7px rgba(20, 40, 75, 0.06);
+}
+
+.sales-chart-panel .panel-heading h3 {
+  margin: 0;
+  color: #173766;
+  font-size: 16px;
+  font-weight: 800;
+}
+
+.sales-chart-panel .panel-heading p {
+  margin: 4px 0 0;
+  color: #8290aa;
+  font-size: 12px;
+}
+
+.sales-chart-wrapper {
+  width: 100%;
+  height: 265px;
+  margin-top: 12px;
+}
+
+.sales-bottom-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+.sales-bottom-panel {
+  min-width: 0;
+  min-height: 345px;
+  padding: 22px;
+  background: #ffffff;
+  border: 1px solid #e4e8f0;
+  border-radius: 17px;
+  box-shadow: 0 2px 7px rgba(20, 40, 75, 0.06);
+}
+
+.sales-bottom-panel .panel-heading h3 {
+  margin: 0;
+  color: #173766;
+  font-size: 16px;
+  font-weight: 800;
+}
+
+.sales-bottom-panel .panel-heading p {
+  margin: 4px 0 0;
+  color: #8290aa;
+  font-size: 12px;
+}
+
+.sales-bottom-chart-wrapper {
+  width: 100%;
+  height: 255px;
+  margin-top: 12px;
+}
+
+.sales-tooltip {
+  min-width: 120px;
+  padding: 10px 12px;
+  border: 1px solid #e5e9f1;
+  border-radius: 9px;
+  background: #ffffff;
+  box-shadow: 0 8px 24px rgba(24, 35, 60, 0.1);
+  color: #42516c;
+  font-size: 11px;
+}
+
+.sales-tooltip strong {
+  display: block;
+  margin-bottom: 5px;
+  color: #17233c;
+  font-size: 12px;
+  font-weight: 800;
+}
+
+.dashboard-notification-button,
+.dashboard-theme-button {
+  width: 36px;
+  min-width: 36px;
+  height: 36px;
+
+  padding: 0;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border: 1px solid #e3e8ef;
+  border-radius: 50%;
+
+  background: #f7f9fc;
+
+  font-size: 17px;
+
+  cursor: pointer;
+
+  transition: 0.2s ease;
+}
+
+.dashboard-notification-button:hover,
+.dashboard-theme-button:hover {
+  background: #ffffff;
+  border-color: #cfd8e5;
+
+  transform: translateY(-1px);
+
+  box-shadow:
+    0 4px 10px rgba(15, 23, 42, 0.08);
+}
+
+@media (max-width: 1200px) {
+  .sales-kpi-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .sales-chart-grid,
+  .sales-bottom-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 520px) {
+  .sales-kpi-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .sales-chart-wrapper,
+  .sales-bottom-chart-wrapper {
+    height: 250px;
+  }
+}

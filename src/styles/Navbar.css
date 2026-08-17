@@ -1,0 +1,166 @@
+.navbar {
+  width: 100%;
+  height: 76px;
+
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+
+  background: rgba(255, 255, 255, 0.98);
+
+  border-bottom: 1px solid #edf1f5;
+}
+
+.navbar-inner {
+  width: 100%;
+  max-width: 1180px;
+  height: 100%;
+
+  margin: 0 auto;
+  padding: 0 20px;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.navbar-logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+
+  border: none;
+  background: transparent;
+
+  color: #203d70;
+
+  font-size: 20px;
+  font-weight: 800;
+
+  cursor: pointer;
+}
+
+.navbar-logo-icon {
+  width: 34px;
+  height: 34px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 8px;
+
+  background: #2ccbbb;
+
+  color: #ffffff;
+
+  font-size: 15px;
+  font-weight: 800;
+}
+
+.navbar-menu {
+  display: flex;
+  align-items: center;
+  gap: 28px;
+}
+
+.navbar-menu button {
+  border: none;
+  background: transparent;
+
+  color: #3d5273;
+
+  font-size: 14px;
+  font-weight: 700;
+
+  cursor: pointer;
+}
+
+.navbar-menu button:hover {
+  color: #20c7b8;
+}
+
+.navbar-actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.language-button {
+  height: 36px;
+
+  padding: 0 13px;
+
+  border: 1px solid #dae2ed;
+  border-radius: 8px;
+
+  background: #ffffff;
+
+  color: #223c69;
+
+  font-weight: 700;
+
+  cursor: pointer;
+}
+
+.contact-button {
+  height: 40px;
+
+  padding: 0 21px;
+
+  border: none;
+  border-radius: 8px;
+
+  background: #2ccbbb;
+
+  color: #ffffff;
+
+  font-size: 14px;
+  font-weight: 700;
+
+  cursor: pointer;
+
+  box-shadow: 0 5px 12px rgba(44, 203, 187, 0.22);
+}
+
+.login-action {
+  padding: 12px 24px;
+
+  border: 1px solid var(--primary);
+  border-radius: 8px;
+
+  background: transparent;
+  color: var(--primary);
+
+  font-size: 14px;
+  font-weight: 600;
+
+  cursor: pointer;
+
+  transition: 0.2s ease;
+}
+
+.login-action:hover {
+  background: var(--primary);
+  color: #ffffff;
+}
+
+@media (max-width: 900px) {
+  .navbar-menu {
+    display: none;
+  }
+}
+
+@media (max-width: 520px) {
+  .navbar {
+    height: 66px;
+  }
+
+  .language-button {
+    display: none;
+  }
+
+  .contact-button {
+    padding: 0 14px;
+  }
+}
