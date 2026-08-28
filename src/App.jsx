@@ -15,6 +15,9 @@ import SalesDashboard from "./pages/graphs/SalesDashboard";
 import ArApDashboard from "./pages/graphs/ArApDashboard";
 import InventoryDashboard from "./pages/graphs/InventoryDashboard";
 
+import DashboardNavbar from "./components/DashboardNavbar";
+import DashboardHeader from "./components/DashboardHeader";
+
 import AdminLogin from "./Admin/AdminLogin";
 import AdminDashboard from "./Admin/AdminDashboard";
 import AdminHome from "./Admin/AdminHome";
@@ -22,6 +25,24 @@ import AdminCompany from "./Admin/AdminCompany";
 import AdminRequests from "./Admin/AdminRequests";
 import AdminUsers from "./Admin/AdminUsers";
 import AdminLayout from "./components/AdminLayout";
+
+import "./styles/Dashboard.css";
+
+function DashboardLayout({ children }) {
+  return (
+    <div className="dashboard-layout">
+      <DashboardNavbar />
+
+      <main className="dashboard-main">
+        <DashboardHeader />
+
+        <div className="dashboard-content">
+          {children}
+        </div>
+      </main>
+    </div>
+  );
+}
 
 function App() {
   return (
@@ -49,27 +70,47 @@ function App() {
 
         <Route
           path="/dashboard"
-          element={<Dashboard />}
+          element={
+            <DashboardLayout>
+              <Dashboard />
+            </DashboardLayout>
+          }
         />
 
         <Route
           path="/finance"
-          element={<FinanceDashboard />}
+          element={
+            <DashboardLayout>
+              <FinanceDashboard />
+            </DashboardLayout>
+          }
         />
 
         <Route
           path="/sales"
-          element={<SalesDashboard />}
+          element={
+            <DashboardLayout>
+              <SalesDashboard />
+            </DashboardLayout>
+          }
         />
 
         <Route
           path="/ar-ap"
-          element={<ArApDashboard />}
+          element={
+            <DashboardLayout>
+              <ArApDashboard />
+            </DashboardLayout>
+          }
         />
 
         <Route
           path="/inventory"
-          element={<InventoryDashboard />}
+          element={
+            <DashboardLayout>
+              <InventoryDashboard />
+            </DashboardLayout>
+          }
         />
 
         <Route

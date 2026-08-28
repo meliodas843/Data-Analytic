@@ -1,526 +1,381 @@
-import { useState } from "react";
-
 import {
-  BarChart,
-  Bar,
-  PieChart,
-  Pie,
-  Cell,
+  CartesianGrid,
+  Line,
+  LineChart,
+  ResponsiveContainer,
+  Tooltip,
   XAxis,
   YAxis,
-  CartesianGrid,
-  Tooltip,
-  ResponsiveContainer,
-  Legend,
 } from "recharts";
 
-import DashboardNavbar from "../../components/DashboardNavbar";
+import "../../styles/Dashboard.css";
 
-import "../../styles/graphs/InventoryDashboard.css";
+const cash = [
+  1950,
+  1700,
+  1500,
+  1370,
+  1510,
+  1300,
+  1100,
+  650,
+  210,
+  -290,
+  -590,
+  -180,
+].map((value, index) => ({
+  m: `${index + 1}-р`,
+  v: value,
+}));
 
-const stockCategoryData = [
-  {
-    name: "Electronics",
-    inStock: 820,
-    reorder: 130,
-  },
-  {
-    name: "Components",
-    inStock: 690,
-    reorder: 110,
-  },
-  {
-    name: "Accessories",
-    inStock: 580,
-    reorder: 85,
-  },
-  {
-    name: "Networking",
-    inStock: 470,
-    reorder: 75,
-  },
-  {
-    name: "Storage",
-    inStock: 390,
-    reorder: 65,
-  },
-  {
-    name: "Other",
-    inStock: 310,
-    reorder: 55,
-  },
-];
-
-const inventoryValueData = [
-  {
-    name: "Electronics",
-    value: 32,
-    color: "#5b5ff2",
-  },
-  {
-    name: "Components",
-    value: 24,
-    color: "#13b981",
-  },
-  {
-    name: "Accessories",
-    value: 18,
-    color: "#16b8d4",
-  },
-  {
-    name: "Networking",
-    value: 14,
-    color: "#f59e0b",
-  },
-  {
-    name: "Other",
-    value: 12,
-    color: "#9b5de5",
-  },
-];
-
-const inventoryItems = [
-  {
-    sku: "SKU-10042",
-    product: "Wireless Headset Pro",
-    category: "Electronics",
-    stock: 124,
-    reorder: 40,
-    value: "$18,600",
-    status: "Healthy",
-  },
-  {
-    sku: "SKU-10057",
-    product: "USB-C Docking Station",
-    category: "Accessories",
-    stock: 28,
-    reorder: 35,
-    value: "$8,960",
-    status: "Low Stock",
-  },
-  {
-    sku: "SKU-10081",
-    product: "Enterprise Router X1",
-    category: "Networking",
-    stock: 12,
-    reorder: 20,
-    value: "$24,000",
-    status: "Low Stock",
-  },
-  {
-    sku: "SKU-10114",
-    product: "NVMe SSD 2TB",
-    category: "Storage",
-    stock: 0,
-    reorder: 30,
-    value: "$0",
-    status: "Out of Stock",
-  },
-  {
-    sku: "SKU-10139",
-    product: "Mechanical Keyboard",
-    category: "Accessories",
-    stock: 86,
-    reorder: 25,
-    value: "$10,320",
-    status: "Healthy",
-  },
-  {
-    sku: "SKU-10152",
-    product: "32-inch Monitor",
-    category: "Electronics",
-    stock: 64,
-    reorder: 20,
-    value: "$28,800",
-    status: "Healthy",
-  },
-];
-
-function KpiCard({
-  title,
-  icon,
-  value,
-  change,
-  description,
-  className,
-}) {
+export default function InventoryDashboard() {
   return (
-    <div className={`kpi-card ${className}`}>
-      <div className="kpi-title-row">
-        <span>{title}</span>
-        <span className="kpi-icon">{icon}</span>
-      </div>
+    <div className="inventory-dashboard">
+      <section
+        className="kpi-grid mb22"
+        style={{
+          gridTemplateColumns:
+            "repeat(3, minmax(0, 1fr))",
+        }}
+      >
+        <div
+          className="kpi-card"
+          style={{
+            background: "#fff5f5",
+            borderColor: "#ffb2b2",
+          }}
+        >
+          <div className="kpi-label">
+            🏦 МӨНГӨН ҮЛДЭГДЭЛ
+          </div>
 
-      <h2>{value}</h2>
+          <div className="kpi-value">
+            ₮1.1bn
+          </div>
 
-      <div className="kpi-change">
-        <span>{change}</span>
-        <small>{description}</small>
-      </div>
-    </div>
-  );
-}
+          <div className="kpi-prev">
+            ₮1.3bn өмнөх жил
+          </div>
 
-function renderPieLabel({
-  cx,
-  cy,
-  midAngle,
-  outerRadius,
-  percent,
-}) {
-  const RADIAN = Math.PI / 180;
-  const radius = outerRadius + 22;
+          <div className="kpi-delta red">
+            ▼ 15.4% &nbsp; -₮200M
+          </div>
+        </div>
 
-  const x =
-    cx +
-    radius *
-      Math.cos(-midAngle * RADIAN);
+        <div
+          className="kpi-card"
+          style={{
+            background: "#f2fcfa",
+            borderColor: "#8bded3",
+          }}
+        >
+          <div className="kpi-label">
+            📥 ОРЛОГО (МӨНГӨӨР)
+          </div>
 
-  const y =
-    cy +
-    radius *
-      Math.sin(-midAngle * RADIAN);
+          <div className="kpi-value">
+            ₮890M
+          </div>
 
-  return (
-    <text
-      x={x}
-      y={y}
-      fill="#60718f"
-      textAnchor={
-        x > cx ? "start" : "end"
-      }
-      dominantBaseline="central"
-      fontSize="11"
-      fontWeight="700"
-    >
-      {`${(percent * 100).toFixed(0)}%`}
-    </text>
-  );
-}
+          <div className="kpi-prev">
+            ₮720M өмнөх жил
+          </div>
 
-function InventoryDashboard() {
-  const [language, setLanguage] =
-    useState("MN");
+          <div className="kpi-delta green">
+            ▲ 23.6% &nbsp; +₮170M
+          </div>
+        </div>
 
-  const toggleLanguage = () => {
-    setLanguage((prev) =>
-      prev === "MN" ? "EN" : "MN"
-    );
-  };
+        <div
+          className="kpi-card"
+          style={{
+            background: "#fff5f5",
+            borderColor: "#ffb2b2",
+          }}
+        >
+          <div className="kpi-label">
+            📤 ЗАРЛАГА (МӨНГӨӨР)
+          </div>
 
-  return (
-    <div className="dashboard-layout">
-      <DashboardNavbar />
+          <div className="kpi-value">
+            ₮1.19bn
+          </div>
 
-      <main className="dashboard-main">
-        <header className="dashboard-header">
+          <div className="kpi-prev">
+            ₮980M өмнөх жил
+          </div>
+
+          <div className="kpi-delta red">
+            ▲ 21.4% &nbsp; +₮210M
+          </div>
+        </div>
+      </section>
+
+      <section
+        className="grid-2 mb22"
+        style={{
+          gridTemplateColumns:
+            "minmax(0, 1fr) minmax(0, 1.7fr)",
+        }}
+      >
+        <div className="dash-card chart-card">
+          <h3 className="section-title">
+            Мөнгөн нөөц — runway
+          </h3>
+
+          <p className="section-sub mono">
+            Одоогийн trend-ээр хэдэн сар
+            хүрэлцэх
+          </p>
+
+          <div
+            style={{
+              height: 220,
+              display: "grid",
+              placeItems: "center",
+              position: "relative",
+            }}
+          >
+            <svg
+              viewBox="0 0 260 150"
+              style={{
+                width: "100%",
+                maxWidth: 260,
+              }}
+            >
+              <path
+                d="M35 130 A95 95 0 0 1 225 130"
+                fill="none"
+                stroke="#d8f8e8"
+                strokeWidth="20"
+                strokeLinecap="round"
+              />
+
+              <path
+                d="M35 130 A95 95 0 0 1 95 43"
+                fill="none"
+                stroke="#f2b500"
+                strokeWidth="20"
+                strokeLinecap="round"
+              />
+
+              <circle
+                cx="93"
+                cy="45"
+                r="8"
+                fill="#f2b500"
+                stroke="#fff"
+                strokeWidth="3"
+              />
+            </svg>
+
+            <div
+              style={{
+                position: "absolute",
+                top: 92,
+                textAlign: "center",
+              }}
+            >
+              <div
+                style={{
+                  fontSize: 42,
+                  fontWeight: 900,
+                  color: "#e9a900",
+                }}
+              >
+                3
+              </div>
+
+              <div className="muted">
+                сар
+              </div>
+            </div>
+          </div>
+
+          <div
+            className="legend-row"
+            style={{
+              justifyContent: "center",
+            }}
+          >
+            <span>
+              <i
+                className="legend-dot"
+                style={{
+                  background: "#19b858",
+                }}
+              />
+              6+ сар
+            </span>
+
+            <span>
+              <i
+                className="legend-dot"
+                style={{
+                  background: "#f2b500",
+                }}
+              />
+              3–6 сар
+            </span>
+
+            <span>
+              <i
+                className="legend-dot"
+                style={{
+                  background: "#f14545",
+                }}
+              />
+              &lt;3 сар
+            </span>
+          </div>
+
+          <div
+            className="callout"
+            style={{
+              borderColor: "#f3cf4e",
+              background: "#fffbe9",
+              color: "#b86c00",
+              textAlign: "center",
+            }}
+          >
+            ⚠ Одоогоор 3 сарын нөөц үлдсэн
+          </div>
+        </div>
+
+        <div className="dash-card chart-card">
+          <h3 className="section-title">
+            Үйл ажиллагааны ангиллаар
+          </h3>
+
+          <p className="section-sub mono">
+            Тухайн сарын мөнгөн урсгал
+          </p>
+
+          {[
+            [
+              "Үндсэн",
+              88,
+              "₮-2,242M",
+              "Өмнөх: ₮-1,810M",
+            ],
+            [
+              "Санхүүжилт",
+              1,
+              "₮-23M",
+              "Өмнөх: ₮-45M",
+            ],
+            [
+              "Хөрөнгө",
+              0.5,
+              "₮-3M",
+              "Өмнөх: ₮-5M",
+            ],
+          ].map((item, index) => (
+            <div
+              key={item[0]}
+              style={{
+                marginTop: 22,
+              }}
+            >
+              <div className="progress-head">
+                <b>{item[0]}</b>
+
+                <b className="red mono">
+                  {item[2]}
+                </b>
+              </div>
+
+              <div
+                className="progress-track"
+                style={{
+                  height: 13,
+                }}
+              >
+                <div
+                  className="progress-fill"
+                  style={{
+                    width: `${item[1]}%`,
+                    background:
+                      index === 0
+                        ? "#e95a58"
+                        : "#9cb0cd",
+                  }}
+                />
+              </div>
+
+              <div className="section-sub mono right">
+                {item[3]}
+              </div>
+            </div>
+          ))}
+
+          <div className="callout">
+            ⚠ Үндсэн үйл ажиллагааны
+            зарлага 24% өссөн
+          </div>
+        </div>
+      </section>
+
+      <section className="dash-card chart-card">
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "space-between",
+            gap: 16,
+          }}
+        >
           <div>
-            <h1>Inventory Dashboard</h1>
+            <h3 className="section-title">
+              Мөнгөн үлдэгдэл — trend ба
+              таамаглал
+            </h3>
 
-            <p>
-              Stock levels, turnover & inventory
-              health
+            <p className="section-sub mono">
+              — Бодит &nbsp; – – Таамаглал
+              &nbsp; | Улаан шугам = тэг
             </p>
           </div>
 
-          <div className="dashboard-header-right">
-            <span>
-              Tuesday, August 11, 2026
-            </span>
-
-            <button
-              type="button"
-              className="dashboard-language-button"
-              onClick={toggleLanguage}
-            >
-              <span className="dashboard-language-flag">
-                {language === "MN" ? "🇲🇳" : "🇬🇧"}
-              </span>
-
-              <span>{language}</span>
-
-              <span className="dashboard-language-arrow">
-                ▾
-              </span>
-            </button>
-
-            <button
-              type="button"
-              className="dashboard-icon-button"
-            >
-              🔔
-            </button>
-
-            <button
-              type="button"
-              className="dashboard-icon-button"
-            >
-              🌙
-            </button>
-          </div>
-        </header>
-
-        <div className="dashboard-content inventory-content">
-          <section className="inventory-kpi-grid">
-            <KpiCard
-              title="Total SKUs"
-              icon="📦"
-              value="1,248"
-              change="▲ +4.8%"
-              description="vs last month"
-              className="kpi-purple"
-            />
-
-            <KpiCard
-              title="Inventory Value"
-              icon="💰"
-              value="$8.42M"
-              change="▲ +6.2%"
-              description="vs last month"
-              className="kpi-green"
-            />
-
-            <KpiCard
-              title="Turnover Rate"
-              icon="🔄"
-              value="6.8x"
-              change="▲ +0.4x"
-              description="vs last quarter"
-              className="kpi-cyan"
-            />
-
-            <KpiCard
-              title="Out of Stock"
-              icon="⚠️"
-              value="18"
-              change="▼ -6"
-              description="vs last month"
-              className="kpi-red"
-            />
-          </section>
-
-          <section className="inventory-chart-grid">
-            <div className="dashboard-panel inventory-stock-panel">
-              <div className="panel-heading">
-                <h3>
-                  Stock Levels by Category
-                </h3>
-
-                <p>
-                  Current stock vs reorder level
-                </p>
-              </div>
-
-              <div className="inventory-chart-wrapper">
-                <ResponsiveContainer
-                  width="100%"
-                  height="100%"
-                >
-                  <BarChart
-                    data={stockCategoryData}
-                    margin={{
-                      top: 15,
-                      right: 15,
-                      left: 0,
-                      bottom: 5,
-                    }}
-                  >
-                    <CartesianGrid
-                      strokeDasharray="3 3"
-                      stroke="#e8edf5"
-                      vertical={false}
-                    />
-
-                    <XAxis
-                      dataKey="name"
-                      tick={{
-                        fill: "#7d8eaa",
-                        fontSize: 10,
-                      }}
-                      axisLine={false}
-                      tickLine={false}
-                    />
-
-                    <YAxis
-                      tick={{
-                        fill: "#7d8eaa",
-                        fontSize: 11,
-                      }}
-                      axisLine={false}
-                      tickLine={false}
-                    />
-
-                    <Tooltip />
-
-                    <Legend
-                      iconType="square"
-                      iconSize={10}
-                    />
-
-                    <Bar
-                      dataKey="inStock"
-                      name="In Stock"
-                      fill="#5b5ff2"
-                      radius={[5, 5, 0, 0]}
-                      barSize={24}
-                    />
-
-                    <Bar
-                      dataKey="reorder"
-                      name="Reorder Level"
-                      fill="#f59e0b"
-                      radius={[5, 5, 0, 0]}
-                      barSize={24}
-                    />
-                  </BarChart>
-                </ResponsiveContainer>
-              </div>
-            </div>
-
-            <div className="dashboard-panel inventory-value-panel">
-              <div className="panel-heading">
-                <h3>Inventory Value Mix</h3>
-
-                <p>
-                  Value distribution by category
-                </p>
-              </div>
-
-              <div className="inventory-pie-wrapper">
-                <ResponsiveContainer
-                  width="100%"
-                  height="100%"
-                >
-                  <PieChart>
-                    <Pie
-                      data={inventoryValueData}
-                      dataKey="value"
-                      nameKey="name"
-                      cx="50%"
-                      cy="44%"
-                      innerRadius={55}
-                      outerRadius={82}
-                      paddingAngle={2}
-                      labelLine
-                      label={renderPieLabel}
-                      stroke="#ffffff"
-                      strokeWidth={2}
-                    >
-                      {inventoryValueData.map(
-                        (item) => (
-                          <Cell
-                            key={item.name}
-                            fill={item.color}
-                          />
-                        )
-                      )}
-                    </Pie>
-
-                    <Tooltip
-                      formatter={(value) => [
-                        `${value}%`,
-                        "Share",
-                      ]}
-                    />
-
-                    <Legend
-                      layout="horizontal"
-                      verticalAlign="bottom"
-                      align="center"
-                      iconType="square"
-                      iconSize={9}
-                      wrapperStyle={{
-                        fontSize: "11px",
-                      }}
-                    />
-                  </PieChart>
-                </ResponsiveContainer>
-              </div>
-            </div>
-          </section>
-
-          <section className="dashboard-panel inventory-table-panel">
-            <div className="inventory-table-heading">
-              <div className="panel-heading">
-                <h3>Inventory Status</h3>
-
-                <p>
-                  Products requiring attention
-                </p>
-              </div>
-
-              <button
-                type="button"
-                className="inventory-view-button"
-              >
-                View All Inventory
-              </button>
-            </div>
-
-            <div className="inventory-table-wrapper">
-              <table className="inventory-table">
-                <thead>
-                  <tr>
-                    <th>SKU</th>
-                    <th>Product</th>
-                    <th>Category</th>
-                    <th>Stock</th>
-                    <th>Reorder Level</th>
-                    <th>Inventory Value</th>
-                    <th>Status</th>
-                  </tr>
-                </thead>
-
-                <tbody>
-                  {inventoryItems.map((item) => (
-                    <tr key={item.sku}>
-                      <td className="inventory-sku">
-                        {item.sku}
-                      </td>
-
-                      <td className="inventory-product">
-                        {item.product}
-                      </td>
-
-                      <td>
-                        {item.category}
-                      </td>
-
-                      <td>
-                        {item.stock}
-                      </td>
-
-                      <td>
-                        {item.reorder}
-                      </td>
-
-                      <td className="inventory-value">
-                        {item.value}
-                      </td>
-
-                      <td>
-                        <span
-                          className={
-                            item.status === "Healthy"
-                              ? "inventory-status status-healthy"
-                              : item.status === "Low Stock"
-                              ? "inventory-status status-low"
-                              : "inventory-status status-out"
-                          }
-                        >
-                          {item.status}
-                        </span>
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-          </section>
+          <span className="pill yellow">
+            10-р сард -₮290M
+          </span>
         </div>
-      </main>
+
+        <div
+          style={{
+            height: 330,
+            marginTop: 15,
+          }}
+        >
+          <ResponsiveContainer
+            width="100%"
+            height="100%"
+          >
+            <LineChart data={cash}>
+              <CartesianGrid
+                strokeDasharray="2 4"
+              />
+
+              <XAxis dataKey="m" />
+
+              <YAxis
+                tickFormatter={(value) =>
+                  `₮${value}M`
+                }
+              />
+
+              <Tooltip />
+
+              <Line
+                dataKey="v"
+                stroke="#0fa344"
+                strokeWidth={3}
+                dot={{ r: 4 }}
+              />
+            </LineChart>
+          </ResponsiveContainer>
+        </div>
+      </section>
     </div>
   );
 }
-
-export default InventoryDashboard;

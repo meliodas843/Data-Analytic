@@ -1704,6 +1704,8 @@ function Home() {
             PRICING
         ================================================= */}
 
+        {/*
+
         <section
           className="section section-soft"
           id="pricing"
@@ -1873,6 +1875,8 @@ function Home() {
 
         </section>
 
+
+        */}
 
         {/* =================================================
             TESTIMONIALS

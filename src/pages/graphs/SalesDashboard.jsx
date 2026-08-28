@@ -1,649 +1,652 @@
-import { useState } from "react";
-
 import {
-  BarChart,
   Bar,
-  ScatterChart,
-  Scatter,
+  BarChart,
+  CartesianGrid,
+  Cell,
+  Line,
+  LineChart,
+  Pie,
+  PieChart,
+  ResponsiveContainer,
+  Tooltip,
   XAxis,
   YAxis,
-  ZAxis,
-  CartesianGrid,
-  Tooltip,
-  ResponsiveContainer,
-  Legend,
-  Cell,
 } from "recharts";
 
-import DashboardNavbar from "../../components/DashboardNavbar";
-import "../../styles/graphs/SalesDashboard.css";
+import "../../styles/Dashboard.css";
 
-const salesByProductData = [
+const collection = [
+  70,
+  12,
+  15,
+  9,
+  11,
+  16,
+  23,
+  19,
+  25,
+  28,
+  32,
+  45,
+].map((value, index) => ({
+  m: `${index + 1}-р`,
+  v: value,
+}));
+
+const age = [
   {
-    name: "Enterprise",
-    revenue: 18.4,
+    n: "1-30 хоног",
+    v: 4,
+    a: "₮180M",
+    c: "#1db954",
   },
   {
-    name: "Professional",
-    revenue: 15.8,
+    n: "31-60 хоног",
+    v: 8,
+    a: "₮360M",
+    c: "#f4b000",
   },
   {
-    name: "Starter",
-    revenue: 12.1,
+    n: "61-90 хоног",
+    v: 3,
+    a: "₮135M",
+    c: "#ff7610",
   },
   {
-    name: "Add-ons",
-    revenue: 9.7,
-  },
-  {
-    name: "Services",
-    revenue: 7.8,
+    n: "90+ хоног",
+    v: 85,
+    a: "₮3.8bn",
+    c: "#f33c3c",
   },
 ];
 
-const pipelineData = [
+const branches = [
   {
-    stage: "Lead",
-    value: 18.5,
+    n: "Тавилга И...",
+    r: 670,
+    p: 568,
   },
   {
-    stage: "Qualified",
-    value: 14.2,
+    n: "Стрийт",
+    r: 116,
+    p: 71,
   },
   {
-    stage: "Proposal",
-    value: 10.8,
+    n: "Мишээл гр...",
+    r: 102,
+    p: 64,
   },
   {
-    stage: "Negotiation",
-    value: 7.6,
+    n: "Авто цент...",
+    r: 24,
+    p: 0,
   },
   {
-    stage: "Closed Won",
-    value: 5.4,
-  },
-];
-
-const repPerformanceData = [
-  {
-    rep: "Sarah",
-    quota: 100,
-    actual: 124,
+    n: "МЛС-1",
+    r: 38,
+    p: 16,
   },
   {
-    rep: "Michael",
-    quota: 100,
-    actual: 116,
+    n: "Катеринг",
+    r: 32,
+    p: 4,
   },
   {
-    rep: "Emma",
-    quota: 100,
-    actual: 109,
-  },
-  {
-    rep: "Daniel",
-    quota: 100,
-    actual: 103,
-  },
-  {
-    rep: "Olivia",
-    quota: 100,
-    actual: 96,
-  },
-  {
-    rep: "James",
-    quota: 100,
-    actual: 91,
+    n: "Бусад",
+    r: 28,
+    p: 13,
   },
 ];
 
-const dealScatterData = [
-  {
-    deals: 24,
-    revenue: 1.4,
-    size: 120,
-  },
-  {
-    deals: 31,
-    revenue: 1.9,
-    size: 150,
-  },
-  {
-    deals: 38,
-    revenue: 2.4,
-    size: 170,
-  },
-  {
-    deals: 45,
-    revenue: 3.1,
-    size: 210,
-  },
-  {
-    deals: 52,
-    revenue: 3.7,
-    size: 230,
-  },
-  {
-    deals: 59,
-    revenue: 4.3,
-    size: 250,
-  },
-  {
-    deals: 66,
-    revenue: 5,
-    size: 280,
-  },
-  {
-    deals: 72,
-    revenue: 5.6,
-    size: 300,
-  },
+const customers = [
+  [
+    "ТИД Түрээс",
+    "₮2.9bn",
+    "120+",
+    "₮2.9bn",
+    "▲ 2.2%",
+    "☎",
+  ],
+  [
+    "Менежмент ХХК",
+    "₮751M",
+    "90",
+    "₮680M",
+    "▲ 10.4%",
+    "☎",
+  ],
+  [
+    "Цахилгаан ХК",
+    "₮236M",
+    "60",
+    "₮290M",
+    "▼ 18.6%",
+    "✓",
+  ],
+  [
+    "Хоол сервис",
+    "₮209M",
+    "45",
+    "₮195M",
+    "▲ 7.2%",
+    "☎",
+  ],
+  [
+    "Харуул хамгаалалт",
+    "₮200M",
+    "92",
+    "₮210M",
+    "▼ 4.8%",
+    "✓",
+  ],
+  [
+    "Дулааны хангамж",
+    "₮142M",
+    "75",
+    "₮118M",
+    "▲ 20.3%",
+    "⚠",
+  ],
+  [
+    "Авто засвар",
+    "₮98M",
+    "30",
+    "₮110M",
+    "▼ 10.9%",
+    "✓",
+  ],
+  [
+    "Тээвэр ХХ",
+    "₮87M",
+    "55",
+    "₮72M",
+    "▲ 20.8%",
+    "☎",
+  ],
+  [
+    "Барилга групп",
+    "₮64M",
+    "20",
+    "₮88M",
+    "▼ 27.3%",
+    "✓",
+  ],
+  [
+    "Бусад ХХК",
+    "₮51M",
+    "15",
+    "₮45M",
+    "▲ 13.3%",
+    "✓",
+  ],
 ];
 
-function KpiCard({
+function Stat({
   title,
-  icon,
   value,
-  change,
-  description,
-  className,
+  prev,
+  delta,
+  bad = false,
 }) {
   return (
-    <div className={`kpi-card ${className}`}>
-      <div className="kpi-title-row">
-        <span>{title}</span>
-        <span className="kpi-icon">{icon}</span>
+    <div className="kpi-card">
+      <div className="kpi-label">
+        {title}
       </div>
 
-      <h2>{value}</h2>
+      <div className="kpi-value">
+        {value}
+      </div>
 
-      <div className="kpi-change">
-        <span>{change}</span>
-        <small>{description}</small>
+      <div className="kpi-prev">
+        {prev}
+      </div>
+
+      <div
+        className={`kpi-delta ${
+          bad ? "red" : "green"
+        }`}
+      >
+        {delta}
       </div>
     </div>
   );
 }
 
-function CurrencyTooltip({
-  active,
-  payload,
-  label,
-}) {
-  if (
-    !active ||
-    !payload ||
-    !payload.length
-  ) {
-    return null;
-  }
-
+export default function SalesDashboard() {
   return (
-    <div className="sales-tooltip">
-      <strong>{label}</strong>
+    <div className="sales-dashboard">
+      <section
+        className="kpi-grid mb22"
+        style={{
+          gridTemplateColumns:
+            "repeat(4, minmax(0, 1fr))",
+        }}
+      >
+        <Stat
+          title="💰 НИЙТ БОРЛУУЛАЛТ"
+          value="₮2.19bn"
+          prev="₮1.79bn өмнөх жил"
+          delta="+₮400M"
+        />
 
-      {payload.map((item) => (
-        <div key={item.dataKey}>
-          {item.name}: ${item.value}M
-        </div>
-      ))}
-    </div>
-  );
-}
+        <Stat
+          title="📄 НЭХЭМЖЛЭХ ТОО"
+          value="847"
+          prev="712 өмнөх жил"
+          delta="+135 ширхэг"
+        />
 
-function SalesDashboard() {
-  const [language, setLanguage] =
-    useState("MN");
+        <Stat
+          title="✅ ЦУГЛУУЛАЛТ %"
+          value="23.3%"
+          prev="16.5% өмнөх жил"
+          delta="+6.8 нэгж"
+        />
 
-  const toggleLanguage = () => {
-    setLanguage((prev) =>
-      prev === "MN" ? "EN" : "MN"
-    );
-  };
+        <Stat
+          title="⚠ ХУГАЦАА ХЭТЭРСЭН"
+          value="₮3.8bn"
+          prev="₮4.1bn өмнөх жил"
+          delta="-₮300M"
+        />
+      </section>
 
-  return (
-    <div className="dashboard-layout">
-      <DashboardNavbar />
+      <section className="grid-2 mb22">
+        <div className="dash-card chart-card">
+          <div
+            style={{
+              display: "flex",
+              justifyContent:
+                "space-between",
+              gap: 16,
+            }}
+          >
+            <div>
+              <h3 className="section-title">
+                Авлага цуглуулалтын хувь
+              </h3>
 
-      <main className="dashboard-main">
-        <header className="dashboard-header">
-          <div>
-            <h1>Sales Dashboard</h1>
+              <p className="section-sub mono">
+                Зорилт: 20% | Ногоон =
+                биелсэн, улаан = биелээгүй
+              </p>
+            </div>
 
-            <p>
-              Pipeline, performance & revenue
-              analysis
-            </p>
-          </div>
-
-          <div className="dashboard-header-right">
-            <span>
-              Tuesday, August 11, 2026
+            <span className="pill green">
+              23.3% ✓
             </span>
-
-            <button
-              type="button"
-              className="dashboard-language-button"
-              onClick={toggleLanguage}
-            >
-              <span className="dashboard-language-flag">
-                {language === "MN" ? "🇲🇳" : "🇬🇧"}
-              </span>
-
-              <span>{language}</span>
-
-              <span className="dashboard-language-arrow">
-                ▾
-              </span>
-            </button>
-
-            <button
-              type="button"
-              className="dashboard-icon-button"
-            >
-              🔔
-            </button>
-
-            <button
-              type="button"
-              className="dashboard-icon-button"
-            >
-              🌙
-            </button>
           </div>
-        </header>
 
-        <div className="dashboard-content sales-content">
-          <section className="sales-kpi-grid">
-            <KpiCard
-              title="Total Sales"
-              icon="💰"
-              value="$63.8M"
-              change="▲ +11.8%"
-              description="vs last month"
-              className="kpi-purple"
-            />
+          <div className="chart-wrap">
+            <ResponsiveContainer
+              width="100%"
+              height="100%"
+            >
+              <LineChart
+                data={collection}
+              >
+                <CartesianGrid
+                  strokeDasharray="2 4"
+                />
 
-            <KpiCard
-              title="Deals Closed"
-              icon="🤝"
-              value="842"
-              change="▲ +9.4%"
-              description="vs last month"
-              className="kpi-green"
-            />
+                <XAxis dataKey="m" />
 
-            <KpiCard
-              title="Avg Deal Size"
-              icon="📊"
-              value="$75.8K"
-              change="▲ +4.1%"
-              description="vs last month"
-              className="kpi-cyan"
-            />
+                <YAxis
+                  domain={[0, 80]}
+                  tickFormatter={(value) =>
+                    `${value}%`
+                  }
+                />
 
-            <KpiCard
-              title="Win Rate"
-              icon="🎯"
-              value="38.6%"
-              change="▲ +2.7%"
-              description="vs last month"
-              className="kpi-orange"
-            />
-          </section>
+                <Tooltip />
 
-          <section className="sales-chart-grid">
-            <div className="dashboard-panel sales-chart-panel">
-              <div className="panel-heading">
-                <h3>
-                  Sales by Product Line
-                </h3>
+                <Line
+                  dataKey="v"
+                  stroke="#14a34a"
+                  strokeWidth={3}
+                  dot={(props) => {
+                    const {
+                      cx,
+                      cy,
+                      payload,
+                    } = props;
 
-                <p>
-                  Revenue contribution by product
-                </p>
-              </div>
-
-              <div className="sales-chart-wrapper">
-                <ResponsiveContainer
-                  width="100%"
-                  height="100%"
-                >
-                  <BarChart
-                    data={salesByProductData}
-                    margin={{
-                      top: 15,
-                      right: 15,
-                      left: 0,
-                      bottom: 5,
-                    }}
-                  >
-                    <CartesianGrid
-                      strokeDasharray="3 3"
-                      stroke="#e8edf5"
-                      vertical={false}
-                    />
-
-                    <XAxis
-                      dataKey="name"
-                      tick={{
-                        fill: "#7d8eaa",
-                        fontSize: 10,
-                      }}
-                      axisLine={false}
-                      tickLine={false}
-                    />
-
-                    <YAxis
-                      tickFormatter={(value) =>
-                        `$${value}M`
-                      }
-                      tick={{
-                        fill: "#7d8eaa",
-                        fontSize: 11,
-                      }}
-                      axisLine={false}
-                      tickLine={false}
-                    />
-
-                    <Tooltip
-                      content={
-                        <CurrencyTooltip />
-                      }
-                    />
-
-                    <Bar
-                      dataKey="revenue"
-                      name="Revenue"
-                      fill="#5b5ff2"
-                      radius={[5, 5, 0, 0]}
-                      barSize={34}
-                    />
-                  </BarChart>
-                </ResponsiveContainer>
-              </div>
-            </div>
-
-            <div className="dashboard-panel sales-chart-panel">
-              <div className="panel-heading">
-                <h3>Pipeline by Stage</h3>
-
-                <p>
-                  Current opportunity value
-                </p>
-              </div>
-
-              <div className="sales-chart-wrapper">
-                <ResponsiveContainer
-                  width="100%"
-                  height="100%"
-                >
-                  <BarChart
-                    data={pipelineData}
-                    layout="vertical"
-                    margin={{
-                      top: 15,
-                      right: 15,
-                      left: 10,
-                      bottom: 5,
-                    }}
-                  >
-                    <CartesianGrid
-                      strokeDasharray="3 3"
-                      stroke="#e8edf5"
-                      horizontal={false}
-                    />
-
-                    <XAxis
-                      type="number"
-                      tickFormatter={(value) =>
-                        `$${value}M`
-                      }
-                      tick={{
-                        fill: "#7d8eaa",
-                        fontSize: 11,
-                      }}
-                      axisLine={false}
-                      tickLine={false}
-                    />
-
-                    <YAxis
-                      type="category"
-                      dataKey="stage"
-                      width={80}
-                      tick={{
-                        fill: "#7d8eaa",
-                        fontSize: 11,
-                      }}
-                      axisLine={false}
-                      tickLine={false}
-                    />
-
-                    <Tooltip
-                      formatter={(value) =>
-                        `$${value}M`
-                      }
-                    />
-
-                    <Bar
-                      dataKey="value"
-                      radius={[0, 5, 5, 0]}
-                      barSize={28}
-                    >
-                      {pipelineData.map(
-                        (item, index) => {
-                          const colors = [
-                            "#5b5ff2",
-                            "#16b8d4",
-                            "#13b981",
-                            "#f59e0b",
-                            "#f43f5e",
-                          ];
-
-                          return (
-                            <Cell
-                              key={item.stage}
-                              fill={
-                                colors[index]
-                              }
-                            />
-                          );
+                    return (
+                      <circle
+                        cx={cx}
+                        cy={cy}
+                        r={5}
+                        fill={
+                          payload.v >= 20
+                            ? "#13a34a"
+                            : "#e94242"
                         }
-                      )}
-                    </Bar>
-                  </BarChart>
-                </ResponsiveContainer>
-              </div>
-            </div>
-          </section>
-
-          <section className="sales-bottom-grid">
-            <div className="dashboard-panel sales-bottom-panel">
-              <div className="panel-heading">
-                <h3>
-                  Sales Rep Performance
-                </h3>
-
-                <p>
-                  Quota attainment percentage
-                </p>
-              </div>
-
-              <div className="sales-bottom-chart-wrapper">
-                <ResponsiveContainer
-                  width="100%"
-                  height="100%"
-                >
-                  <BarChart
-                    data={repPerformanceData}
-                    margin={{
-                      top: 15,
-                      right: 15,
-                      left: 0,
-                      bottom: 5,
-                    }}
-                  >
-                    <CartesianGrid
-                      strokeDasharray="3 3"
-                      vertical={false}
-                      stroke="#e8edf5"
-                    />
-
-                    <XAxis
-                      dataKey="rep"
-                      tick={{
-                        fill: "#7d8eaa",
-                        fontSize: 10,
-                      }}
-                      axisLine={false}
-                      tickLine={false}
-                    />
-
-                    <YAxis
-                      domain={[0, 140]}
-                      tickFormatter={(value) =>
-                        `${value}%`
-                      }
-                      tick={{
-                        fill: "#7d8eaa",
-                        fontSize: 11,
-                      }}
-                      axisLine={false}
-                      tickLine={false}
-                    />
-
-                    <Tooltip
-                      formatter={(value) =>
-                        `${value}%`
-                      }
-                    />
-
-                    <Legend
-                      iconType="square"
-                      iconSize={9}
-                    />
-
-                    <Bar
-                      dataKey="quota"
-                      name="Quota"
-                      fill="#e7eaf3"
-                      radius={[5, 5, 0, 0]}
-                      barSize={18}
-                    />
-
-                    <Bar
-                      dataKey="actual"
-                      name="Actual"
-                      fill="#13b981"
-                      radius={[5, 5, 0, 0]}
-                      barSize={18}
-                    />
-                  </BarChart>
-                </ResponsiveContainer>
-              </div>
-            </div>
-
-            <div className="dashboard-panel sales-bottom-panel">
-              <div className="panel-heading">
-                <h3>
-                  Deal Volume vs Revenue
-                </h3>
-
-                <p>
-                  Monthly sales relationship
-                </p>
-              </div>
-
-              <div className="sales-bottom-chart-wrapper">
-                <ResponsiveContainer
-                  width="100%"
-                  height="100%"
-                >
-                  <ScatterChart
-                    margin={{
-                      top: 15,
-                      right: 20,
-                      bottom: 5,
-                      left: 0,
-                    }}
-                  >
-                    <CartesianGrid
-                      strokeDasharray="3 3"
-                      stroke="#e8edf5"
-                    />
-
-                    <XAxis
-                      type="number"
-                      dataKey="deals"
-                      name="Deals"
-                      tick={{
-                        fill: "#7d8eaa",
-                        fontSize: 11,
-                      }}
-                      axisLine={false}
-                      tickLine={false}
-                    />
-
-                    <YAxis
-                      type="number"
-                      dataKey="revenue"
-                      name="Revenue"
-                      unit="M"
-                      tickFormatter={(value) =>
-                        `$${value}M`
-                      }
-                      tick={{
-                        fill: "#7d8eaa",
-                        fontSize: 11,
-                      }}
-                      axisLine={false}
-                      tickLine={false}
-                    />
-
-                    <ZAxis
-                      type="number"
-                      dataKey="size"
-                      range={[80, 260]}
-                    />
-
-                    <Tooltip
-                      cursor={{
-                        strokeDasharray: "3 3",
-                      }}
-                      formatter={(
-                        value,
-                        name
-                      ) => {
-                        if (
-                          name === "Revenue"
-                        ) {
-                          return [
-                            `$${value}M`,
-                            name,
-                          ];
-                        }
-
-                        return [
-                          value,
-                          name,
-                        ];
-                      }}
-                    />
-
-                    <Scatter
-                      name="Sales"
-                      data={dealScatterData}
-                      fill="#5b5ff2"
-                    />
-                  </ScatterChart>
-                </ResponsiveContainer>
-              </div>
-            </div>
-          </section>
+                        stroke="#fff"
+                        strokeWidth={2}
+                      />
+                    );
+                  }}
+                />
+              </LineChart>
+            </ResponsiveContainer>
+          </div>
         </div>
-      </main>
+
+        <div className="dash-card chart-card">
+          <h3 className="section-title">
+            Авлагын насжилт
+          </h3>
+
+          <div style={{ height: 150 }}>
+            <ResponsiveContainer
+              width="100%"
+              height="100%"
+            >
+              <PieChart>
+                <Pie
+                  data={age}
+                  dataKey="v"
+                  innerRadius={46}
+                  outerRadius={68}
+                  paddingAngle={2}
+                >
+                  {age.map((item) => (
+                    <Cell
+                      key={item.n}
+                      fill={item.c}
+                    />
+                  ))}
+                </Pie>
+              </PieChart>
+            </ResponsiveContainer>
+          </div>
+
+          {age.map((item) => (
+            <div
+              key={item.n}
+              style={{
+                display: "grid",
+                gridTemplateColumns:
+                  "minmax(0, 1fr) 40px 70px",
+                gap: 8,
+                padding:
+                  item.v === 85
+                    ? "9px"
+                    : "6px 0",
+                background:
+                  item.v === 85
+                    ? "#fff1f1"
+                    : "transparent",
+                borderRadius: 7,
+                fontSize: 12,
+              }}
+            >
+              <span>
+                <i
+                  style={{
+                    display: "inline-block",
+                    width: 9,
+                    height: 9,
+                    borderRadius: "50%",
+                    background: item.c,
+                    marginRight: 8,
+                  }}
+                />
+                {item.n}
+              </span>
+
+              <span className="muted">
+                {item.v}%
+              </span>
+
+              <b>{item.a}</b>
+            </div>
+          ))}
+
+          <div className="callout">
+            ⚠ 90+ хоногийн авлага нийт-ийн
+            85%
+          </div>
+        </div>
+      </section>
+
+      <section className="dash-card chart-card mb22">
+        <h3 className="section-title">
+          Салбарын борлуулалт — орлого ба
+          ашиг
+        </h3>
+
+        <p className="section-sub mono">
+          Авто центр алдагдалтай тул ашиг =
+          0 харуулав
+        </p>
+
+        <div
+          style={{
+            height: 340,
+            marginTop: 12,
+          }}
+        >
+          <ResponsiveContainer
+            width="100%"
+            height="100%"
+          >
+            <BarChart
+              data={branches}
+              layout="vertical"
+              margin={{
+                left: 50,
+                right: 30,
+              }}
+            >
+              <CartesianGrid
+                strokeDasharray="2 4"
+              />
+
+              <XAxis
+                type="number"
+                tickFormatter={(value) =>
+                  `₮${value}M`
+                }
+              />
+
+              <YAxis
+                type="category"
+                dataKey="n"
+                width={90}
+              />
+
+              <Tooltip />
+
+              <Bar
+                dataKey="r"
+                fill="#53b86d"
+                radius={[0, 4, 4, 0]}
+              />
+
+              <Bar
+                dataKey="p"
+                fill="#daa242"
+                radius={[0, 4, 4, 0]}
+              />
+            </BarChart>
+          </ResponsiveContainer>
+        </div>
+      </section>
+
+      <section className="dash-card chart-card mb22">
+        <h3 className="section-title">
+          Нэхэмжлэхийн статус
+        </h3>
+
+        <div className="metric-grid mt22">
+          <div className="metric-box">
+            <div className="title">
+              🟢 Төлөгдсөн
+            </div>
+
+            <div className="value">
+              421
+            </div>
+
+            <div className="foot green">
+              ₮890M
+            </div>
+          </div>
+
+          <div
+            className="metric-box"
+            style={{
+              background: "#f0f8ff",
+              borderColor: "#a9d8ff",
+            }}
+          >
+            <div className="title">
+              🔵 Хугацаандаа
+            </div>
+
+            <div className="value">
+              198
+            </div>
+
+            <div
+              className="foot"
+              style={{
+                color: "#13a7e2",
+              }}
+            >
+              ₮620M
+            </div>
+          </div>
+
+          <div className="metric-box warn">
+            <div className="title">
+              🟠 Ойрхон хугацаа
+            </div>
+
+            <div className="value">
+              112
+            </div>
+
+            <div className="foot orange">
+              ₮380M
+            </div>
+          </div>
+
+          <div className="metric-box danger">
+            <div className="title">
+              🔴 Хэтэрсэн
+            </div>
+
+            <div className="value">
+              116
+            </div>
+
+            <div className="foot red">
+              ₮2300M
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section className="dash-card table-card">
+        <div className="table-title-row">
+          <h3 className="section-title">
+            Хамгийн их авлагатай
+            харилцагчид (Топ 10)
+          </h3>
+
+          <span className="pill red">
+            Нийт: ₮4.5bn
+          </span>
+        </div>
+
+        <table className="data-table">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Харилцагч</th>
+              <th className="right">
+                Авлага
+              </th>
+              <th className="right">
+                Хоног
+              </th>
+              <th className="right">
+                Өмнөх сар
+              </th>
+              <th className="right">
+                Trend
+              </th>
+              <th className="right">
+                Арга
+              </th>
+            </tr>
+          </thead>
+
+          <tbody>
+            {customers.map(
+              (row, index) => {
+                const days = Number(
+                  row[2].replace("+", ""),
+                );
+
+                const dayStatus =
+                  days > 89
+                    ? "status-bad"
+                    : days > 30
+                      ? "status-warn"
+                      : "status-ok";
+
+                return (
+                  <tr key={row[0]}>
+                    <td className="muted">
+                      {index + 1}
+                    </td>
+
+                    <td>
+                      <b>{row[0]}</b>
+                    </td>
+
+                    <td className="right mono">
+                      <b>{row[1]}</b>
+                    </td>
+
+                    <td className="right">
+                      <span
+                        className={`status-badge ${dayStatus}`}
+                      >
+                        {row[2]}
+                      </span>
+                    </td>
+
+                    <td className="right mono muted">
+                      {row[3]}
+                    </td>
+
+                    <td
+                      className={`right mono ${
+                        row[4].startsWith(
+                          "▲",
+                        )
+                          ? "red"
+                          : "green"
+                      }`}
+                    >
+                      <b>{row[4]}</b>
+                    </td>
+
+                    <td className="right">
+                      {row[5]}
+                    </td>
+                  </tr>
+                );
+              },
+            )}
+          </tbody>
+        </table>
+      </section>
     </div>
   );
 }
-
-export default SalesDashboard;
