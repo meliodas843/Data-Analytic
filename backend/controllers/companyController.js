@@ -244,7 +244,7 @@ exports.registerCompany =
 
       const finalColor =
         color ||
-        "#2dd4bf";
+        "#16A34A";
 
       const [result] =
         await db.query(
@@ -450,7 +450,7 @@ exports.updateCompany =
       const finalColor =
         color ??
         existing.color ??
-        "#2dd4bf";
+        "#16A34A";
 
       const finalLogo =
         logo ===

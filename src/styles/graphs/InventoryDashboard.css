@@ -246,18 +246,18 @@
 }
 
 .inventory-sku {
-  color: #5b45f5 !important;
+  color: #5b45f5;
   font-family: monospace;
   font-weight: 700;
 }
 
 .inventory-product {
-  color: #273550 !important;
+  color: #273550;
   font-weight: 700;
 }
 
 .inventory-value {
-  color: #263550 !important;
+  color: #263550;
   font-weight: 800;
 }
 
@@ -285,41 +285,6 @@
 .status-out {
   background: #fff0f3;
   color: #ed3156;
-}
-
-.dashboard-notification-button,
-.dashboard-theme-button {
-  width: 36px;
-  min-width: 36px;
-  height: 36px;
-
-  padding: 0;
-
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  border: 1px solid #e3e8ef;
-  border-radius: 50%;
-
-  background: #f7f9fc;
-
-  font-size: 17px;
-
-  cursor: pointer;
-
-  transition: 0.2s ease;
-}
-
-.dashboard-notification-button:hover,
-.dashboard-theme-button:hover {
-  background: #ffffff;
-  border-color: #cfd8e5;
-
-  transform: translateY(-1px);
-
-  box-shadow:
-    0 4px 10px rgba(15, 23, 42, 0.08);
 }
 
 @media (max-width: 1200px) {

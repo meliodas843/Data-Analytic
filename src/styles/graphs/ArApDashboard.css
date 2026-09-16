@@ -121,14 +121,16 @@
   box-shadow: 0 2px 7px rgba(20, 40, 75, 0.06);
 }
 
-.arap-chart-panel .panel-heading h3 {
+.arap-chart-panel .panel-heading h3,
+.arap-table-panel .panel-heading h3 {
   margin: 0;
   color: #173766;
   font-size: 16px;
   font-weight: 800;
 }
 
-.arap-chart-panel .panel-heading p {
+.arap-chart-panel .panel-heading p,
+.arap-table-panel .panel-heading p {
   margin: 4px 0 0;
   color: #8290aa;
   font-size: 12px;
@@ -148,19 +150,6 @@
   border: 1px solid #e4e8f0;
   border-radius: 17px;
   box-shadow: 0 2px 7px rgba(20, 40, 75, 0.06);
-}
-
-.arap-table-panel .panel-heading h3 {
-  margin: 0;
-  color: #173766;
-  font-size: 16px;
-  font-weight: 800;
-}
-
-.arap-table-panel .panel-heading p {
-  margin: 4px 0 0;
-  color: #8290aa;
-  font-size: 12px;
 }
 
 .arap-table-container {
@@ -202,72 +191,37 @@
 }
 
 .invoice-number {
-  color: #5b45f5 !important;
+  color: #5b45f5;
   font-family: monospace;
   font-weight: 700;
 }
 
 .customer-name {
-  color: #273550 !important;
+  color: #273550;
   font-weight: 700;
 }
 
 .invoice-amount {
-  color: #263550 !important;
+  color: #263550;
   font-weight: 800;
 }
 
 .overdue-days {
-  color: #f02d55 !important;
+  color: #f02d55;
   font-family: monospace;
   font-weight: 700;
 }
 
 .overdue-badge {
   display: inline-flex;
-  padding: 5px 10px;
   align-items: center;
   justify-content: center;
+  padding: 5px 10px;
   border-radius: 999px;
   background: #fff0f3;
   color: #f02d55;
   font-size: 11px;
   font-weight: 700;
-}
-
-.dashboard-notification-button,
-.dashboard-theme-button {
-  width: 36px;
-  min-width: 36px;
-  height: 36px;
-
-  padding: 0;
-
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  border: 1px solid #e3e8ef;
-  border-radius: 50%;
-
-  background: #f7f9fc;
-
-  font-size: 17px;
-
-  cursor: pointer;
-
-  transition: 0.2s ease;
-}
-
-.dashboard-notification-button:hover,
-.dashboard-theme-button:hover {
-  background: #ffffff;
-  border-color: #cfd8e5;
-
-  transform: translateY(-1px);
-
-  box-shadow:
-    0 4px 10px rgba(15, 23, 42, 0.08);
 }
 
 @media (max-width: 1200px) {

@@ -1,187 +1,169 @@
 .admin-users-page {
   width: 100%;
-  padding: 6px 0 40px;
-  color: #111827;
+  padding: 0 0 40px;
+  color: #203f70;
+  box-sizing: border-box;
 }
-
-
-/* ================================
-   HEADING
-================================ */
 
 .admin-users-heading {
   display: flex;
   align-items: center;
   justify-content: space-between;
-
-  margin-bottom: 26px;
+  min-height: 42px;
+  margin-bottom: 24px;
 }
 
+.admin-users-heading h1,
 .admin-users-heading h2 {
   margin: 0;
-
+  color: #203f70;
   font-size: 24px;
+  line-height: 1.2;
   font-weight: 800;
+}
 
-  color: #111827;
+.admin-users-heading p {
+  margin: 6px 0 0;
+  color: #7c8da8;
+  font-size: 13px;
+  line-height: 1.4;
+  font-weight: 500;
 }
 
 .add-user-button {
   height: 42px;
-
   padding: 0 18px;
-
   display: flex;
   align-items: center;
+  justify-content: center;
   gap: 8px;
-
   border: none;
   border-radius: 8px;
-
-  background: #2dd4bf;
+  background: #16A34A;
   color: #ffffff;
-
-  font-size: 14px;
+  font-family: inherit;
+  font-size: 13px;
   font-weight: 700;
-
   cursor: pointer;
-
-  transition: 0.2s ease;
+  transition:
+    background 0.2s ease,
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
 }
 
 .add-user-button:hover {
   transform: translateY(-1px);
-
-  box-shadow:
-    0 6px 15px
-    rgba(45, 212, 191, 0.25);
+  background: #16A34A;
+  box-shadow: 0 6px 15px rgba(45, 212, 191, 0.25);
 }
 
 .add-user-button span {
-  font-size: 20px;
+  font-size: 18px;
   line-height: 1;
 }
-
-
-/* ================================
-   TOOLBAR
-================================ */
 
 .users-toolbar {
   display: flex;
   align-items: center;
-
   gap: 10px;
-
+  min-height: 42px;
   margin-bottom: 20px;
 }
 
 .users-toolbar select {
-  height: 40px;
-
+  height: 42px;
+  box-sizing: border-box;
   padding: 0 36px 0 13px;
-
   border: 1px solid #dbe2ea;
   border-radius: 8px;
-
+  outline: none;
   background: #ffffff;
-
-  color: #334155;
-
+  color: #425775;
+  font-family: inherit;
   font-size: 13px;
   font-weight: 600;
-
-  outline: none;
-
   cursor: pointer;
+  transition:
+    border-color 0.15s ease,
+    box-shadow 0.15s ease;
+}
+
+.users-toolbar select:focus {
+  border-color: #16A34A;
+  box-shadow: 0 0 0 3px rgba(45, 212, 191, 0.1);
 }
 
 .user-search {
   width: 240px;
-  height: 40px;
-
+  height: 42px;
+  box-sizing: border-box;
   display: flex;
   align-items: center;
-
   gap: 8px;
-
   padding: 0 12px;
-
   background: #ffffff;
-
   border: 1px solid #dbe2ea;
   border-radius: 8px;
+  transition:
+    border-color 0.15s ease,
+    box-shadow 0.15s ease;
+}
+
+.user-search:focus-within {
+  border-color: #16A34A;
+  box-shadow: 0 0 0 3px rgba(45, 212, 191, 0.1);
 }
 
 .search-icon {
+  flex-shrink: 0;
   color: #94a3b8;
-
   font-size: 18px;
 }
 
 .user-search input {
   flex: 1;
-
   min-width: 0;
-
   border: none;
   outline: none;
-
   background: transparent;
-
-  color: #1e293b;
-
+  color: #425775;
+  font-family: inherit;
   font-size: 13px;
+  font-weight: 400;
 }
 
 .user-search input::placeholder {
   color: #9ca3af;
 }
 
-
-/* ================================
-   ERROR
-================================ */
-
 .users-error {
-  margin-bottom: 16px;
-
+  margin-bottom: 20px;
   padding: 12px 14px;
-
   border: 1px solid #fecaca;
   border-radius: 8px;
-
   background: #fef2f2;
-
   color: #b91c1c;
-
   font-size: 13px;
   font-weight: 600;
 }
 
-
-/* ================================
-   TABLE CARD
-================================ */
-
 .users-table-card {
+  width: 100%;
   overflow: hidden;
-
+  box-sizing: border-box;
   background: #ffffff;
-
   border: 1px solid #dfe5ec;
   border-radius: 10px;
 }
 
 .users-table-scroll {
+  width: 100%;
   overflow-x: auto;
 }
 
 .users-table {
   width: 100%;
-
   border-collapse: collapse;
-
   table-layout: auto;
 }
 
@@ -190,32 +172,29 @@
 }
 
 .users-table th {
-  padding: 13px 16px;
-
+  height: 40px;
+  padding: 0 16px;
   text-align: left;
-
+  vertical-align: middle;
   border-bottom: 1px solid #e5e7eb;
-
+  background: #fafbfc;
   color: #64748b;
-
   font-size: 11px;
+  line-height: 1.2;
   font-weight: 800;
-
   letter-spacing: 0.04em;
+  text-transform: uppercase;
 }
 
 .users-table td {
-  padding: 14px 16px;
-
+  height: 56px;
+  padding: 0 16px;
+  vertical-align: middle;
   border-bottom: 1px solid #edf0f3;
-
   color: #64748b;
-
   font-size: 13px;
-}
-
-.users-table tbody tr:last-child td {
-  border-bottom: none;
+  line-height: 1.4;
+  font-weight: 400;
 }
 
 .users-table tbody tr {
@@ -226,287 +205,245 @@
   background: #fafcfe;
 }
 
+.users-table tbody tr:last-child td {
+  border-bottom: none;
+}
+
 .user-email {
   color: #111827;
-
+  font-size: 13px;
   font-weight: 700;
 }
 
 .company-name {
   color: #64748b;
+  font-size: 13px;
+  font-weight: 400;
 }
 
-.last-login {
-  color: #94a3b8 !important;
-
+.users-table td.last-login {
+  color: #94a3b8;
+  font-size: 13px;
   white-space: nowrap;
 }
-
-
-/* ================================
-   ROLE
-================================ */
 
 .role-badge {
   display: inline-flex;
   align-items: center;
-
+  justify-content: center;
   padding: 4px 9px;
-
   border-radius: 6px;
-
   font-size: 11px;
+  line-height: 1;
   font-weight: 700;
-
-  text-transform: lowercase;
 }
 
 .role-admin {
   background: #ede9fe;
-
   color: #7c3aed;
 }
 
 .role-viewer {
   background: #f1f3f5;
-
   color: #64748b;
 }
-
-
-/* ================================
-   ACTIONS
-================================ */
 
 .user-actions {
   display: flex;
   align-items: center;
-
   gap: 5px;
 }
 
 .user-action-button {
   width: 28px;
   height: 28px;
-
   display: flex;
   align-items: center;
   justify-content: center;
-
   padding: 0;
-
   border: none;
-
-  background: transparent;
-
-  color: #94a3b8;
-
-  font-size: 16px;
-
-  cursor: pointer;
-
   border-radius: 6px;
-
-  transition: 0.15s ease;
+  background: transparent;
+  color: #94a3b8;
+  font-size: 16px;
+  cursor: pointer;
+  transition:
+    background 0.15s ease,
+    color 0.15s ease;
 }
 
 .user-action-button:hover {
   background: #f1f5f9;
-
   color: #334155;
 }
 
-.user-action-button.delete:hover {
-  background: #fef2f2;
+.user-action-button.delete,
+.user-action-button.lock {
+  color: #94a3b8;
+}
 
+.user-action-button.delete:hover {
   color: #ef4444;
+  background: #fef2f2;
 }
 
 .user-action-button.unlock {
   color: #ef4444;
 }
 
+.user-action-button.lock:hover {
+  color: #f59e0b;
+  background: #fffbeb;
+}
+
+.user-action-button.unlock:hover {
+  color: #10b981;
+  background: #ecfdf5;
+}
+
+.user-action-button.delete svg,
+.user-action-button.lock svg,
+.user-action-button.unlock svg {
+  width: 16px;
+  height: 16px;
+  stroke-width: 1.8;
+}
+
 .locked-user-row {
   opacity: 0.6;
 }
 
-
-/* ================================
-   EMPTY
-================================ */
-
-.users-empty {
-  padding: 40px !important;
-
-  text-align: center !important;
-
-  color: #94a3b8 !important;
+.users-table td.users-empty {
+  height: auto;
+  padding: 40px;
+  text-align: center;
+  color: #94a3b8;
+  font-size: 13px;
 }
 
-
-/* ================================
-   PAGINATION
-================================ */
-
 .users-pagination {
-  min-height: 58px;
-
+  min-height: 56px;
   padding: 0 18px;
-
   display: flex;
   align-items: center;
   justify-content: flex-end;
-
   gap: 20px;
-
   border-top: 1px solid #edf0f3;
-
   color: #64748b;
-
   font-size: 12px;
 }
 
 .pagination-buttons {
   display: flex;
-
+  align-items: center;
   gap: 8px;
 }
 
 .pagination-buttons button {
   height: 34px;
-
   padding: 0 15px;
-
   border: 1px solid #dfe5ec;
   border-radius: 7px;
-
   background: #ffffff;
-
   color: #475569;
-
+  font-family: inherit;
   font-size: 12px;
   font-weight: 600;
-
   cursor: pointer;
+  transition:
+    background 0.15s ease,
+    border-color 0.15s ease;
 }
 
 .pagination-buttons button:hover:not(:disabled) {
   background: #f8fafc;
+  border-color: #cbd5e1;
 }
 
 .pagination-buttons button:disabled {
   opacity: 0.45;
-
   cursor: not-allowed;
 }
 
-
-/* ================================
-   MODAL
-================================ */
-
 .user-modal-overlay {
   position: fixed;
-
   inset: 0;
-
   z-index: 9999;
-
   display: flex;
   align-items: center;
   justify-content: center;
-
   padding: 20px;
-
-  background:
-    rgba(15, 23, 42, 0.45);
+  background: rgba(15, 23, 42, 0.45);
 }
 
 .user-modal {
   width: 100%;
   max-width: 520px;
-
   overflow: hidden;
-
   background: #ffffff;
-
   border-radius: 12px;
-
-  box-shadow:
-    0 25px 70px
-    rgba(15, 23, 42, 0.25);
-
-  animation:
-    adminUserModalIn
-    0.2s ease;
+  box-shadow: 0 25px 70px rgba(15, 23, 42, 0.25);
+  animation: adminUserModalIn 0.2s ease;
 }
 
 @keyframes adminUserModalIn {
   from {
     opacity: 0;
-
-    transform:
-      translateY(10px)
-      scale(0.98);
+    transform: translateY(10px) scale(0.98);
   }
 
   to {
     opacity: 1;
-
-    transform:
-      translateY(0)
-      scale(1);
+    transform: translateY(0) scale(1);
   }
 }
-
-
-/* ================================
-   MODAL HEADER
-================================ */
 
 .user-modal-header {
   display: flex;
   align-items: flex-start;
   justify-content: space-between;
-
+  gap: 15px;
   padding: 22px 24px;
-
   border-bottom: 1px solid #e5e7eb;
 }
 
 .user-modal-header h3 {
   margin: 0 0 5px;
-
-  color: #111827;
-
+  color: #203f70;
   font-size: 19px;
+  line-height: 1.3;
   font-weight: 800;
 }
 
 .user-modal-header p {
   margin: 0;
-
-  color: #94a3b8;
-
+  color: #7c8da8;
   font-size: 12px;
+  line-height: 1.4;
 }
 
 .modal-close {
+  width: 34px;
+  height: 34px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
   border: none;
-
+  border-radius: 7px;
   background: transparent;
-
   color: #94a3b8;
-
   font-size: 25px;
-
   cursor: pointer;
+  transition:
+    background 0.15s ease,
+    color 0.15s ease;
 }
 
-
-/* ================================
-   FORM
-================================ */
+.modal-close:hover {
+  background: #f1f5f9;
+  color: #334155;
+}
 
 .user-form {
   padding: 22px 24px;
@@ -515,13 +452,9 @@
 .user-form label {
   display: flex;
   flex-direction: column;
-
   gap: 7px;
-
   margin-bottom: 16px;
-
-  color: #334155;
-
+  color: #425775;
   font-size: 12px;
   font-weight: 700;
 }
@@ -530,143 +463,87 @@
 .user-form select {
   width: 100%;
   height: 42px;
-
   box-sizing: border-box;
-
   padding: 0 12px;
-
   border: 1px solid #dbe2ea;
-  border-radius: 7px;
-
-  background: #ffffff;
-
-  color: #1e293b;
-
-  font-size: 13px;
-
+  border-radius: 8px;
   outline: none;
-
-  transition: 0.15s ease;
+  background: #ffffff;
+  color: #425775;
+  font-family: inherit;
+  font-size: 13px;
+  transition:
+    border-color 0.15s ease,
+    box-shadow 0.15s ease;
 }
 
 .user-form input:focus,
 .user-form select:focus {
-  border-color: #2dd4bf;
-
-  box-shadow:
-    0 0 0 3px
-    rgba(45, 212, 191, 0.1);
+  border-color: #16A34A;
+  box-shadow: 0 0 0 3px rgba(45, 212, 191, 0.1);
 }
 
 .user-form-row {
   display: grid;
-
-  grid-template-columns:
-    repeat(2, minmax(0, 1fr));
-
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 14px;
 }
-
-
-/* ================================
-   MODAL FOOTER
-================================ */
 
 .user-modal-footer {
   display: flex;
   align-items: center;
   justify-content: flex-end;
-
   gap: 10px;
-
   margin-top: 8px;
 }
 
 .cancel-user-button,
 .save-user-button {
   height: 40px;
-
   padding: 0 18px;
-
   border-radius: 7px;
-
+  font-family: inherit;
   font-size: 13px;
   font-weight: 700;
-
   cursor: pointer;
+  transition:
+    background 0.15s ease,
+    border-color 0.15s ease;
 }
 
 .cancel-user-button {
   border: 1px solid #dbe2ea;
-
   background: #ffffff;
-
   color: #64748b;
+}
+
+.cancel-user-button:hover {
+  background: #f8fafc;
 }
 
 .save-user-button {
   border: none;
-
-  background: #2dd4bf;
-
+  background: #16A34A;
   color: #ffffff;
 }
 
-
-.user-action-button.delete {
-  color: #94a3b8;
+.save-user-button:hover {
+  background: #25c4b0;
 }
-
-.user-action-button.delete:hover {
-  color: #ef4444;
-  background: #fef2f2;
-}
-
-.user-action-button.delete svg {
-  width: 16px;
-  height: 16px;
-  stroke-width: 1.8;
-}
-
-.user-action-button.lock,
-.user-action-button.unlock {
-  color: #94a3b8;
-}
-
-.user-action-button.lock:hover {
-  color: #f59e0b;
-  background: #fffbeb;
-}
-
-.user-action-button.unlock {
-  color: #ef4444;
-}
-
-.user-action-button.unlock:hover {
-  color: #10b981;
-  background: #ecfdf5;
-}
-
-.user-action-button.lock svg,
-.user-action-button.unlock svg {
-  width: 16px;
-  height: 16px;
-  stroke-width: 1.8;
-}
-
-/* ================================
-   RESPONSIVE
-================================ */
 
 @media (max-width: 800px) {
   .admin-users-heading {
     align-items: flex-start;
-
     gap: 15px;
   }
 
   .users-toolbar {
     flex-wrap: wrap;
+  }
+
+  .users-toolbar select {
+    flex: 1;
+    min-width: 160px;
   }
 
   .user-search {

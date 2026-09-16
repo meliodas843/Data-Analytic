@@ -1,47 +1,64 @@
+import "../styles/Admin/AdminDashboard.css";
 function AdminDashboard() {
-  return (
-    <div>
+  const stats = [
+    {
+      label: "Нийт админ",
+      value: 0,
+      icon: "👥",
+    },
+    {
+      label: "Хүлээгдэж буй админ",
+      value: 0,
+      icon: "◷",
+    },
+    {
+      label: "Идэвхтэй админ",
+      value: 0,
+      icon: "✓",
+    },
+    {
+      label: "Нүүр хуудасны хэсэг",
+      value: 8,
+      icon: "▤",
+    },
+  ];
 
+  return (
+    <div className="admin-dashboard-page">
       <div className="admin-page-heading">
         <div>
-          <h2>Dashboard</h2>
+          <h2>Хяналтын самбар</h2>
+
           <p>
-            DataView administration overview
+            DataView системийн удирдлагын ерөнхий мэдээлэл
           </p>
         </div>
       </div>
 
-
       <div className="admin-stat-grid">
+        {stats.map((item) => (
+          <div
+            className="admin-stat-card"
+            key={item.label}
+          >
+            <div className="admin-stat-card-top">
+              <span className="admin-stat-label">
+                {item.label}
+              </span>
 
-        <div className="admin-stat-card">
-          <span>Total Admins</span>
-          <strong>0</strong>
-        </div>
+              <div className="admin-stat-icon">
+                {item.icon}
+              </div>
+            </div>
 
-
-        <div className="admin-stat-card">
-          <span>Pending Admins</span>
-          <strong>0</strong>
-        </div>
-
-
-        <div className="admin-stat-card">
-          <span>Active Admins</span>
-          <strong>0</strong>
-        </div>
-
-
-        <div className="admin-stat-card">
-          <span>Home Sections</span>
-          <strong>8</strong>
-        </div>
-
+            <strong className="admin-stat-value">
+              {item.value}
+            </strong>
+          </div>
+        ))}
       </div>
-
     </div>
   );
 }
-
 
 export default AdminDashboard;

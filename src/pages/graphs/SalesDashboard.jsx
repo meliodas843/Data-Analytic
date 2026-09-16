@@ -1,4 +1,9 @@
 import {
+  Fragment,
+  useState,
+} from "react";
+
+import {
   Bar,
   BarChart,
   CartesianGrid,
@@ -214,6 +219,25 @@ function Stat({
 }
 
 export default function SalesDashboard() {
+  const [
+    selectedCustomer,
+    setSelectedCustomer,
+  ] = useState(null);
+
+  const handleCustomerClick = (
+    row,
+    index,
+  ) => {
+    setSelectedCustomer((current) =>
+      current?.index === index
+        ? null
+        : {
+            row,
+            index,
+          },
+    );
+  };
+
   return (
     <div className="sales-dashboard">
       <section
@@ -385,7 +409,8 @@ export default function SalesDashboard() {
               <span>
                 <i
                   style={{
-                    display: "inline-block",
+                    display:
+                      "inline-block",
                     width: 9,
                     height: 9,
                     borderRadius: "50%",
@@ -393,6 +418,7 @@ export default function SalesDashboard() {
                     marginRight: 8,
                   }}
                 />
+
                 {item.n}
               </span>
 
@@ -562,90 +588,214 @@ export default function SalesDashboard() {
           </span>
         </div>
 
-        <table className="data-table">
-          <thead>
-            <tr>
-              <th>#</th>
-              <th>Харилцагч</th>
-              <th className="right">
-                Авлага
-              </th>
-              <th className="right">
-                Хоног
-              </th>
-              <th className="right">
-                Өмнөх сар
-              </th>
-              <th className="right">
-                Trend
-              </th>
-              <th className="right">
-                Арга
-              </th>
-            </tr>
-          </thead>
+        <div className="customer-table-wrapper">
+          <table className="data-table customer-expand-table">
+            <thead>
+              <tr>
+                <th>#</th>
 
-          <tbody>
-            {customers.map(
-              (row, index) => {
-                const days = Number(
-                  row[2].replace("+", ""),
-                );
+                <th>
+                  ХАРИЛЦАГЧ
+                </th>
 
-                const dayStatus =
-                  days > 89
-                    ? "status-bad"
-                    : days > 30
-                      ? "status-warn"
-                      : "status-ok";
+                <th className="right">
+                  АВЛАГА
+                </th>
 
-                return (
-                  <tr key={row[0]}>
-                    <td className="muted">
-                      {index + 1}
-                    </td>
+                <th className="right">
+                  ХОНОГ
+                </th>
 
-                    <td>
-                      <b>{row[0]}</b>
-                    </td>
+                <th className="right">
+                  ӨМНӨХ САР
+                </th>
 
-                    <td className="right mono">
-                      <b>{row[1]}</b>
-                    </td>
+                <th className="right">
+                  TREND
+                </th>
 
-                    <td className="right">
-                      <span
-                        className={`status-badge ${dayStatus}`}
-                      >
-                        {row[2]}
-                      </span>
-                    </td>
+                <th className="right">
+                  АРГА
+                </th>
+              </tr>
+            </thead>
 
-                    <td className="right mono muted">
-                      {row[3]}
-                    </td>
+            <tbody>
+              {customers.map(
+                (row, index) => {
+                  const days = Number(
+                    row[2].replace(
+                      "+",
+                      "",
+                    ),
+                  );
 
-                    <td
-                      className={`right mono ${
-                        row[4].startsWith(
-                          "▲",
-                        )
-                          ? "red"
-                          : "green"
-                      }`}
+                  const dayStatus =
+                    days > 89
+                      ? "status-bad"
+                      : days > 30
+                        ? "status-warn"
+                        : "status-ok";
+
+                  const isOpen =
+                    selectedCustomer?.index ===
+                    index;
+
+                  const trendBad =
+                    row[4].startsWith(
+                      "▲",
+                    );
+
+                  return (
+                    <Fragment
+                      key={row[0]}
                     >
-                      <b>{row[4]}</b>
-                    </td>
+                      <tr
+                        className={`customer-main-row ${
+                          isOpen
+                            ? "customer-row-open"
+                            : ""
+                        }`}
+                        onClick={() =>
+                          handleCustomerClick(
+                            row,
+                            index,
+                          )
+                        }
+                      >
+                        <td className="customer-number">
+                          {index + 1}
+                        </td>
 
-                    <td className="right">
-                      {row[5]}
-                    </td>
-                  </tr>
-                );
-              },
-            )}
-          </tbody>
-        </table>
+                        <td>
+                          <b className="customer-name">
+                            {row[0]}
+                          </b>
+                        </td>
+
+                        <td className="right mono customer-amount">
+                          <b>
+                            {row[1]}
+                          </b>
+                        </td>
+
+                        <td className="right">
+                          <span
+                            className={`status-badge ${dayStatus}`}
+                          >
+                            {row[2]}
+                          </span>
+                        </td>
+
+                        <td className="right mono muted">
+                          {row[3]}
+                        </td>
+
+                        <td
+                          className={`right mono ${
+                            trendBad
+                              ? "red"
+                              : "green"
+                          }`}
+                        >
+                          <b>
+                            {row[4]}
+                          </b>
+                        </td>
+
+                        <td className="right customer-action">
+                          {row[5]}
+                        </td>
+                      </tr>
+
+                      {isOpen && (
+                        <tr className="customer-expanded-row">
+                          <td
+                            colSpan={7}
+                          >
+                            <div className="customer-inline-detail">
+                              <div className="customer-inline-item">
+                                <span>
+                                  Авлага:
+                                </span>
+
+                                <strong className="mono">
+                                  {row[1]}
+                                </strong>
+                              </div>
+
+                              <div className="customer-inline-item">
+                                <span>
+                                  Хугацаа:
+                                </span>
+
+                                <strong>
+                                  {row[2]} хоног
+                                </strong>
+                              </div>
+
+                              <div className="customer-inline-item">
+                                <span>
+                                  Өмнөх сар:
+                                </span>
+
+                                <strong className="mono">
+                                  {row[3]}
+                                </strong>
+                              </div>
+
+                              <div className="customer-inline-item">
+                                <span>
+                                  Өөрчлөлт:
+                                </span>
+
+                                <strong
+                                  className={`mono ${
+                                    trendBad
+                                      ? "red"
+                                      : "green"
+                                  }`}
+                                >
+                                  {row[4]}
+                                </strong>
+                              </div>
+
+                              <div
+                                className={`customer-inline-action ${
+                                  row[5] ===
+                                  "☎"
+                                    ? "danger"
+                                    : row[5] ===
+                                        "⚠"
+                                      ? "warning"
+                                      : "success"
+                                }`}
+                              >
+                                <span>
+                                  {row[5]}
+                                </span>
+
+                                <strong>
+                                  {row[5] ===
+                                  "☎"
+                                    ? "Яаралтай холбогдох шаардлагатай"
+                                    : row[5] ===
+                                        "⚠"
+                                      ? "Анхаарал шаардлагатай"
+                                      : "Хяналт хэвийн"}
+                                </strong>
+                              </div>
+                            </div>
+                          </td>
+                        </tr>
+                      )}
+                    </Fragment>
+                  );
+                },
+              )}
+            </tbody>
+          </table>
+        </div>
       </section>
     </div>
   );

@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { FcGoogle } from "react-icons/fc";
-
+import logo from "../assets/logo-default.svg";
 import "../styles/Login.css";
 
 
@@ -45,20 +45,20 @@ function Login() {
 
           <button
             type="button"
-            className="login-brand"
+            className="navbar-logo"
             onClick={() =>
-              navigate("/")
+              window.scrollTo({
+                top: 0,
+                behavior: "smooth",
+              })
             }
-          >
-            <span className="login-logo">
-              D
-            </span>
-
-            <span>
-              DataView
-            </span>
+            >
+            <img
+              src={logo}
+                alt="DataView"
+                className="navbar-logo-image"
+            />
           </button>
-
 
           <button
             type="button"

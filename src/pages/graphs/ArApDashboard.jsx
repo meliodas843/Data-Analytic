@@ -1,4 +1,9 @@
 import {
+  Fragment,
+  useState,
+} from "react";
+
+import {
   Bar,
   BarChart,
   CartesianGrid,
@@ -180,7 +185,149 @@ const invoices = [
   ],
 ];
 
+const payables = [
+  [
+    "Монгол Нийлүүлэгч ХК",
+    "AP-2026-0312",
+    "2026-07-01",
+    "2026-07-31",
+    "₮280M",
+    "₮280M",
+    "—",
+    "✓",
+    "Төлөгдсөн",
+  ],
+  [
+    "Дулааны хангамж ХХК",
+    "AP-2026-0318",
+    "2026-06-15",
+    "2026-07-15",
+    "₮156M",
+    "₮100M",
+    "₮56M",
+    "32",
+    "Хоцрогдол",
+  ],
+  [
+    "Цахилгаан Эрчим ХК",
+    "AP-2026-0325",
+    "2026-07-05",
+    "2026-08-05",
+    "₮98M",
+    "—",
+    "₮98M",
+    "13",
+    "Хэвийн",
+  ],
+  [
+    "Усны Дэд Бүтэц",
+    "AP-2026-0331",
+    "2026-07-10",
+    "2026-08-10",
+    "₮72M",
+    "—",
+    "₮72M",
+    "8",
+    "Хэвийн",
+  ],
+  [
+    "Тоног Төхөөрөмж ХХК",
+    "AP-2026-0338",
+    "2026-06-01",
+    "2026-07-01",
+    "₮190M",
+    "₮190M",
+    "—",
+    "✓",
+    "Төлөгдсөн",
+  ],
+  [
+    "Интернет Провайдер",
+    "AP-2026-0344",
+    "2026-07-01",
+    "2026-07-25",
+    "₮24M",
+    "—",
+    "₮24M",
+    "6",
+    "Хэвийн",
+  ],
+  [
+    "Хоол Нийлүүлэгч",
+    "AP-2026-0351",
+    "2026-07-15",
+    "2026-08-15",
+    "₮45M",
+    "—",
+    "₮45M",
+    "3",
+    "Хэвийн",
+  ],
+  [
+    "Аюулгүй Байдал ХХК",
+    "AP-2026-0357",
+    "2026-05-20",
+    "2026-06-20",
+    "₮88M",
+    "₮60M",
+    "₮28M",
+    "58",
+    "Хэтэрсэн",
+  ],
+  [
+    "Засвар Үйлчилгээ",
+    "AP-2026-0363",
+    "2026-07-08",
+    "2026-08-08",
+    "₮62M",
+    "—",
+    "₮62M",
+    "10",
+    "Хэвийн",
+  ],
+  [
+    "Маркетинг Агентлаг",
+    "AP-2026-0369",
+    "2026-07-12",
+    "2026-08-12",
+    "₮35M",
+    "—",
+    "₮35M",
+    "6",
+    "Хэвийн",
+  ],
+];
+
 export default function ArApDashboard() {
+  const [activeTab, setActiveTab] =
+    useState("ar");
+
+  const [
+    selectedInvoice,
+    setSelectedInvoice,
+  ] = useState(null);
+
+  const changeTab = (tab) => {
+    setActiveTab(tab);
+    setSelectedInvoice(null);
+  };
+
+  const handleRowClick = (
+    row,
+    index,
+  ) => {
+    setSelectedInvoice((current) =>
+      current === index
+        ? null
+        : index,
+    );
+  };
+
+  const tableData =
+    activeTab === "ar"
+      ? invoices
+      : payables;
+
   return (
     <div className="arap-dashboard">
       <section
@@ -346,7 +493,9 @@ export default function ArApDashboard() {
               key={item[0]}
             >
               <div className="progress-head">
-                <span>{item[0]}</span>
+                <span>
+                  {item[0]}
+                </span>
 
                 <b
                   style={{
@@ -362,7 +511,8 @@ export default function ArApDashboard() {
                   className="progress-fill"
                   style={{
                     width: `${item[1]}%`,
-                    background: item[4],
+                    background:
+                      item[4],
                   }}
                 />
               </div>
@@ -427,7 +577,8 @@ export default function ArApDashboard() {
               <i
                 className="legend-dot"
                 style={{
-                  background: "#e63f3f",
+                  background:
+                    "#e63f3f",
                 }}
               />
               AR авлага
@@ -437,7 +588,8 @@ export default function ArApDashboard() {
               <i
                 className="legend-dot"
                 style={{
-                  background: "#3dae64",
+                  background:
+                    "#3dae64",
                 }}
               />
               AP өглөг
@@ -488,17 +640,22 @@ export default function ArApDashboard() {
                 fontSize: 13,
               }}
             >
-              <span>{item[0]}</span>
+              <span>
+                {item[0]}
+              </span>
 
               <div
                 className="progress-track"
-                style={{ margin: 0 }}
+                style={{
+                  margin: 0,
+                }}
               >
                 <div
                   className="progress-fill"
                   style={{
                     width: `${item[1]}%`,
-                    background: item[3],
+                    background:
+                      item[3],
                   }}
                 />
               </div>
@@ -520,153 +677,347 @@ export default function ArApDashboard() {
       </section>
 
       <section className="dash-card table-card">
-        <div className="table-title-row">
-          <div>
-            <span
-              className="pill"
-              style={{
-                background: "#eef2f7",
-                marginRight: 8,
-              }}
+        <div className="arap-table-header">
+          <div className="arap-tabs">
+            <button
+              type="button"
+              className={`arap-tab ${
+                activeTab === "ar"
+                  ? "active"
+                  : ""
+              }`}
+              onClick={() =>
+                changeTab("ar")
+              }
             >
               📥 Авлага (AR)
-            </span>
+            </button>
 
-            <span
-              className="pill"
-              style={{
-                background: "#eef2f7",
-                color: "#8ca1bd",
-              }}
+            <button
+              type="button"
+              className={`arap-tab ${
+                activeTab === "ap"
+                  ? "active"
+                  : ""
+              }`}
+              onClick={() =>
+                changeTab("ap")
+              }
             >
               📤 Өглөг (AP)
-            </span>
+            </button>
           </div>
 
           <span className="section-sub mono">
-            10 нэхэмжлэх | ₮4.75bn
+            {activeTab === "ar"
+              ? "10 нэхэмжлэх | ₮4.75bn"
+              : "10 нэхэмжлэх | ₮420M"}
           </span>
         </div>
 
-        <table className="data-table">
-          <thead>
-            <tr>
-              <th>Харилцагч</th>
-              <th>Нэхэмжлэх №</th>
-              <th>Нэхэмжилсэн огноо</th>
-              <th>Дуусах огноо</th>
-              <th className="right">
-                Нийт дүн
-              </th>
-              <th className="right">
-                Төлсөн
-              </th>
-              <th className="right">
-                Үлдэгдэл
-              </th>
-              <th className="right">
-                Хоног
-              </th>
-              <th className="right">
-                Статус
-              </th>
-            </tr>
-          </thead>
+        <div className="arap-table-wrapper">
+          <table className="data-table arap-expand-table">
+            <thead>
+              <tr>
+                <th>
+                  {activeTab === "ar"
+                    ? "ХАРИЛЦАГЧ"
+                    : "НИЙЛҮҮЛЭГЧ"}
+                </th>
 
-          <tbody>
-            {invoices.map((row) => {
-              const statusClass =
-                row[8] === "Хэвийн"
-                  ? "status-ok"
-                  : row[8] === "Хоцрогдол"
-                    ? "status-warn"
-                    : "status-bad";
+                <th>
+                  НЭХЭМЖЛЭХ №
+                </th>
 
-              const colorClass =
-                row[8] === "Хэвийн"
-                  ? "green"
-                  : row[8] === "Хоцрогдол"
-                    ? "orange"
-                    : "red";
+                <th>
+                  {activeTab === "ar"
+                    ? "НЭХЭМЖИЛСЭН ОГНОО"
+                    : "ОГНОО"}
+                </th>
 
-              return (
-                <tr key={row[1]}>
-                  <td>
-                    <b>{row[0]}</b>
-                  </td>
+                <th>
+                  ДУУСАХ ОГНОО
+                </th>
 
-                  <td className="mono muted">
-                    {row[1]}
-                  </td>
+                <th className="right">
+                  НИЙТ ДҮН
+                </th>
 
-                  <td className="mono muted">
-                    {row[2]}
-                  </td>
+                <th className="right">
+                  ТӨЛСӨН
+                </th>
 
-                  <td className="mono muted">
-                    {row[3]}
+                <th className="right">
+                  ҮЛДЭГДЭЛ
+                </th>
+
+                <th className="right">
+                  ХОНОГ
+                </th>
+
+                <th className="right">
+                  СТАТУС
+                </th>
+              </tr>
+            </thead>
+
+            <tbody>
+              {tableData.map(
+                (row, index) => {
+                  const statusClass =
+                    row[8] ===
+                      "Хэвийн" ||
+                    row[8] ===
+                      "Төлөгдсөн"
+                      ? "status-ok"
+                      : row[8] ===
+                          "Хоцрогдол"
+                        ? "status-warn"
+                        : "status-bad";
+
+                  const colorClass =
+                    row[8] ===
+                      "Хэвийн" ||
+                    row[8] ===
+                      "Төлөгдсөн"
+                      ? "green"
+                      : row[8] ===
+                          "Хоцрогдол"
+                        ? "orange"
+                        : "red";
+
+                  const isOpen =
+                    selectedInvoice ===
+                    index;
+
+                  return (
+                    <Fragment
+                      key={`${activeTab}-${row[1]}`}
+                    >
+                      <tr
+                        className={`arap-main-row ${
+                          isOpen
+                            ? "arap-row-open"
+                            : ""
+                        } ${
+                          row[8] ===
+                          "Хэтэрсэн"
+                            ? "arap-overdue-row"
+                            : ""
+                        }`}
+                        onClick={() =>
+                          handleRowClick(
+                            row,
+                            index,
+                          )
+                        }
+                      >
+                        <td>
+                          <b>
+                            {row[0]}
+                          </b>
+                        </td>
+
+                        <td className="mono muted">
+                          {row[1]}
+                        </td>
+
+                        <td className="mono muted">
+                          {row[2]}
+                        </td>
+
+                        <td className="mono muted">
+                          {row[3]}
+                        </td>
+
+                        <td className="right mono">
+                          <b>
+                            {row[4]}
+                          </b>
+                        </td>
+
+                        <td className="right mono muted">
+                          {row[5]}
+                        </td>
+
+                        <td
+                          className={`right mono ${colorClass}`}
+                        >
+                          <b>
+                            {row[6]}
+                          </b>
+                        </td>
+
+                        <td className="right">
+                          <span
+                            className={`status-badge ${statusClass}`}
+                          >
+                            {row[7]}
+                          </span>
+                        </td>
+
+                        <td className="right">
+                          <span
+                            className={`status-badge ${statusClass}`}
+                          >
+                            {row[8]}
+                          </span>
+                        </td>
+                      </tr>
+
+                      {isOpen && (
+                        <tr className="arap-expanded-row">
+                          <td colSpan={9}>
+                            <div className="arap-inline-detail">
+                              <div className="arap-inline-item">
+                                <span>
+                                  Нийт дүн:
+                                </span>
+
+                                <strong className="mono">
+                                  {row[4]}
+                                </strong>
+                              </div>
+
+                              <div className="arap-inline-item">
+                                <span>
+                                  Төлсөн:
+                                </span>
+
+                                <strong className="mono">
+                                  {row[5] ===
+                                  "—"
+                                    ? "₮0M"
+                                    : row[5]}
+                                </strong>
+                              </div>
+
+                              <div className="arap-inline-item">
+                                <span>
+                                  Үлдэгдэл:
+                                </span>
+
+                                <strong className="mono">
+                                  {row[6]}
+                                </strong>
+                              </div>
+
+                              {row[7] !==
+                                "✓" && (
+                                <div className="arap-inline-item">
+                                  <span>
+                                    Хугацаа:
+                                  </span>
+
+                                  <strong>
+                                    {row[7]} хоног
+                                  </strong>
+                                </div>
+                              )}
+
+                              <div className="arap-inline-item">
+                                <span>
+                                  Дуусах:
+                                </span>
+
+                                <strong className="mono">
+                                  {row[3]}
+                                </strong>
+                              </div>
+
+                              {row[8] ===
+                                "Хэтэрсэн" && (
+                                <div className="arap-inline-alert danger">
+                                  🔴 Яаралтай
+                                  холбогдох
+                                  шаардлагатай
+                                </div>
+                              )}
+
+                              {row[8] ===
+                                "Хоцрогдол" && (
+                                <div className="arap-inline-alert warning">
+                                  🟠 Хоцрогдолтой
+                                  нэхэмжлэх
+                                </div>
+                              )}
+
+                              {row[8] ===
+                                "Хэвийн" && (
+                                <div className="arap-inline-alert success">
+                                  ✓ Хугацаа хэвийн
+                                </div>
+                              )}
+
+                              {row[8] ===
+                                "Төлөгдсөн" && (
+                                <div className="arap-inline-alert success">
+                                  ✓ Бүрэн төлөгдсөн
+                                </div>
+                              )}
+                            </div>
+                          </td>
+                        </tr>
+                      )}
+                    </Fragment>
+                  );
+                },
+              )}
+            </tbody>
+
+            <tfoot>
+              {activeTab === "ar" ? (
+                <tr>
+                  <td colSpan="4">
+                    <b>
+                      Нийт (10 нэхэмжлэх)
+                    </b>
                   </td>
 
                   <td className="right mono">
-                    <b>{row[4]}</b>
+                    <b>₮4,850M</b>
                   </td>
 
-                  <td className="right mono muted">
-                    {row[5]}
+                  <td className="right mono">
+                    <b>₮100M</b>
                   </td>
 
-                  <td
-                    className={`right mono ${colorClass}`}
-                  >
-                    <b>{row[6]}</b>
+                  <td className="right mono red">
+                    <b>₮4.75bn</b>
                   </td>
 
-                  <td className="right">
-                    <span
-                      className={`status-badge ${statusClass}`}
-                    >
-                      {row[7]}
-                    </span>
-                  </td>
+                  <td />
 
-                  <td className="right">
-                    <span
-                      className={`status-badge ${statusClass}`}
-                    >
-                      {row[8]}
-                    </span>
-                  </td>
+                  <td />
                 </tr>
-              );
-            })}
-          </tbody>
+              ) : (
+                <tr>
+                  <td colSpan="4">
+                    <b>
+                      Нийт (10 нэхэмжлэх)
+                    </b>
+                  </td>
 
-          <tfoot>
-            <tr>
-              <td colSpan="4">
-                <b>
-                  Нийт (10 нэхэмжлэх)
-                </b>
-              </td>
+                  <td className="right mono">
+                    <b>₮1,050M</b>
+                  </td>
 
-              <td className="right mono">
-                <b>₮4,850M</b>
-              </td>
+                  <td className="right mono">
+                    <b>₮630M</b>
+                  </td>
 
-              <td className="right mono">
-                <b>₮100M</b>
-              </td>
+                  <td className="right mono green">
+                    <b>₮420M</b>
+                  </td>
 
-              <td className="right mono red">
-                <b>₮4.75bn</b>
-              </td>
+                  <td />
 
-              <td />
-
-              <td />
-            </tr>
-          </tfoot>
-        </table>
+                  <td />
+                </tr>
+              )}
+            </tfoot>
+          </table>
+        </div>
       </section>
     </div>
   );

@@ -3,7 +3,12 @@ import {
   useNavigate,
 } from "react-router-dom";
 
-function DashboardNavbar() {
+import logo from "../assets/logo-default.svg";
+
+function DashboardNavbar({
+  collapsed,
+  onToggle,
+}) {
   const navigate = useNavigate();
 
   const getLinkClass = ({ isActive }) =>
@@ -17,102 +22,189 @@ function DashboardNavbar() {
   };
 
   return (
-    <aside className="dashboard-sidebar">
+    <aside
+      className={`dashboard-sidebar ${
+        collapsed ? "collapsed" : ""
+      }`}
+    >
       <div>
         <div className="sidebar-logo">
-          <div className="sidebar-logo-icon">
-            D
-          </div>
+          {!collapsed && (
+            <img
+              src={logo}
+              alt="DataView"
+              className="sidebar-logo-image"
+            />
+          )}
 
-          <span>DataView</span>
+          <button
+            type="button"
+            className="sidebar-toggle"
+            onClick={onToggle}
+            aria-label={
+              collapsed
+                ? "Меню дэлгэх"
+                : "Меню хураах"
+            }
+            title={
+              collapsed
+                ? "Меню дэлгэх"
+                : "Меню хураах"
+            }
+          >
+            {collapsed ? "☰" : "←"}
+          </button>
         </div>
 
         <div className="sidebar-section">
-          <p className="sidebar-label">
-            DASHBOARDS
-          </p>
+          {!collapsed && (
+            <p className="sidebar-label">
+              DASHBOARDS
+            </p>
+          )}
 
           <NavLink
             to="/dashboard"
+            end
             className={getLinkClass}
+            title="CEO Dashboard"
           >
-            <span>🏢</span>
-            <span>CEO Dashboard</span>
+            <span className="sidebar-item-icon">
+              🏢
+            </span>
+
+            {!collapsed && (
+              <span className="sidebar-item-text">
+                CEO Dashboard
+              </span>
+            )}
           </NavLink>
 
           <NavLink
             to="/finance"
             className={getLinkClass}
+            title="Finance Dashboard"
           >
-            <span>💰</span>
-            <span>Finance Dashboard</span>
+            <span className="sidebar-item-icon">
+              💰
+            </span>
+
+            {!collapsed && (
+              <span className="sidebar-item-text">
+                Finance Dashboard
+              </span>
+            )}
           </NavLink>
 
           <NavLink
             to="/sales"
             className={getLinkClass}
+            title="Sales Dashboard"
           >
-            <span>📈</span>
-            <span>Sales Dashboard</span>
+            <span className="sidebar-item-icon">
+              📈
+            </span>
+
+            {!collapsed && (
+              <span className="sidebar-item-text">
+                Sales Dashboard
+              </span>
+            )}
           </NavLink>
 
           <NavLink
             to="/ar-ap"
             className={getLinkClass}
+            title="AR/AP Dashboard"
           >
-            <span>🧾</span>
-            <span>AR/AP Dashboard</span>
+            <span className="sidebar-item-icon">
+              🧾
+            </span>
+
+            {!collapsed && (
+              <span className="sidebar-item-text">
+                AR/AP Dashboard
+              </span>
+            )}
           </NavLink>
 
           <NavLink
             to="/inventory"
             className={getLinkClass}
+            title="Inventory Dashboard"
           >
-            <span>📦</span>
-            <span>Inventory Dashboard</span>
+            <span className="sidebar-item-icon">
+              📦
+            </span>
+
+            {!collapsed && (
+              <span className="sidebar-item-text">
+                Inventory Dashboard
+              </span>
+            )}
           </NavLink>
         </div>
 
         <div className="sidebar-section">
-          <p className="sidebar-label">
-            TOOLS
-          </p>
+          {!collapsed && (
+            <p className="sidebar-label">
+              TOOLS
+            </p>
+          )}
 
           <button
             type="button"
             className="sidebar-item"
+            title="Chart Templates"
           >
-            <span>📊</span>
-            <span>Chart Templates</span>
+            <span className="sidebar-item-icon">
+              📊
+            </span>
+
+            {!collapsed && (
+              <span className="sidebar-item-text">
+                Chart Templates
+              </span>
+            )}
           </button>
 
           <button
             type="button"
             className="sidebar-item"
+            title="Dashboard Builder"
           >
-            <span>🔧</span>
-            <span>Dashboard Builder</span>
+            <span className="sidebar-item-icon">
+              🔧
+            </span>
+
+            {!collapsed && (
+              <span className="sidebar-item-text">
+                Dashboard Builder
+              </span>
+            )}
           </button>
         </div>
       </div>
 
       <div className="sidebar-user">
-        <div className="sidebar-user-left">
-          <div className="user-avatar">
-            D
-          </div>
+        {!collapsed && (
+          <div className="sidebar-user-left">
+            <div className="user-avatar">
+              D
+            </div>
 
-          <div>
-            <strong>demo</strong>
-            <span>demo@dataviz.pro</span>
+            <div className="sidebar-user-info">
+              <strong>demo</strong>
+              <span>demo@dataviz.pro</span>
+            </div>
           </div>
-        </div>
+        )}
 
         <button
           type="button"
           className="logout-button"
           onClick={handleLogout}
-          title="Log out"
+          title="Гарах"
         >
           ⏻
         </button>

@@ -1,4 +1,9 @@
 import {
+  Fragment,
+  useState,
+} from "react";
+
+import {
   Bar,
   BarChart,
   CartesianGrid,
@@ -254,6 +259,17 @@ function Waterfall() {
 }
 
 export default function FinanceDashboard() {
+  const [selectedBranch, setSelectedBranch] =
+    useState(null);
+
+  const handleBranchClick = (row) => {
+    setSelectedBranch((current) =>
+      current?.[0] === row[0]
+        ? null
+        : row,
+    );
+  };
+
   return (
     <div className="finance-dashboard">
       <section className="dash-card chart-card mb22">
@@ -430,6 +446,7 @@ export default function FinanceDashboard() {
                     marginRight: 8,
                   }}
                 />
+
                 {item.n}
               </span>
 
@@ -563,57 +580,184 @@ export default function FinanceDashboard() {
           </h3>
 
           <span className="section-sub">
-            Багаас дарж эрэмбэлэх
+            Мөр дээр дарж дэлгэрэнгүй харах
           </span>
         </div>
 
-        <table className="data-table">
-          <thead>
-            <tr>
-              <th>Салбар</th>
-              <th className="right">
-                Орлого
-              </th>
-              <th className="right">
-                Зардал
-              </th>
-              <th className="right">
-                Ашиг ↓
-              </th>
-              <th className="right">
-                Өөрчлөлт
-              </th>
-            </tr>
-          </thead>
+        <div className="branch-table-wrapper">
+          <table className="data-table branch-expand-table">
+            <thead>
+              <tr>
+                <th>#</th>
 
-          <tbody>
-            {rows.map((row) => (
-              <tr key={row[0]}>
-                <td>
-                  <b>{row[0]}</b>
-                </td>
+                <th>
+                  САЛБАР
+                </th>
 
-                <td className="right mono">
-                  {row[1]}
-                </td>
+                <th className="right">
+                  ОРЛОГО
+                </th>
 
-                <td className="right mono muted">
-                  {row[2]}
-                </td>
+                <th className="right">
+                  ЗАРДАЛ
+                </th>
 
-                <td className="right mono green">
-                  <b>{row[3]}</b>
-                </td>
+                <th className="right">
+                  АШИГ
+                </th>
 
-                <td
-                  className={`right mono ${row[5]}`}
-                >
-                  <b>{row[4]}</b>
-                </td>
+                <th className="right">
+                  ӨӨРЧЛӨЛТ
+                </th>
+
+                <th className="right">
+                  ТӨЛӨВ
+                </th>
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+
+            <tbody>
+              {rows.map((row, index) => {
+                const isOpen =
+                  selectedBranch?.[0] ===
+                  row[0];
+
+                return (
+                  <Fragment key={row[0]}>
+                    <tr
+                      className={`branch-main-row ${
+                        isOpen
+                          ? "branch-row-open"
+                          : ""
+                      }`}
+                      onClick={() =>
+                        handleBranchClick(row)
+                      }
+                    >
+                      <td className="branch-number">
+                        {index + 1}
+                      </td>
+
+                      <td>
+                        <b className="branch-name">
+                          {row[0]}
+                        </b>
+                      </td>
+
+                      <td className="right mono">
+                        <b>{row[1]}</b>
+                      </td>
+
+                      <td className="right mono muted">
+                        {row[2]}
+                      </td>
+
+                      <td className="right mono green">
+                        <b>{row[3]}</b>
+                      </td>
+
+                      <td
+                        className={`right mono ${row[5]}`}
+                      >
+                        <b>{row[4]}</b>
+                      </td>
+
+                      <td className="right">
+                        <span
+                          className={`branch-status-dot ${row[5]}`}
+                        >
+                          {row[5] === "green"
+                            ? "✓"
+                            : row[5] ===
+                                "orange"
+                              ? "!"
+                              : "!"}
+                        </span>
+                      </td>
+                    </tr>
+
+                    {isOpen && (
+                      <tr className="branch-expanded-row">
+                        <td colSpan={7}>
+                          <div className="branch-inline-detail">
+                            <div className="branch-inline-item">
+                              <span>
+                                Орлого:
+                              </span>
+
+                              <strong className="mono">
+                                {row[1]}
+                              </strong>
+                            </div>
+
+                            <div className="branch-inline-item">
+                              <span>
+                                Зардал:
+                              </span>
+
+                              <strong className="mono">
+                                {row[2]}
+                              </strong>
+                            </div>
+
+                            <div className="branch-inline-item">
+                              <span>
+                                Ашиг:
+                              </span>
+
+                              <strong className="mono green">
+                                {row[3]}
+                              </strong>
+                            </div>
+
+                            <div className="branch-inline-item">
+                              <span>
+                                Өөрчлөлт:
+                              </span>
+
+                              <strong
+                                className={`mono ${row[5]}`}
+                              >
+                                {row[4]}
+                              </strong>
+                            </div>
+
+                            <div
+                              className={`branch-inline-alert ${row[5]}`}
+                            >
+                              {row[5] ===
+                                "green" && (
+                                <>
+                                  ✓ Гүйцэтгэл сайн
+                                </>
+                              )}
+
+                              {row[5] ===
+                                "orange" && (
+                                <>
+                                  ⚠ Анхаарал
+                                  шаардлагатай
+                                </>
+                              )}
+
+                              {row[5] ===
+                                "red" && (
+                                <>
+                                  ⚠ Гүйцэтгэл
+                                  буурсан
+                                </>
+                              )}
+                            </div>
+                          </div>
+                        </td>
+                      </tr>
+                    )}
+                  </Fragment>
+                );
+              })}
+            </tbody>
+          </table>
+        </div>
       </section>
     </div>
   );

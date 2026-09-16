@@ -11,29 +11,18 @@ const defaultHomeContent = {
   ========================================= */
 
   hero: {
-    title:
-      "ТАНАЙ БИЗНЕСИЙН ТОО — НЭГ ДАШБОАРД ДЭЭР, МОНГОЛООР",
-
+    eyebrow: "DATAVIEW MONGOLIA — ХАРЬЦУУЛАЛТ",
+    title: "Мэдээлэлд суурилсан шийдвэр — нэг харцаар.",
     description:
-      "Excel тайланг хүлээхээ больё. Бэлэн загвар, бид холбож өгнө, 2–3 долоо хоногт бэлэн.",
-
-    primaryButton:
-      "Холбогдох",
-
-    secondaryButton:
-      "Загварууд үзэх",
-
-    note:
-      "Кредит карт шаардлагагүй · 14 хоног үнэгүй",
-
-    badge:
-      "Бодит цаг ⚡",
-
-    previewTitle:
-      "DataView — Санхүүгийн самбар",
-
-    previewTime:
-      "Excel → Самбар: 3 минут",
+      "Excel-ийн хаосыг орхиж — бодит цагийн санхүүгийн мэдээлэлд шилж.",
+    beforeLabel: "ӨМНӨ · EXCEL",
+    afterLabel: "ДАРАА · DATAVIEW",
+    compareHint: "↔ Чирж харьцуулах ↔",
+    primaryButton: "Холбогдох",
+    secondaryButton: "Загварууд үзэх",
+    note: "",
+    leftImage: "",
+    rightImage: "",
   },
 
 
@@ -291,7 +280,7 @@ const defaultHomeContent = {
     plans: [
       {
         name:
-          "Starter",
+          "Эхлэл",
 
         price:
           "₮200,000",
@@ -303,7 +292,7 @@ const defaultHomeContent = {
           false,
 
         features: [
-          "2 дашбоард (CEO + Санхүү)",
+          "2 хяналтын самбар (Захирлын тойм + Санхүү)",
           "1 эх үүсвэр",
           "3 хэрэглэгч хүртэл",
           "Өдөрт 1 удаа шинэчлэлт",
@@ -313,7 +302,7 @@ const defaultHomeContent = {
 
       {
         name:
-          "Professional",
+          "Мэргэжлийн",
 
         price:
           "₮400,000",
@@ -325,7 +314,7 @@ const defaultHomeContent = {
           true,
 
         features: [
-          "5 дашбоард бүгд",
+          "Бүх 5 хяналтын самбар",
           "Олон эх үүсвэр",
           "10 хэрэглэгч хүртэл",
           "4 цаг тутам шинэчлэлт",
@@ -335,7 +324,7 @@ const defaultHomeContent = {
 
       {
         name:
-          "Enterprise",
+          "Байгууллага",
 
         price:
           "₮800,000+",
@@ -347,7 +336,7 @@ const defaultHomeContent = {
           false,
 
         features: [
-          "Хязгааргүй дашбоард + custom",
+          "Хязгааргүй хяналтын самбар + захиалгат тохиргоо",
           "Бүх эх үүсвэр + API",
           "Хязгааргүй хэрэглэгч",
           "Бодит цагийн шинэчлэлт",
@@ -545,16 +534,21 @@ function AdminHome() {
             result.data
           ) {
 
-            setContent(
-              result.data
-            );
+            setContent({
+              ...defaultHomeContent,
+              ...result.data,
+              hero: {
+                ...defaultHomeContent.hero,
+                ...(result.data.hero || {}),
+              },
+            });
 
           }
 
         } catch (error) {
 
           console.error(
-            "Load home error:",
+            "Нүүр хуудас ачаалах алдаа:",
             error
           );
 
@@ -651,8 +645,6 @@ function AdminHome() {
     );
 
   };
-
-
   /* =========================================
      FEATURE CHANGE
   ========================================= */
@@ -760,14 +752,14 @@ function AdminHome() {
 
           throw new Error(
             result.message ||
-            "Save failed"
+            "Хадгалахад алдаа гарлаа"
           );
 
         }
 
 
         setMessage(
-          "Home page амжилттай хадгалагдлаа."
+          "Нүүр хуудас амжилттай хадгалагдлаа."
         );
 
       } catch (error) {
@@ -794,7 +786,7 @@ function AdminHome() {
 
     return (
       <div className="admin-loading">
-        Loading Home Page...
+        Нүүр хуудсыг ачаалж байна...
       </div>
     );
 
@@ -815,11 +807,11 @@ function AdminHome() {
         <div>
 
           <h2>
-            Home Page
+            Нүүр хуудас
           </h2>
 
           <p>
-            Public website-ийн бүх мэдээллийг удирдах
+            Нийтийн вэбсайтын бүх мэдээллийг удирдах
           </p>
 
         </div>
@@ -838,8 +830,8 @@ function AdminHome() {
 
           {
             saving
-              ? "Saving..."
-              : "Save All Changes"
+              ? "Хадгалж байна..."
+              : "Бүх өөрчлөлтийг хадгалах"
           }
 
         </button>
@@ -863,95 +855,108 @@ function AdminHome() {
       ========================================= */}
 
       <EditorSection
-        title="Hero Section"
-        subtitle="Homepage-ийн хамгийн дээд хэсэг"
+        title="Нүүр хэсэг / Excel vs DataView"
+        subtitle="Нүүр хуудасны дээд хэсгийн гарчиг болон харьцуулалтын самбарын мэдээллийг удирдах"
       >
-
         <Field
-          label="Title"
-          textarea
-          value={
-            content.hero.title
-          }
-          onChange={
-            (value) =>
-              updateSection(
-                "hero",
-                "title",
-                value
-              )
+          label="Дээд жижиг гарчиг"
+          value={content.hero.eyebrow}
+          onChange={(value) =>
+            updateSection("hero", "eyebrow", value)
           }
         />
 
-
         <Field
-          label="Description"
+          label="Үндсэн гарчиг"
           textarea
-          value={
-            content.hero.description
-          }
-          onChange={
-            (value) =>
-              updateSection(
-                "hero",
-                "description",
-                value
-              )
+          value={content.hero.title}
+          onChange={(value) =>
+            updateSection("hero", "title", value)
           }
         />
 
+        <Field
+          label="Тайлбар"
+          textarea
+          value={content.hero.description}
+          onChange={(value) =>
+            updateSection("hero", "description", value)
+          }
+        />
 
         <div className="admin-form-row">
-
           <Field
-            label="Primary button"
-            value={
-              content.hero.primaryButton
-            }
-            onChange={
-              (value) =>
-                updateSection(
-                  "hero",
-                  "primaryButton",
-                  value
-                )
+            label="Зүүн талын нэр"
+            value={content.hero.beforeLabel}
+            onChange={(value) =>
+              updateSection("hero", "beforeLabel", value)
             }
           />
 
-
           <Field
-            label="Secondary button"
-            value={
-              content.hero.secondaryButton
-            }
-            onChange={
-              (value) =>
-                updateSection(
-                  "hero",
-                  "secondaryButton",
-                  value
-                )
+            label="Баруун талын нэр"
+            value={content.hero.afterLabel}
+            onChange={(value) =>
+              updateSection("hero", "afterLabel", value)
             }
           />
-
         </div>
 
-
         <Field
-          label="Note"
-          value={
-            content.hero.note
-          }
-          onChange={
-            (value) =>
-              updateSection(
-                "hero",
-                "note",
-                value
-              )
+          label="Харьцуулах заавар"
+          value={content.hero.compareHint}
+          onChange={(value) =>
+            updateSection("hero", "compareHint", value)
           }
         />
 
+        <div className="admin-form-row">
+          <Field
+            label="Үндсэн товч"
+            value={content.hero.primaryButton}
+            onChange={(value) =>
+              updateSection("hero", "primaryButton", value)
+            }
+          />
+
+          <Field
+            label="Хоёрдогч товч"
+            value={content.hero.secondaryButton}
+            onChange={(value) =>
+              updateSection("hero", "secondaryButton", value)
+            }
+          />
+        </div>
+
+        <div className="admin-array-title">
+          Харьцуулалтын зураг
+        </div>
+
+        <div className="admin-form-row">
+          <ImageField
+            label="Зүүн зураг / Excel"
+            value={content.hero.leftImage}
+            onChange={(value) =>
+              updateSection("hero", "leftImage", value)
+            }
+          />
+
+          <ImageField
+            label="Баруун зураг / DataView"
+            value={content.hero.rightImage}
+            onChange={(value) =>
+              updateSection("hero", "rightImage", value)
+            }
+          />
+        </div>
+
+        <Field
+          label="Тэмдэглэл"
+          value={content.hero.note}
+          onChange={(value) =>
+            updateSection("hero", "note", value)
+          }
+        />
       </EditorSection>
 
 
@@ -960,11 +965,11 @@ function AdminHome() {
       ========================================= */}
 
       <EditorSection
-        title="Problem Section"
+        title="Асуудлын хэсэг"
       >
 
         <Field
-          label="Section label"
+          label="Хэсгийн нэр"
           value={
             content.problem.kicker
           }
@@ -980,7 +985,7 @@ function AdminHome() {
 
 
         <Field
-          label="Title"
+          label="Гарчиг"
           value={
             content.problem.title
           }
@@ -1005,12 +1010,12 @@ function AdminHome() {
               <ArrayCard
                 key={index}
                 title={
-                  `Problem ${index + 1}`
+                  `Асуудал ${index + 1}`
                 }
               >
 
                 <Field
-                  label="Icon"
+                  label="Дүрс"
                   value={
                     item.icon
                   }
@@ -1028,7 +1033,7 @@ function AdminHome() {
 
 
                 <Field
-                  label="Title"
+                  label="Гарчиг"
                   value={
                     item.title
                   }
@@ -1046,7 +1051,7 @@ function AdminHome() {
 
 
                 <Field
-                  label="Description"
+                  label="Тайлбар"
                   textarea
                   value={
                     item.description
@@ -1077,11 +1082,11 @@ function AdminHome() {
       ========================================= */}
 
       <EditorSection
-        title="Dashboard Templates"
+        title="Хяналтын самбарын загварууд"
       >
 
         <Field
-          label="Section label"
+          label="Хэсгийн нэр"
           value={
             content.templates.kicker
           }
@@ -1097,7 +1102,7 @@ function AdminHome() {
 
 
         <Field
-          label="Title"
+          label="Гарчиг"
           value={
             content.templates.title
           }
@@ -1122,14 +1127,14 @@ function AdminHome() {
               <ArrayCard
                 key={index}
                 title={
-                  `Template ${index + 1}`
+                  `Загвар ${index + 1}`
                 }
               >
 
                 <div className="admin-form-row">
 
                   <Field
-                    label="Icon"
+                    label="Дүрс"
                     value={
                       item.icon
                     }
@@ -1147,7 +1152,7 @@ function AdminHome() {
 
 
                   <Field
-                    label="Title"
+                    label="Гарчиг"
                     value={
                       item.title
                     }
@@ -1167,7 +1172,7 @@ function AdminHome() {
 
 
                 <Field
-                  label="Description"
+                  label="Тайлбар"
                   textarea
                   value={
                     item.description
@@ -1192,7 +1197,7 @@ function AdminHome() {
 
 
         <Field
-          label="Bottom note"
+          label="Доод тэмдэглэл"
           value={
             content.templates.note
           }
@@ -1214,11 +1219,11 @@ function AdminHome() {
       ========================================= */}
 
       <EditorSection
-        title="Why DataView"
+        title="Яагаад DataView?"
       >
 
         <Field
-          label="Section label"
+          label="Хэсгийн нэр"
           value={
             content.benefits.kicker
           }
@@ -1234,7 +1239,7 @@ function AdminHome() {
 
 
         <Field
-          label="Title"
+          label="Гарчиг"
           value={
             content.benefits.title
           }
@@ -1259,14 +1264,14 @@ function AdminHome() {
               <ArrayCard
                 key={index}
                 title={
-                  `Benefit ${index + 1}`
+                  `Давуу тал ${index + 1}`
                 }
               >
 
                 <div className="admin-form-row">
 
                   <Field
-                    label="Icon"
+                    label="Дүрс"
                     value={
                       item.icon
                     }
@@ -1284,7 +1289,7 @@ function AdminHome() {
 
 
                   <Field
-                    label="Title"
+                    label="Гарчиг"
                     value={
                       item.title
                     }
@@ -1304,7 +1309,7 @@ function AdminHome() {
 
 
                 <Field
-                  label="Description"
+                  label="Тайлбар"
                   value={
                     item.description
                   }
@@ -1334,11 +1339,11 @@ function AdminHome() {
       ========================================= */}
 
       <EditorSection
-        title="How It Works"
+        title="Хэрхэн ажилладаг вэ?"
       >
 
         <Field
-          label="Section label"
+          label="Хэсгийн нэр"
           value={
             content.steps.kicker
           }
@@ -1354,7 +1359,7 @@ function AdminHome() {
 
 
         <Field
-          label="Title"
+          label="Гарчиг"
           value={
             content.steps.title
           }
@@ -1379,12 +1384,12 @@ function AdminHome() {
               <ArrayCard
                 key={index}
                 title={
-                  `Step ${index + 1}`
+                  `Алхам ${index + 1}`
                 }
               >
 
                 <Field
-                  label="Title"
+                  label="Гарчиг"
                   value={
                     item.title
                   }
@@ -1402,7 +1407,7 @@ function AdminHome() {
 
 
                 <Field
-                  label="Description"
+                  label="Тайлбар"
                   textarea
                   value={
                     item.description
@@ -1427,7 +1432,7 @@ function AdminHome() {
 
 
         <Field
-          label="Bottom note"
+          label="Доод тэмдэглэл"
           value={
             content.steps.note
           }
@@ -1449,11 +1454,11 @@ function AdminHome() {
       ========================================= */}
 
       <EditorSection
-        title="Pricing"
+        title="Үнийн мэдээлэл"
       >
 
         <Field
-          label="Section label"
+          label="Хэсгийн нэр"
           value={
             content.pricing.kicker
           }
@@ -1469,7 +1474,7 @@ function AdminHome() {
 
 
         <Field
-          label="Title"
+          label="Гарчиг"
           value={
             content.pricing.title
           }
@@ -1494,14 +1499,14 @@ function AdminHome() {
               <ArrayCard
                 key={planIndex}
                 title={
-                  `Plan ${planIndex + 1}`
+                  `Багц ${planIndex + 1}`
                 }
               >
 
                 <div className="admin-form-row">
 
                   <Field
-                    label="Name"
+                    label="Нэр"
                     value={
                       plan.name
                     }
@@ -1519,7 +1524,7 @@ function AdminHome() {
 
 
                   <Field
-                    label="Price"
+                    label="Үнэ"
                     value={
                       plan.price
                     }
@@ -1550,7 +1555,7 @@ function AdminHome() {
                           featureIndex
                         }
                         label={
-                          `Feature ${featureIndex + 1}`
+                          `Боломж ${featureIndex + 1}`
                         }
                         value={
                           feature
@@ -1577,7 +1582,7 @@ function AdminHome() {
 
 
         <Field
-          label="Bottom note"
+          label="Доод тэмдэглэл"
           value={
             content.pricing.note
           }
@@ -1599,11 +1604,11 @@ function AdminHome() {
       ========================================= */}
 
       <EditorSection
-        title="Testimonials"
+        title="Харилцагчдын сэтгэгдэл"
       >
 
         <Field
-          label="Section label"
+          label="Хэсгийн нэр"
           value={
             content.testimonials.kicker
           }
@@ -1619,7 +1624,7 @@ function AdminHome() {
 
 
         <Field
-          label="Title"
+          label="Гарчиг"
           value={
             content.testimonials.title
           }
@@ -1644,12 +1649,12 @@ function AdminHome() {
               <ArrayCard
                 key={index}
                 title={
-                  `Testimonial ${index + 1}`
+                  `Сэтгэгдэл ${index + 1}`
                 }
               >
 
                 <Field
-                  label="Comment"
+                  label="Сэтгэгдэл"
                   textarea
                   value={
                     item.text
@@ -1670,7 +1675,7 @@ function AdminHome() {
                 <div className="admin-form-row">
 
                   <Field
-                    label="Name"
+                    label="Нэр"
                     value={
                       item.name
                     }
@@ -1688,7 +1693,7 @@ function AdminHome() {
 
 
                   <Field
-                    label="Position"
+                    label="Албан тушаал"
                     value={
                       item.position
                     }
@@ -1720,11 +1725,11 @@ function AdminHome() {
       ========================================= */}
 
       <EditorSection
-        title="FAQ"
+        title="Түгээмэл асуулт"
       >
 
         <Field
-          label="Section label"
+          label="Хэсгийн нэр"
           value={
             content.faq.kicker
           }
@@ -1740,7 +1745,7 @@ function AdminHome() {
 
 
         <Field
-          label="Title"
+          label="Гарчиг"
           value={
             content.faq.title
           }
@@ -1765,12 +1770,12 @@ function AdminHome() {
               <ArrayCard
                 key={index}
                 title={
-                  `FAQ ${index + 1}`
+                  `Асуулт ${index + 1}`
                 }
               >
 
                 <Field
-                  label="Question"
+                  label="Асуулт"
                   value={
                     item.question
                   }
@@ -1788,7 +1793,7 @@ function AdminHome() {
 
 
                 <Field
-                  label="Answer"
+                  label="Хариулт"
                   textarea
                   value={
                     item.answer
@@ -1819,11 +1824,11 @@ function AdminHome() {
       ========================================= */}
 
       <EditorSection
-        title="Contact"
+        title="Холбоо барих"
       >
 
         <Field
-          label="Section label"
+          label="Хэсгийн нэр"
           value={
             content.contact.kicker
           }
@@ -1839,7 +1844,7 @@ function AdminHome() {
 
 
         <Field
-          label="Title"
+          label="Гарчиг"
           value={
             content.contact.title
           }
@@ -1855,7 +1860,7 @@ function AdminHome() {
 
 
         <Field
-          label="Description"
+          label="Тайлбар"
           value={
             content.contact.description
           }
@@ -1871,7 +1876,7 @@ function AdminHome() {
 
 
         <Field
-          label="Phone"
+          label="Утас"
           value={
             content.contact.phone
           }
@@ -1887,7 +1892,7 @@ function AdminHome() {
 
 
         <Field
-          label="Email"
+          label="И-мэйл"
           value={
             content.contact.email
           }
@@ -1903,7 +1908,7 @@ function AdminHome() {
 
 
         <Field
-          label="Address"
+          label="Хаяг"
           value={
             content.contact.address
           }
@@ -1937,8 +1942,8 @@ function AdminHome() {
 
           {
             saving
-              ? "Saving..."
-              : "Save All Changes"
+              ? "Хадгалж байна..."
+              : "Бүх өөрчлөлтийг хадгалах"
           }
 
         </button>
@@ -2025,6 +2030,129 @@ function ArrayCard({
 /* =========================================
    FIELD
 ========================================= */
+
+function ImageField({
+  label,
+  value,
+  onChange,
+}) {
+  const handleFileChange = (event) => {
+    const file = event.target.files?.[0];
+
+    if (!file) {
+      return;
+    }
+
+    if (!file.type.startsWith("image/")) {
+      return;
+    }
+
+    const reader = new FileReader();
+
+    reader.onload = () => {
+      onChange(reader.result);
+    };
+
+    reader.readAsDataURL(file);
+  };
+
+  return (
+    <div className="admin-form-group">
+      <label>{label}</label>
+
+      <div
+        style={{
+          padding: "14px",
+          border: "1px solid #dce4ed",
+          borderRadius: "10px",
+          background: "#f8fafc",
+        }}
+      >
+        {value ? (
+          <div
+            style={{
+              width: "100%",
+              height: "220px",
+              marginBottom: "12px",
+              overflow: "hidden",
+              border: "1px solid #e2e8f0",
+              borderRadius: "8px",
+              background: "#ffffff",
+            }}
+          >
+            <img
+              src={value}
+              alt={label}
+              style={{
+                width: "100%",
+                height: "100%",
+                display: "block",
+                objectFit: "contain",
+              }}
+            />
+          </div>
+        ) : (
+          <div
+            style={{
+              width: "100%",
+              height: "220px",
+              marginBottom: "12px",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              border: "1px dashed #cbd5e1",
+              borderRadius: "8px",
+              background: "#ffffff",
+              color: "#8fa2be",
+              fontSize: "13px",
+            }}
+          >
+            Зураг сонгоогүй
+          </div>
+        )}
+
+        <input
+          type="file"
+          accept="image/*"
+          onChange={handleFileChange}
+          style={{
+            width: "100%",
+            padding: "9px",
+            border: "1px solid #dce4ed",
+            borderRadius: "8px",
+            background: "#ffffff",
+            color: "#425775",
+            fontFamily: "inherit",
+            fontSize: "12px",
+          }}
+        />
+
+        {value && (
+          <button
+            type="button"
+            onClick={() => onChange("")}
+            style={{
+              width: "100%",
+              height: "38px",
+              marginTop: "10px",
+              border: "1px solid #fecdd3",
+              borderRadius: "8px",
+              background: "#fff1f2",
+              color: "#e11d48",
+              fontFamily: "inherit",
+              fontSize: "12px",
+              fontWeight: "700",
+              cursor: "pointer",
+            }}
+          >
+            Зураг устгах
+          </button>
+        )}
+      </div>
+    </div>
+  );
+}
+
 
 function Field({
   label,

@@ -39,11 +39,6 @@ exports.getHomeContent = async (req, res) => {
   }
 };
 
-
-// ==========================================
-// SAVE HOME CONTENT
-// ==========================================
-
 exports.saveHomeContent = async (req, res) => {
   try {
     const content = req.body;

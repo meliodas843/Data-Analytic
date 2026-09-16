@@ -325,7 +325,7 @@ exports.saveCompanyInfo =
                 companyName
                   .charAt(0)
                   .toUpperCase(),
-              "#2dd4bf",
+              "#16A34A",
               userId,
             ]
           );

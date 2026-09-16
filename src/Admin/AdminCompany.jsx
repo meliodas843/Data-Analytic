@@ -4,6 +4,7 @@ import {
   useRef,
   useState,
 } from "react";
+import "../styles/Admin/AdminCompany.css";
 
 const API_URL =
   "http://localhost:5000/api/companies";
@@ -82,7 +83,7 @@ function AdminCompany() {
     sync_status:
       "pending",
     sync_time: "",
-    color: "#2dd4bf",
+    color: "#16A34A",
     logo: null,
   });
 
@@ -192,7 +193,7 @@ function AdminCompany() {
         sync_status:
           "pending",
         sync_time: "",
-        color: "#2dd4bf",
+        color: "#16A34A",
         logo: null,
       });
 
@@ -246,7 +247,7 @@ function AdminCompany() {
 
         color:
           company.color ||
-          "#2dd4bf",
+          "#16A34A",
 
         logo:
           company.logo ||
@@ -644,7 +645,7 @@ function AdminCompany() {
 
                   color:
                     company.color ||
-                    "#2dd4bf",
+                    "#16A34A",
 
                   logo:
                     company.logo,

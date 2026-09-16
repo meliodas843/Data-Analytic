@@ -4,6 +4,8 @@ import {
   Route,
 } from "react-router-dom";
 
+import { useState } from "react";
+
 import Home from "./pages/Home";
 import Dashboard from "./pages/Dashboard";
 import Login from "./components/Login";
@@ -29,9 +31,23 @@ import AdminLayout from "./components/AdminLayout";
 import "./styles/Dashboard.css";
 
 function DashboardLayout({ children }) {
+  const [collapsed, setCollapsed] =
+    useState(false);
+
+  const handleToggleSidebar = () => {
+    setCollapsed((prev) => !prev);
+  };
+
   return (
-    <div className="dashboard-layout">
-      <DashboardNavbar />
+    <div
+      className={`dashboard-layout ${
+        collapsed ? "sidebar-collapsed" : ""
+      }`}
+    >
+      <DashboardNavbar
+        collapsed={collapsed}
+        onToggle={handleToggleSidebar}
+      />
 
       <main className="dashboard-main">
         <DashboardHeader />
