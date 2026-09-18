@@ -9,23 +9,12 @@ import {
   EyeOff,
 } from "lucide-react";
 
-import logo from "../assets/logo-default.svg";
+import Navbar from "./Navbar";
+
 import "../styles/Login.css";
 
 const API_URL =
   "http://localhost:5000/api";
-
-function DataViewLogo() {
-  return (
-    <div className="auth-brand">
-      <img
-        src={logo}
-        alt="DataView"
-        className="navbar-logo-image"
-      />
-    </div>
-  );
-}
 
 function Login() {
   const navigate =
@@ -226,257 +215,273 @@ function Login() {
     );
   };
 
+  const openForgotPassword =
+    () => {
+      setMode("forgot");
+      setError("");
+      setResetMessage("");
+    };
+
+  const backToLogin =
+    () => {
+      setMode("login");
+      setError("");
+      setResetMessage("");
+    };
+
   return (
-    <main className="login-page">
-      <div className="login-container">
-        <DataViewLogo />
+    <>
+      <Navbar />
 
-        {mode === "login" ? (
-          <section className="login-card">
-            <div className="login-heading">
-              <h1>
-                Нэвтрэх
-              </h1>
+      <main className="login-page">
+        <div className="login-container">
+          {mode === "login" ? (
+            <section className="login-card">
+              <div className="login-heading">
+                <h1>
+                  Нэвтрэх
+                </h1>
 
-              <p>
-                Dashboard-даа
-                нэвтэрнэ үү
-              </p>
-            </div>
-
-            <form
-              className="login-form"
-              onSubmit={
-                handleLogin
-              }
-            >
-              <div className="login-field">
-                <label htmlFor="email">
-                  И-мэйл
-                </label>
-
-                <input
-                  id="email"
-                  type="email"
-                  name="email"
-                  placeholder="demo@company.mn"
-                  value={
-                    form.email
-                  }
-                  onChange={
-                    handleChange
-                  }
-                  autoComplete="email"
-                  disabled={
-                    loading
-                  }
-                  required
-                />
+                <p>
+                  Dashboard-даа
+                  нэвтэрнэ үү
+                </p>
               </div>
 
-              <div className="login-field">
-                <div className="login-label-row">
-                  <label htmlFor="password">
-                    Нууц үг
+              <form
+                className="login-form"
+                onSubmit={
+                  handleLogin
+                }
+              >
+                <div className="login-field">
+                  <label htmlFor="email">
+                    И-мэйл
                   </label>
 
-                  <button
-                    type="button"
-                    className="forgot-password-link"
-                    onClick={() => {
-                      setMode(
-                        "forgot"
-                      );
-
-                      setError("");
-
-                      setResetMessage(
-                        ""
-                      );
-                    }}
-                  >
-                    Нууц үгээ мартсан?
-                  </button>
-                </div>
-
-                <div className="login-password">
                   <input
-                    id="password"
-                    type={
-                      showPassword
-                        ? "text"
-                        : "password"
-                    }
-                    name="password"
-                    placeholder="••••••••"
+                    id="email"
+                    type="email"
+                    name="email"
+                    placeholder="demo@company.mn"
                     value={
-                      form.password
+                      form.email
                     }
                     onChange={
                       handleChange
                     }
-                    autoComplete="current-password"
+                    autoComplete="email"
                     disabled={
                       loading
                     }
                     required
                   />
+                </div>
 
-                  <button
-                    type="button"
-                    className="password-eye"
-                    onClick={() =>
-                      setShowPassword(
-                        (prev) =>
-                          !prev
-                      )
-                    }
-                    aria-label={
-                      showPassword
-                        ? "Нууц үг нуух"
-                        : "Нууц үг харах"
-                    }
-                    disabled={
-                      loading
-                    }
+                <div className="login-field">
+                  <div className="login-label-row">
+                    <label htmlFor="password">
+                      Нууц үг
+                    </label>
+
+                    <button
+                      type="button"
+                      className="forgot-password-link"
+                      onClick={
+                        openForgotPassword
+                      }
+                      disabled={
+                        loading
+                      }
+                    >
+                      Нууц үгээ мартсан?
+                    </button>
+                  </div>
+
+                  <div className="login-password">
+                    <input
+                      id="password"
+                      type={
+                        showPassword
+                          ? "text"
+                          : "password"
+                      }
+                      name="password"
+                      placeholder="••••••••"
+                      value={
+                        form.password
+                      }
+                      onChange={
+                        handleChange
+                      }
+                      autoComplete="current-password"
+                      disabled={
+                        loading
+                      }
+                      required
+                    />
+
+                    <button
+                      type="button"
+                      className="password-eye"
+                      onClick={() =>
+                        setShowPassword(
+                          (prev) =>
+                            !prev
+                        )
+                      }
+                      aria-label={
+                        showPassword
+                          ? "Нууц үг нуух"
+                          : "Нууц үг харах"
+                      }
+                      disabled={
+                        loading
+                      }
+                    >
+                      {showPassword ? (
+                        <EyeOff
+                          size={19}
+                        />
+                      ) : (
+                        <Eye
+                          size={19}
+                        />
+                      )}
+                    </button>
+                  </div>
+                </div>
+
+                {error && (
+                  <div
+                    className="login-error"
+                    role="alert"
                   >
-                    {showPassword ? (
-                      <EyeOff
-                        size={19}
-                      />
-                    ) : (
-                      <Eye
-                        size={19}
-                      />
-                    )}
-                  </button>
-                </div>
+                    {error}
+                  </div>
+                )}
+
+                <button
+                  type="submit"
+                  className="login-submit"
+                  disabled={
+                    loading
+                  }
+                >
+                  {loading
+                    ? "Нэвтэрч байна..."
+                    : "Нэвтрэх"}
+                </button>
+              </form>
+
+              <div className="login-register">
+                <span>
+                  Бүртгэлгүй юу?
+                </span>
+
+                <button
+                  type="button"
+                  onClick={() =>
+                    navigate(
+                      "/signup"
+                    )
+                  }
+                  disabled={
+                    loading
+                  }
+                >
+                  Үнэгүй бүртгүүлэх
+                </button>
               </div>
-
-              {error && (
-                <div className="login-error">
-                  {error}
-                </div>
-              )}
-
-              <button
-                type="submit"
-                className="login-submit"
-                disabled={
-                  loading
-                }
-              >
-                {loading
-                  ? "Нэвтэрч байна..."
-                  : "Нэвтрэх"}
-              </button>
-            </form>
-
-            <div className="login-register">
-              <span>
-                Бүртгэлгүй юу?
-              </span>
-
+            </section>
+          ) : (
+            <section className="login-card forgot-card">
               <button
                 type="button"
-                onClick={() =>
-                  navigate(
-                    "/signup"
-                  )
+                className="back-to-login"
+                onClick={
+                  backToLogin
                 }
               >
-                Үнэгүй бүртгүүлэх
-              </button>
-            </div>
-          </section>
-        ) : (
-          <section className="login-card forgot-card">
-            <button
-              type="button"
-              className="back-to-login"
-              onClick={() => {
-                setMode(
-                  "login"
-                );
-
-                setError("");
-
-                setResetMessage(
-                  ""
-                );
-              }}
-            >
-              <ArrowLeft
-                size={17}
-              />
-
-              <span>
-                Нэвтрэх
-              </span>
-            </button>
-
-            <div className="login-heading forgot-heading">
-              <h1>
-                Нууц үг сэргээх
-              </h1>
-
-              <p>
-                Бүртгэлтэй
-                и-мэйл рүү сэргээх
-                холбоос илгээнэ
-              </p>
-            </div>
-
-            <form
-              className="login-form"
-              onSubmit={
-                handleReset
-              }
-            >
-              <div className="login-field">
-                <label htmlFor="reset-email">
-                  И-мэйл
-                </label>
-
-                <input
-                  id="reset-email"
-                  type="email"
-                  name="email"
-                  value={
-                    form.email
-                  }
-                  onChange={
-                    handleChange
-                  }
-                  placeholder="demo@company.mn"
-                  required
+                <ArrowLeft
+                  size={17}
                 />
+
+                <span>
+                  Нэвтрэх
+                </span>
+              </button>
+
+              <div className="login-heading forgot-heading">
+                <h1>
+                  Нууц үг сэргээх
+                </h1>
+
+                <p>
+                  Бүртгэлтэй
+                  и-мэйл рүү сэргээх
+                  холбоос илгээнэ
+                </p>
               </div>
 
-              {error && (
-                <div className="login-error">
-                  {error}
-                </div>
-              )}
-
-              {resetMessage && (
-                <div className="login-success">
-                  {resetMessage}
-                </div>
-              )}
-
-              <button
-                type="submit"
-                className="login-submit"
+              <form
+                className="login-form"
+                onSubmit={
+                  handleReset
+                }
               >
-                Сэргээх холбоос
-                илгээх
-              </button>
-            </form>
-          </section>
-        )}
-      </div>
-    </main>
+                <div className="login-field">
+                  <label htmlFor="reset-email">
+                    И-мэйл
+                  </label>
+
+                  <input
+                    id="reset-email"
+                    type="email"
+                    name="email"
+                    value={
+                      form.email
+                    }
+                    onChange={
+                      handleChange
+                    }
+                    placeholder="demo@company.mn"
+                    autoComplete="email"
+                    required
+                  />
+                </div>
+
+                {error && (
+                  <div
+                    className="login-error"
+                    role="alert"
+                  >
+                    {error}
+                  </div>
+                )}
+
+                {resetMessage && (
+                  <div
+                    className="login-success"
+                    role="status"
+                  >
+                    {resetMessage}
+                  </div>
+                )}
+
+                <button
+                  type="submit"
+                  className="login-submit"
+                >
+                  Сэргээх холбоос
+                  илгээх
+                </button>
+              </form>
+            </section>
+          )}
+        </div>
+      </main>
+    </>
   );
 }
 

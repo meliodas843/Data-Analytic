@@ -13,7 +13,7 @@ button {
 
 .login-page {
   width: 100%;
-  min-height: 100vh;
+  min-height: calc(100vh - 72px);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -36,6 +36,13 @@ button {
   align-items: center;
   justify-content: center;
   gap: 12px;
+}
+
+.auth-brand .navbar-logo-image {
+  width: 160px;
+  height: auto;
+  display: block;
+  object-fit: contain;
 }
 
 .auth-brand-icon {
@@ -144,6 +151,16 @@ button {
   font-size: 14px;
   font-weight: 700;
   cursor: pointer;
+  transition: color 0.18s ease;
+}
+
+.forgot-password-link:hover {
+  color: #137a38;
+}
+
+.forgot-password-link:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
 }
 
 .login-field input {
@@ -158,12 +175,17 @@ button {
   font-size: 15px;
   transition:
     border-color 0.2s ease,
-    box-shadow 0.2s ease;
+    box-shadow 0.2s ease,
+    background-color 0.2s ease;
 }
 
 .login-field input::placeholder {
   color: #667b98;
   opacity: 1;
+}
+
+.login-field input:hover {
+  border-color: #c5d2df;
 }
 
 .login-field input:focus {
@@ -173,8 +195,15 @@ button {
     rgba(24, 168, 77, 0.08);
 }
 
+.login-field input:disabled {
+  background: #f7f9fc;
+  color: #8191a7;
+  cursor: not-allowed;
+}
+
 .login-password {
   position: relative;
+  width: 100%;
 }
 
 .login-password input {
@@ -183,7 +212,7 @@ button {
 
 .password-eye {
   position: absolute;
-  top: 50%;
+  top: 8px;
   right: 13px;
   width: 32px;
   height: 32px;
@@ -191,10 +220,15 @@ button {
   display: flex;
   align-items: center;
   justify-content: center;
-  transform: translateY(-50%);
+  border-radius: 6px;
   background: transparent;
   color: #69809f;
   cursor: pointer;
+}
+
+.password-eye:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
 }
 
 .login-submit {
@@ -208,18 +242,29 @@ button {
   font-weight: 800;
   cursor: pointer;
   transition:
-    background 0.2s ease,
-    opacity 0.2s ease;
+    background-color 0.18s ease,
+    transform 0.18s ease,
+    box-shadow 0.18s ease,
+    opacity 0.18s ease;
 }
 
-.login-submit:hover {
-  background: #139443;
+.login-submit:hover:not(:disabled) {
+  background: #159947;
+  box-shadow:
+    0 5px 14px
+    rgba(24, 168, 77, 0.16);
+}
+
+.login-submit:active:not(:disabled) {
+  transform: translateY(1px);
 }
 
 .login-submit:disabled {
   background: #dfe6f0;
   color: #6b7e98;
   cursor: not-allowed;
+  opacity: 0.65;
+  box-shadow: none;
 }
 
 .login-register {
@@ -238,6 +283,16 @@ button {
   color: #168b3f;
   font-weight: 700;
   cursor: pointer;
+  transition: color 0.18s ease;
+}
+
+.login-register button:hover {
+  color: #137a38;
+}
+
+.login-register button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
 }
 
 .invitation-example {
@@ -264,6 +319,11 @@ button {
   color: #667b98;
   font-size: 14px;
   cursor: pointer;
+  transition: color 0.18s ease;
+}
+
+.back-to-login:hover {
+  color: #17345f;
 }
 
 .forgot-heading {
@@ -291,6 +351,23 @@ button {
   line-height: 1.45;
 }
 
+.login-success {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  min-height: 44px;
+  margin-top: 2px;
+  padding: 11px 13px;
+  border: 1px solid #bbf7d0;
+  border-radius: 8px;
+  background: #f0fdf4;
+  color: #15803d;
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: 600;
+  line-height: 1.45;
+}
+
 .login-field input.input-error,
 .login-password input.input-error {
   border-color: #ef4444;
@@ -301,7 +378,9 @@ button {
 .login-password input.input-error:focus {
   border-color: #dc2626;
   outline: none;
-  box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.1);
+  box-shadow:
+    0 0 0 3px
+    rgba(220, 38, 38, 0.1);
 }
 
 .login-error-icon {
@@ -312,28 +391,9 @@ button {
   color: #dc2626;
 }
 
-.login-submit {
-  transition:
-    background-color 0.18s ease,
-    transform 0.18s ease,
-    box-shadow 0.18s ease;
-}
-
-.login-submit:hover {
-  background: #159947;
-}
-
-.login-submit:active {
-  transform: translateY(1px);
-}
-
-.login-submit:disabled {
-  cursor: not-allowed;
-  opacity: 0.65;
-}
-
 @media (max-width: 520px) {
   .login-page {
+    min-height: calc(100vh - 64px);
     padding: 30px 16px;
   }
 
@@ -345,7 +405,15 @@ button {
     margin-bottom: 26px;
   }
 
+  .auth-brand .navbar-logo-image {
+    width: 145px;
+  }
+
   .login-heading h1 {
     font-size: 27px;
+  }
+
+  .forgot-heading h1 {
+    font-size: 25px;
   }
 }

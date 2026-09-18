@@ -5,23 +5,12 @@ import {
   EyeOff,
 } from "lucide-react";
 
-import logo from "../assets/logo-default.svg";
+import Navbar from "./Navbar";
+
 import "../styles/Signup.css";
 
 const API_URL =
   "http://localhost:5000/api";
-
-function DataViewLogo() {
-  return (
-    <div className="signup-brand">
-      <img
-        src={logo}
-        alt="DataView"
-        className="navbar-logo-image"
-      />
-    </div>
-  );
-}
 
 function Signup() {
   const navigate =
@@ -279,280 +268,282 @@ function Signup() {
   };
 
   return (
-    <main className="signup-page">
-      <div className="signup-container">
-        <DataViewLogo />
+    <>
+      <Navbar />
 
-        <section className="signup-card">
-          <div className="signup-heading">
-            <h1>
-              Бүртгүүлэх
-            </h1>
+      <main className="signup-page">
+        <div className="signup-container">
+          <section className="signup-card">
+            <div className="signup-heading">
+              <h1>
+                Бүртгүүлэх
+              </h1>
 
-            <p>
-              14 хоног үнэгүй туршилт ·
-              Карт шаардахгүй
-            </p>
-          </div>
-
-          <form
-            className="signup-form"
-            onSubmit={
-              handleSubmit
-            }
-          >
-            <div className="signup-field">
-              <label htmlFor="companyName">
-                Байгууллагын нэр
-                <b>*</b>
-              </label>
-
-              <input
-                id="companyName"
-                type="text"
-                name="companyName"
-                placeholder="Монголын Компани ХХК"
-                value={
-                  form.companyName
-                }
-                onChange={
-                  handleChange
-                }
-                autoComplete="organization"
-                disabled={
-                  loading
-                }
-                required
-              />
+              <p>
+                14 хоног үнэгүй туршилт ·
+                Карт шаардахгүй
+              </p>
             </div>
 
-            <div className="signup-field">
-              <label htmlFor="fullName">
-                Таны нэр
-                <b>*</b>
-              </label>
+            <form
+              className="signup-form"
+              onSubmit={
+                handleSubmit
+              }
+            >
+              <div className="signup-field">
+                <label htmlFor="companyName">
+                  Байгууллагын нэр
+                  <b>*</b>
+                </label>
 
-              <input
-                id="fullName"
-                type="text"
-                name="fullName"
-                placeholder="Бат-Эрдэнэ"
-                value={
-                  form.fullName
-                }
-                onChange={
-                  handleChange
-                }
-                autoComplete="name"
-                disabled={
-                  loading
-                }
-                required
-              />
-            </div>
+                <input
+                  id="companyName"
+                  type="text"
+                  name="companyName"
+                  placeholder="Монголын Компани ХХК"
+                  value={
+                    form.companyName
+                  }
+                  onChange={
+                    handleChange
+                  }
+                  autoComplete="organization"
+                  disabled={
+                    loading
+                  }
+                  required
+                />
+              </div>
 
-            <div className="signup-field">
-              <label htmlFor="signupEmail">
-                И-мэйл
-                <b>*</b>
-              </label>
+              <div className="signup-field">
+                <label htmlFor="fullName">
+                  Таны нэр
+                  <b>*</b>
+                </label>
 
-              <input
-                id="signupEmail"
-                type="email"
-                name="email"
-                placeholder="demo@company.mn"
-                value={
-                  form.email
-                }
-                onChange={
-                  handleChange
-                }
-                autoComplete="email"
-                disabled={
-                  loading
-                }
-                required
-              />
-            </div>
+                <input
+                  id="fullName"
+                  type="text"
+                  name="fullName"
+                  placeholder="Бат-Эрдэнэ"
+                  value={
+                    form.fullName
+                  }
+                  onChange={
+                    handleChange
+                  }
+                  autoComplete="name"
+                  disabled={
+                    loading
+                  }
+                  required
+                />
+              </div>
 
-            <div className="signup-field">
-              <label htmlFor="phone">
-                Утасны дугаар
-                <b>*</b>
-              </label>
+              <div className="signup-field">
+                <label htmlFor="signupEmail">
+                  И-мэйл
+                  <b>*</b>
+                </label>
 
-              <div className="phone-input">
-                <div className="phone-code">
-                  +976
+                <input
+                  id="signupEmail"
+                  type="email"
+                  name="email"
+                  placeholder="demo@company.mn"
+                  value={
+                    form.email
+                  }
+                  onChange={
+                    handleChange
+                  }
+                  autoComplete="email"
+                  disabled={
+                    loading
+                  }
+                  required
+                />
+              </div>
+
+              <div className="signup-field">
+                <label htmlFor="phone">
+                  Утасны дугаар
+                  <b>*</b>
+                </label>
+
+                <div className="phone-input">
+                  <div className="phone-code">
+                    +976
+                  </div>
+
+                  <input
+                    id="phone"
+                    type="tel"
+                    name="phone"
+                    inputMode="numeric"
+                    placeholder="9911 2233"
+                    value={
+                      form.phone
+                    }
+                    onChange={
+                      handleChange
+                    }
+                    autoComplete="tel"
+                    disabled={
+                      loading
+                    }
+                    required
+                  />
+                </div>
+              </div>
+
+              <div className="signup-field">
+                <label htmlFor="signupPassword">
+                  Нууц үг
+                  <b>*</b>
+                </label>
+
+                <div className="signup-password">
+                  <input
+                    id="signupPassword"
+                    type={
+                      showPassword
+                        ? "text"
+                        : "password"
+                    }
+                    name="password"
+                    placeholder="••••••••"
+                    value={
+                      form.password
+                    }
+                    onChange={
+                      handleChange
+                    }
+                    autoComplete="new-password"
+                    disabled={
+                      loading
+                    }
+                    required
+                  />
+
+                  <button
+                    type="button"
+                    className="signup-eye"
+                    onClick={() =>
+                      setShowPassword(
+                        (prev) =>
+                          !prev
+                      )
+                    }
+                    aria-label={
+                      showPassword
+                        ? "Нууц үг нуух"
+                        : "Нууц үг харах"
+                    }
+                    disabled={
+                      loading
+                    }
+                  >
+                    {showPassword ? (
+                      <EyeOff
+                        size={19}
+                      />
+                    ) : (
+                      <Eye
+                        size={19}
+                      />
+                    )}
+                  </button>
                 </div>
 
+                <span className="password-help">
+                  8+ тэмдэгт, үсэг ба тоо
+                </span>
+              </div>
+
+              <label className="signup-terms">
                 <input
-                  id="phone"
-                  type="tel"
-                  name="phone"
-                  inputMode="numeric"
-                  placeholder="9911 2233"
-                  value={
-                    form.phone
+                  type="checkbox"
+                  name="terms"
+                  checked={
+                    form.terms
                   }
                   onChange={
                     handleChange
                   }
-                  autoComplete="tel"
                   disabled={
                     loading
                   }
-                  required
                 />
-              </div>
-            </div>
 
-            <div className="signup-field">
-              <label htmlFor="signupPassword">
-                Нууц үг
-                <b>*</b>
+                <span className="custom-checkbox" />
+
+                <span>
+                  <button
+                    type="button"
+                    className="terms-link"
+                  >
+                    Үйлчилгээний нөхцөл
+                  </button>
+
+                  {" "}
+                  болон
+                  {" "}
+
+                  <button
+                    type="button"
+                    className="terms-link"
+                  >
+                    Нууцлалын бодлого
+                  </button>
+
+                  -ыг зөвшөөрч байна
+                </span>
               </label>
 
-              <div className="signup-password">
-                <input
-                  id="signupPassword"
-                  type={
-                    showPassword
-                      ? "text"
-                      : "password"
-                  }
-                  name="password"
-                  placeholder="••••••••"
-                  value={
-                    form.password
-                  }
-                  onChange={
-                    handleChange
-                  }
-                  autoComplete="new-password"
-                  disabled={
-                    loading
-                  }
-                  required
-                />
-
-                <button
-                  type="button"
-                  className="signup-eye"
-                  onClick={() =>
-                    setShowPassword(
-                      (prev) =>
-                        !prev
-                    )
-                  }
-                  aria-label={
-                    showPassword
-                      ? "Нууц үг нуух"
-                      : "Нууц үг харах"
-                  }
-                  disabled={
-                    loading
-                  }
+              {error && (
+                <div
+                  className="signup-error"
+                  role="alert"
                 >
-                  {showPassword ? (
-                    <EyeOff
-                      size={19}
-                    />
-                  ) : (
-                    <Eye
-                      size={19}
-                    />
-                  )}
-                </button>
-              </div>
+                  {error}
+                </div>
+              )}
 
-              <span className="password-help">
-                8+ тэмдэгт, үсэг ба тоо
-              </span>
-            </div>
-
-            <label className="signup-terms">
-              <input
-                type="checkbox"
-                name="terms"
-                checked={
-                  form.terms
-                }
-                onChange={
-                  handleChange
-                }
+              <button
+                type="submit"
+                className="signup-submit"
                 disabled={
                   loading
                 }
-              />
-
-              <span className="custom-checkbox" />
-
-              <span>
-                <button
-                  type="button"
-                  className="terms-link"
-                >
-                  Үйлчилгээний нөхцөл
-                </button>
-
-                {" "}
-                болон
-                {" "}
-
-                <button
-                  type="button"
-                  className="terms-link"
-                >
-                  Нууцлалын бодлого
-                </button>
-
-                -ыг зөвшөөрч байна
-              </span>
-            </label>
-
-            {error && (
-              <div
-                className="signup-error"
-                role="alert"
               >
-                {error}
-              </div>
-            )}
+                {loading
+                  ? "Бүртгэж байна..."
+                  : "Бүртгүүлэх"}
+              </button>
+            </form>
 
-            <button
-              type="submit"
-              className="signup-submit"
-              disabled={
-                loading
-              }
-            >
-              {loading
-                ? "Бүртгэж байна..."
-                : "Бүртгүүлэх"}
-            </button>
-          </form>
+            <div className="signup-login-row">
+              <span>
+                Бүртгэлтэй юу?
+              </span>
 
-          <div className="signup-login-row">
-            <span>
-              Бүртгэлтэй юу?
-            </span>
-
-            <button
-              type="button"
-              onClick={() =>
-                navigate(
-                  "/login"
-                )
-              }
-            >
-              Нэвтрэх
-            </button>
-          </div>
-        </section>
-      </div>
-    </main>
+              <button
+                type="button"
+                onClick={() =>
+                  navigate(
+                    "/login"
+                  )
+                }
+              >
+                Нэвтрэх
+              </button>
+            </div>
+          </section>
+        </div>
+      </main>
+    </>
   );
 }
 

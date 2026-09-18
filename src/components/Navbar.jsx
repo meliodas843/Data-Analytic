@@ -21,12 +21,7 @@ function Navbar() {
           <button
             type="button"
             className="navbar-logo"
-            onClick={() =>
-              window.scrollTo({
-                top: 0,
-                behavior: "smooth",
-              })
-            }
+            onClick={() => navigate("/")}
           >
             <img
               src={logo}
