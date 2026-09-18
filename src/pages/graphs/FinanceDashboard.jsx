@@ -2,7 +2,7 @@ import {
   Fragment,
   useState,
 } from "react";
-
+import LockedDashboard from "../../components/LockedDashboard";
 import {
   Bar,
   BarChart,
@@ -271,6 +271,7 @@ export default function FinanceDashboard() {
   };
 
   return (
+    <LockedDashboard type="finance">
     <div className="finance-dashboard">
       <section className="dash-card chart-card mb22">
         <div
@@ -760,5 +761,6 @@ export default function FinanceDashboard() {
         </div>
       </section>
     </div>
-  );
+  </LockedDashboard>
+);
 }

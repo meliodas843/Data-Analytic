@@ -28,60 +28,72 @@ const monthly = [
 ];
 
 const cards = [
-  [
-    "📈 НИЙТ ОРЛОГО",
-    "₮2.19bn",
-    "₮1.79bn өмнөх жил",
-    "+₮400M өссөн",
-    "▲ 22.2%",
-    87,
-    "#17a34a",
-  ],
-  [
-    "💵 ЦЭВЭР АШИГ",
-    "₮286M",
-    "₮245M өмнөх жил",
-    "+₮41M өссөн",
-    "▲ 16.7%",
-    72,
-    "#17a34a",
-  ],
-  [
-    "% АШГИЙН МАРЖИН",
-    "13.1%",
-    "14.2% өмнөх жил",
-    "-1.1pp буурсан",
-    "▼ 13.1%",
-    87,
-    "#f2b705",
-  ],
-  [
-    "📈 НИЙТ ЗАРДАЛ",
-    "₮1.1bn",
-    "₮1.3bn өмнөх жил",
-    "-₮200M буурсан",
-    "▼ 15.4%",
-    55,
-    "#ff3038",
-  ],
-  [
-    "📥 АВЛАГЫН ҮЛДЭГДЭЛ",
-    "₮4.5bn",
-    "₮4.8bn өмнөх жил",
-    "-₮300M буурсан",
-    "▲ 6.3%",
-    63,
-    "#17a34a",
-  ],
-  [
-    "📤 ӨГЛӨГИЙН ҮЛДЭГДЭЛ",
-    "₮890M",
-    "₮960M өмнөх жил",
-    "-₮70M буурсан",
-    "▲ 7.3%",
-    75,
-    "#17a34a",
-  ],
+  {
+    label: "📈 НИЙТ ОРЛОГО",
+    value: "₮2.19bn",
+    previous: "₮1.79bn өмнөх жил",
+    delta: "+₮400M өссөн",
+    percent: "▲ 22.2%",
+    goal: 87,
+    color: "#17a34a",
+    deltaClass: "green",
+    pillClass: "green",
+  },
+  {
+    label: "💵 ЦЭВЭР АШИГ",
+    value: "₮286M",
+    previous: "₮245M өмнөх жил",
+    delta: "+₮41M өссөн",
+    percent: "▲ 16.7%",
+    goal: 72,
+    color: "#17a34a",
+    deltaClass: "green",
+    pillClass: "green",
+  },
+  {
+    label: "% АШГИЙН МАРЖИН",
+    value: "13.1%",
+    previous: "14.2% өмнөх жил",
+    delta: "-1.1pp буурсан",
+    percent: "▼ 13.1%",
+    goal: 87,
+    color: "#f2b705",
+    deltaClass: "orange",
+    pillClass: "yellow",
+  },
+  {
+    label: "📈 НИЙТ ЗАРДАЛ",
+    value: "₮1.1bn",
+    previous: "₮1.3bn өмнөх жил",
+    delta: "-₮200M буурсан",
+    percent: "▼ 15.4%",
+    goal: 55,
+    color: "#ff3038",
+    deltaClass: "orange",
+    pillClass: "red",
+  },
+  {
+    label: "📥 АВЛАГЫН ҮЛДЭГДЭЛ",
+    value: "₮4.5bn",
+    previous: "₮4.8bn өмнөх жил",
+    delta: "-₮300M буурсан",
+    percent: "▲ 6.3%",
+    goal: 63,
+    color: "#17a34a",
+    deltaClass: "green",
+    pillClass: "green",
+  },
+  {
+    label: "📤 ӨГЛӨГИЙН ҮЛДЭГДЭЛ",
+    value: "₮890M",
+    previous: "₮960M өмнөх жил",
+    delta: "-₮70M буурсан",
+    percent: "▲ 7.3%",
+    goal: 75,
+    color: "#17a34a",
+    deltaClass: "green",
+    pillClass: "green",
+  },
 ];
 
 function Spark({ color = "#17a34a" }) {
@@ -89,12 +101,15 @@ function Spark({ color = "#17a34a" }) {
     <svg
       className="spark"
       viewBox="0 0 80 28"
+      aria-hidden="true"
     >
       <polyline
         points="2,17 15,14 28,17 40,11 55,10 76,4"
         fill="none"
         stroke={color}
         strokeWidth="2.2"
+        strokeLinecap="round"
+        strokeLinejoin="round"
       />
     </svg>
   );
@@ -104,64 +119,54 @@ export default function Dashboard() {
   return (
     <div className="dashboard-page">
       <section className="kpi-grid overview-card-grid mb22">
-        {cards.map((card, index) => (
+        {cards.map((card) => (
           <div
             className="kpi-card overview-card"
-            key={card[0]}
+            key={card.label}
           >
             <div className="kpi-label">
-              {card[0]}
+              {card.label}
             </div>
 
             <div className="kpi-value">
-              {card[1]}
+              {card.value}
             </div>
 
             <div className="kpi-prev">
-              {card[2]}
+              {card.previous}
             </div>
 
             <div
-              className={`kpi-delta ${
-                index === 2 || index === 3
-                  ? "orange"
-                  : "green"
-              }`}
+              className={`kpi-delta ${card.deltaClass}`}
             >
-              {card[3]}
+              {card.delta}
             </div>
 
             <span
-              className={`pill ${
-                index === 3
-                  ? "red"
-                  : index === 2
-                    ? "yellow"
-                    : "green"
-              }`}
+              className={`pill ${card.pillClass}`}
               style={{
                 position: "absolute",
                 right: 16,
                 top: 15,
               }}
             >
-              {card[4]}
+              {card.percent}
             </span>
 
-            <Spark color={card[6]} />
+            <Spark color={card.color} />
 
             <div className="goal-row">
               <div className="goal-head">
                 <span>Зорилт</span>
-                <b>{card[5]}%</b>
+                <b>{card.goal}%</b>
               </div>
 
               <div className="goal-track">
                 <div
                   className="goal-fill"
                   style={{
-                    width: `${card[5]}%`,
-                    background: card[6],
+                    width: `${card.goal}%`,
+                    background: card.color,
                   }}
                 />
               </div>
@@ -198,12 +203,16 @@ export default function Dashboard() {
                 vertical
               />
 
-              <XAxis dataKey="m" />
+              <XAxis
+                dataKey="m"
+                tickLine={false}
+                axisLine={false}
+              />
 
               <YAxis
-                tickFormatter={(value) =>
-                  `₮${value}M`
-                }
+                tickLine={false}
+                axisLine={false}
+                tickFormatter={(value) => `₮${value}M`}
               />
 
               <Tooltip />
@@ -228,6 +237,7 @@ export default function Dashboard() {
               />
 
               <Line
+                type="monotone"
                 dataKey="profit"
                 name="Ашиг"
                 stroke="#e49a00"
@@ -237,6 +247,9 @@ export default function Dashboard() {
                   fill: "#e49a00",
                   stroke: "#ffffff",
                   strokeWidth: 2,
+                }}
+                activeDot={{
+                  r: 5,
                 }}
               />
             </ComposedChart>

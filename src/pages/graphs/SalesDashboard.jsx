@@ -2,7 +2,7 @@ import {
   Fragment,
   useState,
 } from "react";
-
+import LockedDashboard from "../../components/LockedDashboard";
 import {
   Bar,
   BarChart,
@@ -239,6 +239,7 @@ export default function SalesDashboard() {
   };
 
   return (
+    <LockedDashboard type="sales">
     <div className="sales-dashboard">
       <section
         className="kpi-grid mb22"
@@ -798,5 +799,6 @@ export default function SalesDashboard() {
         </div>
       </section>
     </div>
+    </LockedDashboard>
   );
 }

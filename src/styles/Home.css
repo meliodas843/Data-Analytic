@@ -162,7 +162,11 @@ button:hover {
   position: relative;
   overflow: hidden;
   background:
-    radial-gradient(circle at 50% 48%, rgba(44, 203, 187, 0.045), transparent 40%),
+    radial-gradient(
+      circle at 50% 48%,
+      rgba(44, 203, 187, 0.045),
+      transparent 40%
+    ),
     #ffffff;
 }
 
@@ -182,7 +186,7 @@ button:hover {
   justify-content: center;
   gap: 9px;
   margin-bottom: 18px;
-  color: #16A34A;
+  color: #16a34a;
   font-size: 10px;
   line-height: 1;
   font-weight: 800;
@@ -194,7 +198,7 @@ button:hover {
   height: 7px;
   flex: 0 0 7px;
   border-radius: 50%;
-  background: #16A34A;
+  background: #16a34a;
   box-shadow: 0 0 0 4px rgba(22, 163, 74, 0.12);
 }
 
@@ -208,7 +212,7 @@ button:hover {
 }
 
 .compare-gradient-text {
-  color: #16A34A;
+  color: #16a34a;
 }
 
 .compare-hero-heading p {
@@ -255,14 +259,16 @@ button:hover {
 
 .compare-label.after {
   padding-right: 12px;
-  color: #16A34A;
+  color: #16a34a;
 }
 
 .compare-label.after i {
-  background: #16A34A;
+  background: #16a34a;
 }
 
 .before-after-demo {
+  --compare-position: 50%;
+
   position: relative;
   width: min(1080px, 100%);
   height: 475px;
@@ -274,50 +280,56 @@ button:hover {
   box-shadow: 0 22px 50px rgba(38, 58, 89, 0.12);
   user-select: none;
   touch-action: none;
+  isolation: isolate;
 }
 
 .compare-layer {
   position: absolute;
-  inset: 0;
-  width: 100%;
+  top: 0;
+  bottom: 0;
   height: 100%;
   overflow: hidden;
 }
 
 .compare-excel-layer {
   z-index: 1;
-  background:
-    linear-gradient(90deg, rgba(255, 255, 255, 0.75), rgba(245, 247, 250, 0.9)),
-    #f4f5f7;
+  left: 0;
+  width: var(--compare-position);
+  background: #f4f5f7;
 }
 
 .compare-dataview-layer {
   z-index: 2;
-  background:
-    radial-gradient(circle at 55% 40%, rgba(44, 203, 187, 0.06), transparent 48%),
-    #f8fafc;
-  will-change: clip-path;
+  left: var(--compare-position);
+  right: 0;
+  container-type: inline-size;
+  background: #071426;
 }
 
 .excel-side,
 .dataview-side {
   position: absolute;
-  top: 28px;
-  left: 26px;
-  right: 26px;
-  height: 415px;
+  top: 0;
+  bottom: 0;
+  height: 100%;
   overflow: hidden;
-  border-radius: 8px;
-  background: #ffffff;
-  box-shadow: 0 10px 28px rgba(38, 58, 89, 0.12);
 }
 
 .excel-side {
-  border: 1px solid #cfd5dc;
+  left: 0;
+  width: 1080px;
+  min-width: 1080px;
+  border-right: 1px solid #cfd5dc;
+  background: #ffffff;
 }
 
 .dataview-side {
-  border: 1px solid #d7e0e8;
+  left: 0;
+  width: max(100%, 590px);
+  min-width: 590px;
+  display: flex;
+  flex-direction: column;
+  background: #08172a;
 }
 
 .excel-toolbar {
@@ -368,26 +380,28 @@ button:hover {
 
 .excel-table table {
   width: 100%;
+  min-width: 1080px;
   border-collapse: collapse;
   table-layout: fixed;
-  color: #48586e;
+  color: #26313d;
+  font-family: Arial, sans-serif;
   font-size: 7px;
 }
 
 .excel-table th,
 .excel-table td {
-  height: 22px;
-  padding: 0 6px;
+  height: 20px;
+  padding: 0 5px;
   overflow: hidden;
-  border: 1px solid #dfe3e8;
+  border: 1px solid #cfd5dc;
   white-space: nowrap;
   text-overflow: ellipsis;
 }
 
 .excel-table th {
-  height: 23px;
+  height: 21px;
   background: #edf2f0;
-  color: #4b5c58;
+  color: #2e3935;
   font-weight: 800;
 }
 
@@ -396,56 +410,56 @@ button:hover {
 }
 
 .excel-table .excel-error {
-  background: #fff0f1;
-  color: #d83d4d;
+  background: #ffe2e4;
+  color: #d62d3b;
   font-weight: 800;
 }
 
 .excel-table .excel-total td {
-  background: #eef4f1;
-  color: #344c43;
+  background: #d9f0dc;
+  color: #294235;
   font-weight: 800;
 }
 
 .excel-note {
   position: absolute;
-  right: 15px;
-  bottom: 16px;
-  width: 165px;
-  min-height: 55px;
-  padding: 9px 35px 9px 11px;
+  right: 75%;
+  top: 98px;
+  width: 145px;
+  min-height: 66px;
+  padding: 12px 12px 22px;
   display: flex;
   flex-direction: column;
   gap: 4px;
-  border: 1px solid #f0c5c7;
-  border-radius: 5px;
-  background: #fff4f4;
-  color: #9b4d53;
+  background: #fff38c;
+  color: #50491d;
   font-size: 7px;
-  box-shadow: 0 5px 15px rgba(110, 55, 60, 0.08);
+  transform: rotate(-3deg);
+  box-shadow: 0 5px 14px rgba(0, 0, 0, 0.15);
 }
 
 .excel-note strong {
-  color: #d34854;
+  color: #6a601e;
   font-size: 8px;
 }
 
 .excel-note b {
   position: absolute;
-  top: 16px;
-  right: 10px;
-  color: #e35460;
-  font-size: 16px;
+  left: 12px;
+  bottom: 6px;
+  color: #27332c;
+  font-size: 14px;
 }
 
 .dataview-topbar {
   height: 43px;
-  padding: 0 16px;
+  flex: 0 0 43px;
+  padding: 0 13px;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  border-bottom: 1px solid #e8edf2;
-  background: #ffffff;
+  border-bottom: 1px solid #1b3b58;
+  background: #071426;
 }
 
 .dataview-brand,
@@ -456,7 +470,7 @@ button:hover {
 
 .dataview-brand {
   gap: 8px;
-  color: #203f70;
+  color: #ffffff;
   font-size: 8px;
 }
 
@@ -472,7 +486,7 @@ button:hover {
   grid-template-columns: 1fr 1fr;
   gap: 2px;
   border-radius: 5px;
-  background: #16A34A;
+  background: #42e59b;
 }
 
 .dataview-app-icon span {
@@ -483,9 +497,9 @@ button:hover {
 
 .dataview-period {
   padding: 5px 8px;
-  border: 1px solid #e2e8ef;
-  border-radius: 4px;
-  color: #6d7f98;
+  border: 1px solid rgba(66, 229, 155, 0.55);
+  border-radius: 999px;
+  color: #42e59b;
   font-size: 6px;
   font-weight: 700;
 }
@@ -497,30 +511,54 @@ button:hover {
   align-items: center;
   justify-content: center;
   border-radius: 50%;
-  background: #edfafa;
-  color: #16A34A;
+  background: #42e59b;
+  color: #071426;
   font-size: 7px;
   font-weight: 800;
 }
 
 .dataview-dashboard {
-  height: calc(100% - 43px);
-  padding: 14px 16px;
-  background: #f8fafc;
+  flex: 1 1 auto;
+  min-height: 0;
+  padding: 10px;
+  overflow-x: hidden;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  padding-bottom: 22px;
+  background: #08172a;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(66, 229, 155, 0.45) transparent;
+}
+
+.dataview-dashboard::-webkit-scrollbar {
+  width: 5px;
+}
+
+.dataview-dashboard::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.dataview-dashboard::-webkit-scrollbar-thumb {
+  border-radius: 999px;
+  background: rgba(66, 229, 155, 0.45);
 }
 
 .dataview-kpis {
   display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 8px;
 }
 
 .dark-kpi {
+  position: relative;
   min-width: 0;
+  min-height: 108px;
   padding: 10px;
-  border: 1px solid #e3e9ef;
-  border-radius: 6px;
-  background: #ffffff;
+  overflow: hidden;
+  border: 1px solid #244967;
+  border-top-color: #42e59b;
+  border-radius: 7px;
+  background: #162b49;
 }
 
 .dark-kpi-top {
@@ -537,7 +575,7 @@ button:hover {
 
 .dark-kpi-top small {
   overflow: hidden;
-  color: #8798ae;
+  color: #8393a8;
   font-size: 5px;
   font-weight: 800;
   white-space: nowrap;
@@ -546,66 +584,89 @@ button:hover {
 
 .dark-kpi-top span {
   margin-top: 3px;
-  color: #a1afc0;
+  color: #566b83;
   font-size: 5px;
 }
 
 .kpi-sparkline {
-  width: 38px;
-  height: 15px;
-  flex: 0 0 38px;
+  width: 56px;
+  height: 22px;
+  flex: 0 0 56px;
   color: #42e59b;
 }
 
 .dark-kpi > strong {
   display: block;
-  margin: 7px 0 8px;
-  color: #203f70;
-  font-size: 13px;
+  margin: 8px 0 9px;
+  color: #f4f7fb;
+  font-size: 14px;
   line-height: 1;
   font-weight: 850;
 }
 
 .kpi-comparison {
   display: grid;
-  gap: 3px;
+  gap: 4px;
 }
 
 .kpi-comparison > div {
   display: flex;
   align-items: center;
-  justify-content: space-between;
   gap: 5px;
-  color: #9aa9bc;
+  color: #6e7f94;
   font-size: 5px;
+}
+
+.kpi-comparison > div > span:first-child {
+  margin-right: auto;
+}
+
+.kpi-old-value {
+  color: #53677f;
 }
 
 .kpi-comparison b {
-  color: #20b989;
+  color: #42e59b;
   font-size: 5px;
 }
 
+.dashboard-sticky-note {
+  position: absolute;
+  right: 8px;
+  bottom: 7px;
+  width: 105px;
+  padding: 8px;
+  background: #c8f7d7;
+  color: #355442;
+  font-size: 6px;
+  line-height: 1.35;
+  transform: rotate(3deg);
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.15);
+}
+
 .dashboard-bottom-row {
-  margin-top: 9px;
+  margin-top: 8px;
   display: grid;
-  grid-template-columns: 1.6fr 0.8fr;
+  grid-template-columns: minmax(0, 1.7fr) minmax(120px, 0.75fr);
   gap: 8px;
 }
 
 .dark-chart-card,
 .dark-donut-card {
-  height: 210px;
-  padding: 12px;
-  border: 1px solid #e3e9ef;
-  border-radius: 6px;
-  background: #ffffff;
+  min-width: 0;
+  height: 160px;
+  padding: 10px;
+  border: 1px solid #244967;
+  border-top-color: #42e59b;
+  border-radius: 7px;
+  background: #162b49;
 }
 
 .dark-chart-heading {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  color: #203f70;
+  color: #f2f6fb;
   font-size: 7px;
 }
 
@@ -613,24 +674,32 @@ button:hover {
   display: flex;
   align-items: center;
   gap: 8px;
-  color: #8fa2be;
+  color: #75879c;
   font-size: 5px;
 }
 
+.legend-sales {
+  color: #42e59b;
+}
+
+.legend-tax {
+  color: #e5a41e;
+}
+
 .dark-bars {
-  height: 158px;
-  margin-top: 12px;
-  padding-top: 10px;
+  height: 112px;
+  margin-top: 9px;
+  padding-top: 8px;
   display: flex;
   align-items: flex-end;
-  gap: 7px;
-  border-top: 1px solid #edf1f5;
+  gap: 6px;
+  border-top: 1px solid #27405b;
   background:
     repeating-linear-gradient(
       to bottom,
       transparent 0,
-      transparent 36px,
-      #edf1f5 37px
+      transparent 26px,
+      rgba(55, 79, 104, 0.24) 27px
     );
 }
 
@@ -647,7 +716,11 @@ button:hover {
   width: 62%;
   display: block;
   border-radius: 2px 2px 0 0;
-  background: #16A34A;
+  background: #347e6c;
+}
+
+.dark-bar-group:nth-child(12) .sales-bar {
+  background: #42e59b;
 }
 
 .tax-bar {
@@ -655,7 +728,7 @@ button:hover {
   min-height: 3px;
   display: block;
   border-radius: 1px 1px 0 0;
-  background: #ffb454;
+  background: #e5a41e;
 }
 
 .dark-donut-card {
@@ -665,19 +738,19 @@ button:hover {
 }
 
 .dark-donut {
-  width: 122px;
-  height: 122px;
+  width: 92px;
+  height: 92px;
   display: flex;
   align-items: center;
   justify-content: center;
   border-radius: 50%;
   background:
-    radial-gradient(circle at center, #ffffff 0 45%, transparent 46%),
+    radial-gradient(circle at center, #162b49 0 45%, transparent 46%),
     conic-gradient(
-      #16A34A 0 36%,
-      #4c78f0 36% 62%,
-      #f6a20b 62% 78%,
-      #e8edf3 78% 100%
+      #42d78d 0 36%,
+      #239b67 36% 62%,
+      #e5a41e 62% 78%,
+      #355b80 78% 100%
     );
 }
 
@@ -688,36 +761,17 @@ button:hover {
 }
 
 .dark-donut strong {
-  color: #203f70;
-  font-size: 17px;
+  color: #ffffff;
+  font-size: 14px;
   line-height: 1;
   font-weight: 850;
 }
 
 .dark-donut span {
   margin-top: 3px;
-  color: #8fa2be;
-  font-size: 6px;
+  color: #8292a6;
+  font-size: 5px;
   font-weight: 700;
-}
-
-.dashboard-note {
-  position: absolute;
-  right: 18px;
-  bottom: 11px;
-  padding: 6px 9px;
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
-  border: 1px solid #dce6e5;
-  border-radius: 5px;
-  background: #f4fcfb;
-  color: #5f7d7a;
-  font-size: 6px;
-}
-
-.dashboard-note strong {
-  color: #3c6763;
 }
 
 .compare-range {
@@ -754,19 +808,20 @@ button:hover {
   z-index: 25;
   top: 0;
   bottom: 0;
+  left: var(--compare-position);
   width: 2px;
   transform: translateX(-50%);
-  background: #16A34A;
+  background: #42e59b;
   pointer-events: none;
-  box-shadow: 0 0 0 1px rgba(44, 203, 187, 0.08);
+  box-shadow: 0 0 9px rgba(66, 229, 155, 0.45);
 }
 
 .compare-divider button {
   position: absolute;
   top: 50%;
   left: 50%;
-  width: 44px;
-  height: 44px;
+  width: 42px;
+  height: 42px;
   padding: 0;
   transform: translate(-50%, -50%);
   display: flex;
@@ -774,13 +829,13 @@ button:hover {
   justify-content: center;
   border: 3px solid #ffffff;
   border-radius: 50%;
-  background: #16A34A;
-  color: #ffffff;
+  background: #42e59b;
+  color: #062219;
   font-size: 18px;
   line-height: 1;
   font-weight: 900;
   pointer-events: none;
-  box-shadow: 0 7px 20px rgba(44, 203, 187, 0.32);
+  box-shadow: 0 5px 18px rgba(38, 222, 146, 0.38);
 }
 
 .compare-hint {
@@ -793,35 +848,14 @@ button:hover {
   text-align: center;
 }
 
-.compare-hero-actions {
-  margin-top: 28px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 12px;
-}
+@container (min-width: 820px) {
+  .dataview-kpis {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
 
-.primary-action,
-.secondary-action {
-  min-height: 44px;
-  padding: 0 22px;
-  border-radius: 8px;
-  font-size: 13px;
-  font-weight: 800;
-  cursor: pointer;
-}
-
-.primary-action {
-  border: 1px solid #16A34A;
-  background: #16A34A;
-  color: #ffffff;
-  box-shadow: 0 8px 18px rgba(44, 203, 187, 0.22);
-}
-
-.secondary-action {
-  border: 1px solid #dce4ed;
-  background: #ffffff;
-  color: #203f70;
+  .dark-kpi {
+    min-height: 96px;
+  }
 }
 
 @media (max-width: 900px) {
@@ -837,12 +871,22 @@ button:hover {
     height: 410px;
   }
 
-  .excel-side,
-  .dataview-side {
-    top: 20px;
-    left: 20px;
-    right: 20px;
-    height: 365px;
+  .compare-range::-webkit-slider-thumb,
+  .compare-range::-moz-range-thumb {
+    height: 410px;
+  }
+
+  .dark-kpi {
+    min-height: 96px;
+  }
+
+  .dark-chart-card,
+  .dark-donut-card {
+    height: 145px;
+  }
+
+  .dark-bars {
+    height: 98px;
   }
 }
 
@@ -859,24 +903,22 @@ button:hover {
     height: 330px;
   }
 
-  .excel-side,
-  .dataview-side {
-    top: 12px;
-    left: 12px;
-    right: auto;
-    width: 760px;
-    height: 440px;
-    transform: scale(0.68);
-    transform-origin: top left;
+  .compare-range::-webkit-slider-thumb,
+  .compare-range::-moz-range-thumb {
+    height: 330px;
   }
 
-  .compare-hero-actions {
-    flex-direction: column;
+  .dataview-kpis,
+  .dashboard-bottom-row {
+    grid-template-columns: 1fr;
   }
 
-  .primary-action,
-  .secondary-action {
-    width: 100%;
+  .dark-kpi {
+    min-height: 105px;
+  }
+
+  .compare-hint {
+    display: none;
   }
 }
 
@@ -893,12 +935,11 @@ button:hover {
     height: 275px;
   }
 
-  .excel-side,
-  .dataview-side {
-    transform: scale(0.55);
+  .compare-range::-webkit-slider-thumb,
+  .compare-range::-moz-range-thumb {
+    height: 275px;
   }
 }
-
 
 .section {
   padding: var(--section-padding) 0;
@@ -2326,5 +2367,218 @@ button:hover {
 
   .section-heading h2 {
     font-size: var(--font-heading-small);
+  }
+}
+
+
+/* ============================================================
+   FIGMA COMPARISON PREVIEW — IMAGE AREA ONLY
+   Keeps the page background, hero text and all other sections unchanged.
+   ============================================================ */
+
+.before-after-demo {
+  --compare-position: 50%;
+}
+
+/* Left and right are real panes, not two full canvases cropped over each other. */
+.compare-excel-layer,
+.compare-dataview-layer {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  height: 100%;
+  overflow: hidden;
+}
+
+.compare-excel-layer {
+  left: 0;
+  right: auto;
+  width: var(--compare-position);
+}
+
+.compare-dataview-layer {
+  left: var(--compare-position);
+  right: 0;
+  width: auto;
+}
+
+/* Preview cards fill their pane exactly like the Figma composition. */
+.compare-excel-layer > .excel-side {
+  position: absolute;
+  top: 28px;
+  left: 26px;
+  right: 0;
+  width: auto;
+  height: 415px;
+  margin: 0;
+  overflow: hidden;
+  transform: none;
+}
+
+.compare-dataview-layer > .dataview-side {
+  position: absolute;
+  top: 28px;
+  left: 0;
+  right: 26px;
+  width: auto;
+  min-width: 0;
+  height: 415px;
+  margin: 0;
+  overflow: hidden;
+  transform: none;
+}
+
+/* Excel: show the WHOLE sheet inside whatever width the left pane has. */
+.compare-excel-layer .excel-table {
+  width: 100%;
+  overflow: hidden;
+}
+
+.compare-excel-layer .excel-table table {
+  width: 100%;
+  min-width: 0;
+  table-layout: fixed;
+}
+
+.compare-excel-layer .excel-table th,
+.compare-excel-layer .excel-table td {
+  padding-left: 4px;
+  padding-right: 4px;
+  font-size: clamp(4px, .48vw, 7px);
+}
+
+/* DataView: full content is visible in the right half, like the Figma reference. */
+.compare-dataview-layer .dataview-topbar,
+.compare-dataview-layer .dataview-dashboard {
+  width: 100%;
+  min-width: 0;
+}
+
+.compare-dataview-layer .dataview-dashboard {
+  height: calc(100% - 43px);
+  overflow-y: auto;
+  overflow-x: hidden;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(22, 163, 74, .45) transparent;
+}
+
+.compare-dataview-layer .dataview-dashboard::-webkit-scrollbar {
+  width: 5px;
+}
+
+.compare-dataview-layer .dataview-dashboard::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.compare-dataview-layer .dataview-dashboard::-webkit-scrollbar-thumb {
+  background: rgba(22, 163, 74, .45);
+  border-radius: 999px;
+}
+
+/*
+  Figma half view:
+  4 KPIs become 2 x 2, then chart + donut below.
+  Nothing is cut off horizontally.
+*/
+.compare-dataview-layer .dataview-kpis {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px;
+}
+
+.compare-dataview-layer .dashboard-bottom-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1.75fr) minmax(120px, .75fr);
+  gap: 8px;
+}
+
+.compare-dataview-layer .dark-kpi {
+  min-width: 0;
+}
+
+.compare-dataview-layer .dark-chart-card,
+.compare-dataview-layer .dark-donut-card {
+  min-width: 0;
+  height: 150px;
+}
+
+.compare-dataview-layer .dark-bars {
+  height: 100px;
+}
+
+/* When DataView is nearly/full width, use the spacious 4-column dashboard. */
+.before-after-demo:has(.compare-divider[style*="0%"]) .dataview-kpis {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+/* Divider stays exactly between the two panes. */
+.compare-divider {
+  left: var(--compare-position);
+}
+
+/* The range is still the drag surface over the entire preview. */
+.compare-range {
+  pointer-events: auto;
+}
+
+/* Tablet */
+@media (max-width: 900px) {
+  .compare-excel-layer > .excel-side {
+    top: 20px;
+    left: 20px;
+    right: 0;
+    height: 365px;
+  }
+
+  .compare-dataview-layer > .dataview-side {
+    top: 20px;
+    left: 0;
+    right: 20px;
+    height: 365px;
+  }
+
+  .compare-dataview-layer .dark-chart-card,
+  .compare-dataview-layer .dark-donut-card {
+    height: 135px;
+  }
+
+  .compare-dataview-layer .dark-bars {
+    height: 86px;
+  }
+}
+
+/* Mobile: preserve the same split behavior; content remains scrollable vertically. */
+@media (max-width: 650px) {
+  .compare-excel-layer > .excel-side {
+    top: 12px;
+    left: 12px;
+    right: 0;
+    width: auto;
+    height: 306px;
+    transform: none;
+  }
+
+  .compare-dataview-layer > .dataview-side {
+    top: 12px;
+    left: 0;
+    right: 12px;
+    width: auto;
+    height: 306px;
+    transform: none;
+  }
+
+  .compare-dataview-layer .dataview-kpis {
+    grid-template-columns: 1fr;
+  }
+
+  .compare-dataview-layer .dashboard-bottom-row {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 430px) {
+  .compare-excel-layer > .excel-side,
+  .compare-dataview-layer > .dataview-side {
+    transform: none;
   }
 }

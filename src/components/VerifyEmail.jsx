@@ -9,126 +9,94 @@ import {
   useNavigate,
 } from "react-router-dom";
 
+import { Mail } from "lucide-react";
+
 import "../styles/VerifyEmail.css";
 
-const API_URL =
-  "http://localhost:5000/api";
+function DataViewLogo() {
+  return (
+    <div className="verify-brand">
+      <div className="verify-brand-icon">
+        <span />
+        <span />
+        <span />
+      </div>
+
+      <span className="verify-brand-name">
+        DataView Mongolia
+      </span>
+    </div>
+  );
+}
 
 function VerifyEmail() {
-  const navigate =
-    useNavigate();
-
-  const location =
-    useLocation();
+  const navigate = useNavigate();
+  const location = useLocation();
 
   const email =
     location.state?.email ||
     sessionStorage.getItem(
       "verificationEmail"
     ) ||
-    "";
+    "demo@company.mn";
 
-  const [code, setCode] =
-    useState([
-      "",
-      "",
-      "",
-      "",
-      "",
-      "",
-    ]);
-
-  const [
-    loading,
-    setLoading,
-  ] = useState(false);
-
-  const [
-    resendLoading,
-    setResendLoading,
-  ] = useState(false);
-
-  const [
-    error,
-    setError,
-  ] = useState("");
-
-  const [
-    seconds,
-    setSeconds,
-  ] = useState(60);
-
-  const inputRefs =
-    useRef([]);
-
-  useEffect(() => {
-    if (!email) {
-      navigate(
-        "/signup",
-        {
-          replace: true,
-        }
-      );
-    }
-  }, [
-    email,
-    navigate,
+  const [code, setCode] = useState([
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
   ]);
 
+  const [loading, setLoading] =
+    useState(false);
+
+  const [seconds, setSeconds] =
+    useState(43);
+
+  const [error, setError] =
+    useState("");
+
+  const [message, setMessage] =
+    useState("");
+
+  const inputRefs = useRef([]);
+
   useEffect(() => {
-    if (
-      seconds <= 0
-    ) {
+    if (seconds <= 0) {
       return;
     }
 
-    const timer =
-      setInterval(
-        () => {
-          setSeconds(
-            (prev) =>
-              prev - 1
-          );
-        },
-        1000
+    const timer = setTimeout(() => {
+      setSeconds((prev) =>
+        Math.max(prev - 1, 0)
       );
+    }, 1000);
 
     return () =>
-      clearInterval(
-        timer
-      );
+      clearTimeout(timer);
   }, [seconds]);
 
   const handleChange = (
     index,
     value
   ) => {
-    const numericValue =
-      value.replace(
-        /\D/g,
-        ""
-      );
+    const number = value
+      .replace(/\D/g, "")
+      .slice(0, 1);
 
-    if (
-      numericValue.length >
-      1
-    ) {
-      return;
-    }
+    const nextCode = [...code];
 
-    const next =
-      [...code];
+    nextCode[index] = number;
 
-    next[index] =
-      numericValue;
-
-    setCode(next);
-
+    setCode(nextCode);
     setError("");
+    setMessage("");
 
     if (
-      numericValue &&
-      index < 5
+      number &&
+      index < code.length - 1
     ) {
       inputRefs.current[
         index + 1
@@ -138,355 +106,333 @@ function VerifyEmail() {
 
   const handleKeyDown = (
     index,
-    e
+    event
   ) => {
     if (
-      e.key ===
-        "Backspace" &&
+      event.key === "Backspace" &&
       !code[index] &&
       index > 0
     ) {
       inputRefs.current[
         index - 1
       ]?.focus();
-    }
-  };
 
-  const handlePaste = (
-    e
-  ) => {
-    e.preventDefault();
-
-    const pasted =
-      e.clipboardData
-        .getData("text")
-        .replace(
-          /\D/g,
-          ""
-        )
-        .slice(
-          0,
-          6
-        );
-
-    if (!pasted) {
       return;
     }
 
-    const next =
+    if (
+      event.key === "ArrowLeft" &&
+      index > 0
+    ) {
+      inputRefs.current[
+        index - 1
+      ]?.focus();
+
+      return;
+    }
+
+    if (
+      event.key === "ArrowRight" &&
+      index < code.length - 1
+    ) {
+      inputRefs.current[
+        index + 1
+      ]?.focus();
+    }
+  };
+
+  const handlePaste = (event) => {
+    event.preventDefault();
+
+    const pastedCode =
+      event.clipboardData
+        .getData("text")
+        .replace(/\D/g, "")
+        .slice(0, 6);
+
+    if (!pastedCode) {
+      return;
+    }
+
+    const nextCode =
       Array(6).fill("");
 
-    pasted
+    pastedCode
       .split("")
       .forEach(
-        (
-          digit,
-          index
-        ) => {
-          next[index] =
-            digit;
+        (number, index) => {
+          nextCode[index] = number;
         }
       );
 
-    setCode(next);
+    setCode(nextCode);
+    setError("");
+    setMessage("");
+
+    const focusIndex = Math.min(
+      pastedCode.length,
+      6
+    ) - 1;
 
     inputRefs.current[
-      Math.min(
-        pasted.length,
-        5
-      )
+      Math.max(focusIndex, 0)
     ]?.focus();
   };
 
-  const handleVerify =
-    async () => {
-      try {
-        setLoading(true);
-        setError("");
+  const handleVerify = async () => {
+    const verificationCode =
+      code.join("");
 
-        const verificationCode =
-          code.join("");
+    if (
+      verificationCode.length !== 6
+    ) {
+      setError(
+        "6 оронтой код оруулна уу."
+      );
 
-        if (
-          verificationCode
-            .length !== 6
-        ) {
-          throw new Error(
-            "6 оронтой код оруулна уу."
-          );
-        }
+      return;
+    }
 
-        const response =
-          await fetch(
-            `${API_URL}/auth/verify-email`,
-            {
-              method:
-                "POST",
-              headers: {
-                "Content-Type":
-                  "application/json",
-              },
-              body:
-                JSON.stringify(
-                  {
-                    email,
-                    code:
-                      verificationCode,
-                  }
-                ),
-            }
-          );
+    try {
+      setLoading(true);
+      setError("");
+      setMessage("");
 
-        const data =
-          await response.json();
+      /*
+        BACKEND ОДОО ХОЛБОГДООГҮЙ.
 
-        if (
-          !response.ok
-        ) {
-          throw new Error(
-            data.message ||
-              "Код буруу байна."
-          );
-        }
+        Тиймээс одоогоор ямар ч
+        /api/auth/verify-email request
+        явуулахгүй.
 
-        localStorage.setItem(
-          "token",
-          data.token
-        );
+        Backend бэлэн болсон үед
+        энд fetch() нэмнэ.
+      */
 
-        localStorage.setItem(
-          "user",
-          JSON.stringify(
-            data.user
-          )
-        );
+      await new Promise((resolve) =>
+        setTimeout(resolve, 500)
+      );
 
-        sessionStorage.removeItem(
-          "verificationEmail"
-        );
+      /*
+        Setup.jsx token шалгадаг бол
+        development үед temporary token
+        ашиглаж болно.
 
-        navigate(
-          "/company-setup"
-        );
-      } catch (err) {
-        setError(
-          err.message
-        );
-      } finally {
-        setLoading(false);
-      }
-    };
+        Жинхэнэ backend холбоход үүнийг
+        data.token-оор солино.
+      */
 
-  const resendCode =
-    async () => {
-      try {
-        setResendLoading(
-          true
-        );
+      localStorage.setItem(
+        "token",
+        "development-token"
+      );
 
-        setError("");
+      localStorage.setItem(
+        "user",
+        JSON.stringify({
+          email,
+          verified: true,
+        })
+      );
 
-        const response =
-          await fetch(
-            `${API_URL}/auth/resend-verification`,
-            {
-              method:
-                "POST",
-              headers: {
-                "Content-Type":
-                  "application/json",
-              },
-              body:
-                JSON.stringify(
-                  {
-                    email,
-                  }
-                ),
-            }
-          );
+      sessionStorage.removeItem(
+        "verificationEmail"
+      );
 
-        const data =
-          await response.json();
+      navigate("/setup", {
+        replace: true,
+      });
+    } catch (err) {
+      setError(
+        err.message ||
+          "Баталгаажуулах үед алдаа гарлаа."
+      );
+    } finally {
+      setLoading(false);
+    }
+  };
 
-        if (
-          !response.ok
-        ) {
-          throw new Error(
-            data.message ||
-              "Код дахин илгээж чадсангүй."
-          );
-        }
+  const handleResend = () => {
+    if (seconds > 0) {
+      return;
+    }
 
-        setSeconds(60);
-        setCode([
-          "",
-          "",
-          "",
-          "",
-          "",
-          "",
-        ]);
+    setCode([
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+    ]);
 
-        inputRefs.current[
-          0
-        ]?.focus();
-      } catch (err) {
-        setError(
-          err.message
-        );
-      } finally {
-        setResendLoading(
-          false
-        );
-      }
-    };
+    setSeconds(60);
 
-  const complete =
-    code.every(
-      (item) =>
-        item !== ""
+    setError("");
+
+    setMessage(
+      "Баталгаажуулах код дахин илгээгдлээ."
     );
 
+    setTimeout(() => {
+      inputRefs.current[
+        0
+      ]?.focus();
+    }, 50);
+  };
+
+  const handleChangeEmail = () => {
+    sessionStorage.removeItem(
+      "verificationEmail"
+    );
+
+    navigate("/signup");
+  };
+
+  const complete = code.every(
+    (number) => number !== ""
+  );
+
   return (
-    <div className="verify-page">
+    <main className="verify-page">
+      <div className="verify-container">
+        <DataViewLogo />
 
-      <div className="verify-brand">
-        <span className="verify-brand-icon">
-          📊
-        </span>
-
-        <strong>
-          DATAVIEW MONGOLIA
-        </strong>
-      </div>
-
-      <div className="verify-card">
-
-        <div className="verify-mail-icon">
-          ✉️
-        </div>
-
-        <h1>
-          И-мэйл шалгана уу
-        </h1>
-
-        <p>
-          <strong>
-            {email}
-          </strong>{" "}
-          хаяг руу
-          баталгаажуулах код
-          илгээлээ
-        </p>
-
-        <div
-          className="verify-code"
-          onPaste={
-            handlePaste
-          }
-        >
-          {code.map(
-            (
-              digit,
-              index
-            ) => (
-              <input
-                key={
-                  index
-                }
-                ref={(
-                  element
-                ) => {
-                  inputRefs.current[
-                    index
-                  ] =
-                    element;
-                }}
-                type="text"
-                inputMode="numeric"
-                maxLength="1"
-                value={
-                  digit
-                }
-                onChange={(
-                  e
-                ) =>
-                  handleChange(
-                    index,
-                    e.target
-                      .value
-                  )
-                }
-                onKeyDown={(
-                  e
-                ) =>
-                  handleKeyDown(
-                    index,
-                    e
-                  )
-                }
-                autoFocus={
-                  index === 0
-                }
-              />
-            )
-          )}
-        </div>
-
-        {error && (
-          <div className="verify-error">
-            {error}
+        <section className="verify-card">
+          <div className="verify-mail-icon">
+            <Mail
+              size={27}
+              strokeWidth={2}
+            />
           </div>
-        )}
 
-        <button
-          type="button"
-          className="verify-submit"
-          disabled={
-            !complete ||
-            loading
-          }
-          onClick={
-            handleVerify
-          }
-        >
-          {loading
-            ? "Шалгаж байна..."
-            : "Баталгаажуулах"}
-        </button>
+          <h1>
+            Имэйлээ баталгаажуулна уу
+          </h1>
 
-        <div className="verify-resend">
+          <p className="verify-description">
+            <strong>
+              {email}
+            </strong>
 
-          <span>
-            Код ирээгүй юу?
-          </span>
+            {" "}
+            хаяг руу 6 оронтой код
+            илгээлээ
+          </p>
 
-          {seconds > 0 ? (
-            <span>
-              Дахин илгээх
-              ({seconds}с)
-            </span>
-          ) : (
+          <div
+            className="verify-code"
+            onPaste={handlePaste}
+          >
+            {code.map(
+              (
+                digit,
+                index
+              ) => (
+                <input
+                  key={index}
+                  ref={(element) => {
+                    inputRefs.current[
+                      index
+                    ] = element;
+                  }}
+                  type="text"
+                  inputMode="numeric"
+                  maxLength={1}
+                  value={digit}
+                  onChange={(event) =>
+                    handleChange(
+                      index,
+                      event.target.value
+                    )
+                  }
+                  onKeyDown={(event) =>
+                    handleKeyDown(
+                      index,
+                      event
+                    )
+                  }
+                  autoFocus={
+                    index === 0
+                  }
+                  aria-label={`Код ${
+                    index + 1
+                  }`}
+                />
+              )
+            )}
+          </div>
+
+          {error && (
+            <div className="verify-error">
+              {error}
+            </div>
+          )}
+
+          {message && (
+            <div className="verify-success">
+              {message}
+            </div>
+          )}
+
+          <button
+            type="button"
+            className="verify-submit"
+            disabled={
+              !complete ||
+              loading
+            }
+            onClick={
+              handleVerify
+            }
+          >
+            {loading
+              ? "Баталгаажуулж байна..."
+              : "Баталгаажуулах"}
+          </button>
+
+          <div className="verify-actions">
+            <div className="verify-resend">
+              <span>
+                Код дахин илгээх
+              </span>
+
+              {seconds > 0 ? (
+                <strong>
+                  (
+                  {`0:${String(
+                    seconds
+                  ).padStart(
+                    2,
+                    "0"
+                  )}`}
+                  )
+                </strong>
+              ) : (
+                <button
+                  type="button"
+                  onClick={
+                    handleResend
+                  }
+                >
+                  Дахин илгээх
+                </button>
+              )}
+            </div>
+
             <button
               type="button"
+              className="verify-change-email"
               onClick={
-                resendCode
-              }
-              disabled={
-                resendLoading
+                handleChangeEmail
               }
             >
-              {resendLoading
-                ? "Илгээж байна..."
-                : "Дахин илгээх"}
+              И-мэйл хаяг солих
             </button>
-          )}
-
-        </div>
-
+          </div>
+        </section>
       </div>
-
-    </div>
+    </main>
   );
 }
 

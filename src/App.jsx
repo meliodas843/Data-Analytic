@@ -8,9 +8,11 @@ import { useState } from "react";
 
 import Home from "./pages/Home";
 import Dashboard from "./pages/Dashboard";
+import Setup from "./pages/Setup";
+
 import Login from "./components/Login";
 import Signup from "./components/Signup";
-import Setup from "./pages/Setup";
+import VerifyEmail from "./components/VerifyEmail";
 
 import FinanceDashboard from "./pages/graphs/FinanceDashboard";
 import SalesDashboard from "./pages/graphs/SalesDashboard";
@@ -20,12 +22,21 @@ import InventoryDashboard from "./pages/graphs/InventoryDashboard";
 import DashboardNavbar from "./components/DashboardNavbar";
 import DashboardHeader from "./components/DashboardHeader";
 
+import Profile from "./pages/Profile";
+
+import SettingsLayout from "./pages/settings/SettingsLayout";
+import OrganizationSettings from "./pages/settings/OrganizationSettings";
+import DataConnectionSettings from "./pages/settings/DataConnectionSettings";
+import UsersSettings from "./pages/settings/UsersSettings";
+import BillingSettings from "./pages/settings/BillingSettings";
+
 import AdminLogin from "./Admin/AdminLogin";
 import AdminDashboard from "./Admin/AdminDashboard";
 import AdminHome from "./Admin/AdminHome";
 import AdminCompany from "./Admin/AdminCompany";
 import AdminRequests from "./Admin/AdminRequests";
 import AdminUsers from "./Admin/AdminUsers";
+
 import AdminLayout from "./components/AdminLayout";
 
 import "./styles/Dashboard.css";
@@ -41,7 +52,9 @@ function DashboardLayout({ children }) {
   return (
     <div
       className={`dashboard-layout ${
-        collapsed ? "sidebar-collapsed" : ""
+        collapsed
+          ? "sidebar-collapsed"
+          : ""
       }`}
     >
       <DashboardNavbar
@@ -52,8 +65,10 @@ function DashboardLayout({ children }) {
       <main className="dashboard-main">
         <DashboardHeader />
 
-        <div className="dashboard-content">
-          {children}
+        <div className="dashboard-body">
+          <div className="dashboard-content">
+            {children}
+          </div>
         </div>
       </main>
     </div>
@@ -77,6 +92,11 @@ function App() {
         <Route
           path="/signup"
           element={<Signup />}
+        />
+
+        <Route
+          path="/verify-email"
+          element={<VerifyEmail />}
         />
 
         <Route
@@ -112,6 +132,15 @@ function App() {
         />
 
         <Route
+          path="/cash-flow"
+          element={
+            <DashboardLayout>
+              <InventoryDashboard />
+            </DashboardLayout>
+          }
+        />
+
+        <Route
           path="/ar-ap"
           element={
             <DashboardLayout>
@@ -120,15 +149,55 @@ function App() {
           }
         />
 
+        {/* PROFILE */}
         <Route
-          path="/inventory"
-          element={
-            <DashboardLayout>
-              <InventoryDashboard />
-            </DashboardLayout>
-          }
+          path="/profile"
+          element={<Profile />}
         />
 
+        {/* SETTINGS */}
+        <Route
+          path="/settings"
+          element={<SettingsLayout />}
+        >
+          <Route
+            index
+            element={<OrganizationSettings />}
+          />
+
+          <Route
+            path="organization"
+            element={<OrganizationSettings />}
+          />
+
+          <Route
+            path="data"
+            element={<DataConnectionSettings />}
+          />
+
+          <Route
+            path="users"
+            element={<UsersSettings />}
+          />
+
+          <Route
+            path="billing"
+            element={<BillingSettings />}
+          />
+        </Route>
+
+        {/* DROPDOWN BILLING SHORTCUT */}
+        <Route
+          path="/billing"
+          element={<SettingsLayout />}
+        >
+          <Route
+            index
+            element={<BillingSettings />}
+          />
+        </Route>
+
+        {/* ADMIN */}
         <Route
           path="/admin/login"
           element={<AdminLogin />}

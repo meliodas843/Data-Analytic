@@ -3,6 +3,18 @@ import {
   useNavigate,
 } from "react-router-dom";
 
+import {
+  LayoutGrid,
+  DollarSign,
+  TrendingUp,
+  ArrowUpDown,
+  BookOpen,
+  Settings,
+  LockKeyhole,
+  PanelLeftClose,
+  PanelLeftOpen,
+} from "lucide-react";
+
 import logo from "../assets/logo-default.svg";
 
 function DashboardNavbar({
@@ -11,14 +23,24 @@ function DashboardNavbar({
 }) {
   const navigate = useNavigate();
 
-  const getLinkClass = ({ isActive }) =>
-    `sidebar-item ${isActive ? "active" : ""}`;
+  const dataConnected =
+    localStorage.getItem("dataConnected") === "true";
 
-  const handleLogout = () => {
-    localStorage.removeItem("token");
-    localStorage.removeItem("user");
+  const usingDemoData =
+    localStorage.getItem("usingDemoData") === "true";
 
-    navigate("/");
+  const locked =
+    usingDemoData && !dataConnected;
+
+  const getLinkClass = ({
+    isActive,
+  }) =>
+    `sidebar-item ${
+      isActive ? "active" : ""
+    }`;
+
+  const handleSettings = () => {
+    navigate("/setup");
   };
 
   return (
@@ -27,12 +49,12 @@ function DashboardNavbar({
         collapsed ? "collapsed" : ""
       }`}
     >
-      <div>
+      <div className="sidebar-main">
         <div className="sidebar-logo">
           {!collapsed && (
             <img
               src={logo}
-              alt="DataView"
+              alt="DataView Mongolia"
               className="sidebar-logo-image"
             />
           )}
@@ -46,36 +68,38 @@ function DashboardNavbar({
                 ? "Меню дэлгэх"
                 : "Меню хураах"
             }
-            title={
-              collapsed
-                ? "Меню дэлгэх"
-                : "Меню хураах"
-            }
           >
-            {collapsed ? "☰" : "←"}
+            {collapsed ? (
+              <PanelLeftOpen
+                size={19}
+                strokeWidth={1.8}
+              />
+            ) : (
+              <PanelLeftClose
+                size={19}
+                strokeWidth={1.8}
+              />
+            )}
           </button>
         </div>
 
-        <div className="sidebar-section">
-          {!collapsed && (
-            <p className="sidebar-label">
-              DASHBOARDS
-            </p>
-          )}
-
+        <nav className="sidebar-navigation">
           <NavLink
             to="/dashboard"
             end
             className={getLinkClass}
-            title="CEO Dashboard"
+            title="Тойм"
           >
             <span className="sidebar-item-icon">
-              🏢
+              <LayoutGrid
+                size={18}
+                strokeWidth={1.8}
+              />
             </span>
 
             {!collapsed && (
               <span className="sidebar-item-text">
-                CEO Dashboard
+                Тойм
               </span>
             )}
           </NavLink>
@@ -83,131 +107,156 @@ function DashboardNavbar({
           <NavLink
             to="/finance"
             className={getLinkClass}
-            title="Finance Dashboard"
+            title="Санхүү"
           >
             <span className="sidebar-item-icon">
-              💰
+              <DollarSign
+                size={19}
+                strokeWidth={1.8}
+              />
             </span>
 
             {!collapsed && (
-              <span className="sidebar-item-text">
-                Finance Dashboard
-              </span>
+              <>
+                <span className="sidebar-item-text">
+                  Санхүү
+                </span>
+
+                {locked && (
+                  <LockKeyhole
+                    className="sidebar-lock"
+                    size={14}
+                    strokeWidth={1.9}
+                  />
+                )}
+              </>
             )}
           </NavLink>
 
           <NavLink
             to="/sales"
             className={getLinkClass}
-            title="Sales Dashboard"
+            title="Борлуулалт"
           >
             <span className="sidebar-item-icon">
-              📈
+              <TrendingUp
+                size={19}
+                strokeWidth={1.8}
+              />
             </span>
 
             {!collapsed && (
-              <span className="sidebar-item-text">
-                Sales Dashboard
-              </span>
+              <>
+                <span className="sidebar-item-text">
+                  Борлуулалт
+                </span>
+
+                {locked && (
+                  <LockKeyhole
+                    className="sidebar-lock"
+                    size={14}
+                    strokeWidth={1.9}
+                  />
+                )}
+              </>
+            )}
+          </NavLink>
+
+          <NavLink
+            to="/cash-flow"
+            className={getLinkClass}
+            title="Мөнгөн урсгал"
+          >
+            <span className="sidebar-item-icon">
+              <ArrowUpDown
+                size={19}
+                strokeWidth={1.8}
+              />
+            </span>
+
+            {!collapsed && (
+              <>
+                <span className="sidebar-item-text">
+                  Мөнгөн урсгал
+                </span>
+
+                {locked && (
+                  <LockKeyhole
+                    className="sidebar-lock"
+                    size={14}
+                    strokeWidth={1.9}
+                  />
+                )}
+              </>
             )}
           </NavLink>
 
           <NavLink
             to="/ar-ap"
             className={getLinkClass}
-            title="AR/AP Dashboard"
+            title="AR / AP"
           >
             <span className="sidebar-item-icon">
-              🧾
+              <BookOpen
+                size={19}
+                strokeWidth={1.8}
+              />
             </span>
 
             {!collapsed && (
-              <span className="sidebar-item-text">
-                AR/AP Dashboard
-              </span>
+              <>
+                <span className="sidebar-item-text">
+                  AR / AP
+                </span>
+
+                {locked && (
+                  <LockKeyhole
+                    className="sidebar-lock"
+                    size={14}
+                    strokeWidth={1.9}
+                  />
+                )}
+              </>
             )}
           </NavLink>
 
-          <NavLink
-            to="/inventory"
-            className={getLinkClass}
-            title="Inventory Dashboard"
-          >
-            <span className="sidebar-item-icon">
-              📦
-            </span>
-
-            {!collapsed && (
-              <span className="sidebar-item-text">
-                Inventory Dashboard
-              </span>
-            )}
-          </NavLink>
-        </div>
-
-        <div className="sidebar-section">
-          {!collapsed && (
-            <p className="sidebar-label">
-              TOOLS
-            </p>
-          )}
+          <div className="sidebar-divider" />
 
           <button
             type="button"
             className="sidebar-item"
-            title="Chart Templates"
+            onClick={handleSettings}
+            title="Тохиргоо"
           >
             <span className="sidebar-item-icon">
-              📊
+              <Settings
+                size={19}
+                strokeWidth={1.8}
+              />
             </span>
 
             {!collapsed && (
               <span className="sidebar-item-text">
-                Chart Templates
+                Тохиргоо
               </span>
             )}
           </button>
-
-          <button
-            type="button"
-            className="sidebar-item"
-            title="Dashboard Builder"
-          >
-            <span className="sidebar-item-icon">
-              🔧
-            </span>
-
-            {!collapsed && (
-              <span className="sidebar-item-text">
-                Dashboard Builder
-              </span>
-            )}
-          </button>
-        </div>
+        </nav>
       </div>
 
-      <div className="sidebar-user">
-        {!collapsed && (
-          <div className="sidebar-user-left">
-            <div className="user-avatar">
-              D
-            </div>
+      <div className="sidebar-bottom">
+        {locked && !collapsed && (
+          <div className="sidebar-trial-card">
+            <strong>
+              Туршилт эхлээгүй
+            </strong>
 
-            <div className="sidebar-user-info">
-              <strong>demo</strong>
-              <span>demo@dataviz.pro</span>
-            </div>
+            <span>
+              Дата холбосноор 14 хоногийн
+              туршилт эхэлнэ
+            </span>
           </div>
         )}
-
-        <button
-          type="button"
-          className="logout-button"
-          onClick={handleLogout}
-          title="Гарах"
-        >
-          ⏻
-        </button>
       </div>
     </aside>
   );

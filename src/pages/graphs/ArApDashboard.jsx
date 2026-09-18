@@ -2,7 +2,7 @@ import {
   Fragment,
   useState,
 } from "react";
-
+import LockedDashboard from "../../components/LockedDashboard";
 import {
   Bar,
   BarChart,
@@ -329,6 +329,7 @@ export default function ArApDashboard() {
       : payables;
 
   return (
+    <LockedDashboard type="arap">
     <div className="arap-dashboard">
       <section
         className="kpi-grid mb22"
@@ -1020,5 +1021,6 @@ export default function ArApDashboard() {
         </div>
       </section>
     </div>
+    </LockedDashboard>
   );
 }

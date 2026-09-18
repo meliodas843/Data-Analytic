@@ -1,24 +1,45 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { FcGoogle } from "react-icons/fc";
-import logo from "../assets/logo-default.svg";
+import {
+  ArrowLeft,
+  Eye,
+  EyeOff,
+} from "lucide-react";
+
 import "../styles/Login.css";
 
+function DataViewLogo() {
+  return (
+    <div className="auth-brand">
+      <div className="auth-brand-icon">
+        <span />
+        <span />
+        <span />
+      </div>
+
+      <span className="auth-brand-name">
+        DataView Mongolia
+      </span>
+    </div>
+  );
+}
 
 function Login() {
   const navigate = useNavigate();
+
+  const [mode, setMode] =
+    useState("login");
+
+  const [showPassword, setShowPassword] =
+    useState(false);
 
   const [form, setForm] = useState({
     email: "",
     password: "",
   });
 
-
   const handleChange = (e) => {
-    const {
-      name,
-      value,
-    } = e.target;
+    const { name, value } = e.target;
 
     setForm((prev) => ({
       ...prev,
@@ -26,226 +47,196 @@ function Login() {
     }));
   };
 
-
-  const handleSubmit = (e) => {
+  const handleLogin = (e) => {
     e.preventDefault();
 
     navigate("/dashboard");
   };
 
+  const handleReset = (e) => {
+    e.preventDefault();
+
+    if (!form.email.trim()) {
+      return;
+    }
+
+    console.log(
+      "Reset password:",
+      form.email
+    );
+  };
 
   return (
-    <div className="login-page">
+    <main className="login-page">
+      <div className="login-container">
+        <DataViewLogo />
 
-      <div className="login-card">
+        {mode === "login" ? (
+          <section className="login-card">
+            <div className="login-heading">
+              <h1>Нэвтрэх</h1>
 
-        {/* ================= HEADER ================= */}
+              <p>
+                Dashboard-даа нэвтэрнэ үү
+              </p>
+            </div>
 
-        <div className="login-top">
-
-          <button
-            type="button"
-            className="navbar-logo"
-            onClick={() =>
-              window.scrollTo({
-                top: 0,
-                behavior: "smooth",
-              })
-            }
+            <form
+              className="login-form"
+              onSubmit={handleLogin}
             >
-            <img
-              src={logo}
-                alt="DataView"
-                className="navbar-logo-image"
-            />
-          </button>
+              <div className="login-field">
+                <label htmlFor="email">
+                  И-мэйл
+                </label>
 
-          <button
-            type="button"
-            className="language-button"
-          >
-            🇲🇳 MN
-          </button>
+                <input
+                  id="email"
+                  type="email"
+                  name="email"
+                  placeholder="demo@company.mn"
+                  value={form.email}
+                  onChange={handleChange}
+                  required
+                />
+              </div>
 
-        </div>
+              <div className="login-field">
+                <div className="login-label-row">
+                  <label htmlFor="password">
+                    Нууц үг
+                  </label>
 
+                  <button
+                    type="button"
+                    className="forgot-password-link"
+                    onClick={() =>
+                      setMode("forgot")
+                    }
+                  >
+                    Нууц үгээ мартсан?
+                  </button>
+                </div>
 
-        {/* ================= TITLE ================= */}
+                <div className="login-password">
+                  <input
+                    id="password"
+                    type={
+                      showPassword
+                        ? "text"
+                        : "password"
+                    }
+                    name="password"
+                    placeholder="••••••••"
+                    value={form.password}
+                    onChange={handleChange}
+                    required
+                  />
 
-        <div className="login-heading">
+                  <button
+                    type="button"
+                    className="password-eye"
+                    onClick={() =>
+                      setShowPassword(
+                        (prev) => !prev
+                      )
+                    }
+                    aria-label={
+                      showPassword
+                        ? "Нууц үг нуух"
+                        : "Нууц үг харах"
+                    }
+                  >
+                    {showPassword ? (
+                      <EyeOff size={19} />
+                    ) : (
+                      <Eye size={19} />
+                    )}
+                  </button>
+                </div>
+              </div>
 
-          <h1>
-            Welcome back
-          </h1>
+              <button
+                type="submit"
+                className="login-submit"
+              >
+                Нэвтрэх
+              </button>
+            </form>
 
+            <div className="login-register">
+              <span>
+                Бүртгэлгүй юу?
+              </span>
 
-          <p>
-            Don't have an account?{" "}
-
+              <button
+                type="button"
+                onClick={() =>
+                  navigate("/signup")
+                }
+              >
+                Үнэгүй бүртгүүлэх
+              </button>
+            </div>
+          </section>
+        ) : (
+          <section className="login-card forgot-card">
             <button
               type="button"
-              className="signup-link"
+              className="back-to-login"
               onClick={() =>
-                navigate("/signup")
+                setMode("login")
               }
             >
-              Sign up
+              <ArrowLeft size={17} />
+
+              <span>Нэвтрэх</span>
             </button>
-          </p>
 
-        </div>
+            <div className="login-heading forgot-heading">
+              <h1>Нууц үг сэргээх</h1>
 
+              <p>
+                Бүртгэлтэй и-мэйл рүү
+                сэргээх холбоос илгээнэ
+              </p>
+            </div>
 
-        {/* ================= FORM ================= */}
+            <form
+              className="login-form"
+              onSubmit={handleReset}
+            >
+              <div className="login-field">
+                <input
+                  type="email"
+                  name="email"
+                  placeholder="demo@company.mn"
+                  value={form.email}
+                  onChange={handleChange}
+                  required
+                />
+              </div>
 
-        <form
-          className="login-form"
-          onSubmit={handleSubmit}
+              <button
+                type="submit"
+                className="login-submit"
+                disabled={!form.email.trim()}
+              >
+                Холбоос илгээх
+              </button>
+            </form>
+          </section>
+        )}
+
+        <button
+          type="button"
+          className="invitation-example"
         >
-
-          {/* EMAIL */}
-
-          <div className="login-field">
-
-            <label>
-              Email Address
-            </label>
-
-
-            <input
-              type="email"
-              name="email"
-              placeholder="you@company.com"
-              value={form.email}
-              onChange={handleChange}
-              required
-            />
-
-          </div>
-
-
-          {/* PASSWORD */}
-
-          <div className="login-field">
-
-            <label>
-              Password
-            </label>
-
-
-            <input
-              type="password"
-              name="password"
-              placeholder="••••••••"
-              value={form.password}
-              onChange={handleChange}
-              required
-            />
-
-          </div>
-
-
-          {/* FORGOT PASSWORD */}
-
-          <div className="forgot-row">
-
-            <button
-              type="button"
-              className="forgot-button"
-              onClick={() =>
-                navigate(
-                  "/forgot-password"
-                )
-              }
-            >
-              Forgot password?
-            </button>
-
-          </div>
-
-
-          {/* LOGIN BUTTON */}
-
-          <button
-            type="submit"
-            className="login-submit"
-          >
-            Log In
-          </button>
-
-        </form>
-
-
-        {/* ================= DIVIDER ================= */}
-
-        <div className="login-divider">
-
-          <span>
-            Or continue with
-          </span>
-
-        </div>
-
-
-        {/* ================= SOCIAL LOGIN ================= */}
-
-        <div className="social-login">
-
-          {/* GOOGLE */}
-
-          <button
-            type="button"
-            className="social-login-button"
-            onClick={() =>
-              navigate("/dashboard")
-            }
-          >
-            <FcGoogle
-              size={20}
-            />
-
-            <span>
-              Google
-            </span>
-          </button>
-
-
-          {/* MICROSOFT */}
-
-          <button
-            type="button"
-            className="social-login-button"
-            onClick={() =>
-              navigate("/dashboard")
-            }
-          >
-
-            <span className="microsoft-four-logo">
-
-              <i className="ms-red" />
-
-              <i className="ms-green" />
-
-              <i className="ms-blue" />
-
-              <i className="ms-yellow" />
-
-            </span>
-
-
-            <span>
-              Microsoft
-            </span>
-
-          </button>
-
-        </div>
-
+          Урилгын холбоосын жишээ харах
+        </button>
       </div>
-
-    </div>
+    </main>
   );
 }
-
 
 export default Login;

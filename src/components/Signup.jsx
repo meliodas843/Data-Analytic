@@ -1,61 +1,48 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import {
+  Eye,
+  EyeOff,
+} from "lucide-react";
 
 import "../styles/Signup.css";
 
-const API_URL =
-  "http://localhost:5000/api";
+function DataViewLogo() {
+  return (
+    <div className="signup-brand">
+      <div className="signup-brand-icon">
+        <span />
+        <span />
+        <span />
+      </div>
+
+      <span className="signup-brand-name">
+        DataView Mongolia
+      </span>
+    </div>
+  );
+}
 
 function Signup() {
-  const navigate =
-    useNavigate();
+  const navigate = useNavigate();
 
-  const [form, setForm] =
-    useState({
-      companyName: "",
-      fullName: "",
-      email: "",
-      phone: "",
-      password: "",
-      confirmPassword: "",
-      industry: "",
-      terms: false,
-    });
+  const [showPassword, setShowPassword] =
+    useState(false);
 
-  const [
-    showPassword,
-    setShowPassword,
-  ] = useState(false);
+  const [loading, setLoading] =
+    useState(false);
 
-  const [
-    showConfirmPassword,
-    setShowConfirmPassword,
-  ] = useState(false);
+  const [error, setError] =
+    useState("");
 
-  const [
-    loading,
-    setLoading,
-  ] = useState(false);
-
-  const [
-    error,
-    setError,
-  ] = useState("");
-
-  const industries = [
-    "Эм зүйн бүтээгдэхүүн",
-    "Санхүү, банк",
-    "Худалдаа",
-    "Үйлдвэрлэл",
-    "Барилга",
-    "Тээвэр, логистик",
-    "Мэдээллийн технологи",
-    "Эрүүл мэнд",
-    "Боловсрол",
-    "Зочид буудал, аялал жуулчлал",
-    "Хөдөө аж ахуй",
-    "Бусад",
-  ];
+  const [form, setForm] = useState({
+    companyName: "",
+    fullName: "",
+    email: "",
+    phone: "",
+    password: "",
+    terms: false,
+  });
 
   const handleChange = (e) => {
     const {
@@ -67,7 +54,6 @@ function Signup() {
 
     setForm((prev) => ({
       ...prev,
-
       [name]:
         type === "checkbox"
           ? checked
@@ -77,352 +63,272 @@ function Signup() {
     setError("");
   };
 
-  const handleSubmit = async (
-    e
-  ) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     try {
       setLoading(true);
       setError("");
 
-      if (
-        form.password !==
-        form.confirmPassword
-      ) {
+      if (form.password.length < 8) {
         throw new Error(
-          "Нууц үг таарахгүй байна."
-        );
-      }
-
-      if (
-        form.password.length < 6
-      ) {
-        throw new Error(
-          "Нууц үг хамгийн багадаа 6 тэмдэгт байна."
-        );
-      }
-
-      if (!form.industry) {
-        throw new Error(
-          "Салбар сонгоно уу."
+          "Нууц үг хамгийн багадаа 8 тэмдэгт байна."
         );
       }
 
       if (!form.terms) {
         throw new Error(
-          "Үйлчилгээний нөхцөлийг зөвшөөрнө үү."
+          "Үйлчилгээний нөхцөл болон нууцлалын бодлогыг зөвшөөрнө үү."
         );
       }
 
-      const response =
-        await fetch(
-          `${API_URL}/auth/signup`,
+      /*
+        Backend холбоход энд API request хийнэ.
+
+        Жишээ:
+        const response = await fetch(
+          "/api/auth/signup",
           {
             method: "POST",
-
             headers: {
               "Content-Type":
                 "application/json",
             },
-
-            body:
-              JSON.stringify({
-                companyName:
-                  form.companyName,
-
-                fullName:
-                  form.fullName,
-
-                email:
-                  form.email,
-
-                phone:
-                  form.phone,
-
-                password:
-                  form.password,
-
-                industry:
-                  form.industry,
-              }),
+            body: JSON.stringify({
+              companyName:
+                form.companyName,
+              fullName:
+                form.fullName,
+              email:
+                form.email,
+              phone:
+                form.phone,
+              password:
+                form.password,
+            }),
           }
         );
+      */
 
-      const data =
-        await response.json();
-
-      if (!response.ok) {
-        throw new Error(
-          data.error ||
-            data.message ||
-            "Бүртгэл үүсгэхэд алдаа гарлаа."
-        );
-      }
-
-      localStorage.setItem(
-        "token",
-        data.token
-      );
-
-      localStorage.setItem(
-        "user",
-        JSON.stringify(
-          data.user
-        )
-      );
-
-      navigate("/setup");
+      navigate("/verify-email", {
+        state: {
+          email: form.email,
+        },
+      });
     } catch (err) {
-      console.error(
-        "Signup error:",
-        err
-      );
-
-      setError(
-        err.message
-      );
+      setError(err.message);
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <div className="signup-page">
-      <div className="signup-card">
-        <div className="signup-heading">
-          <h1>
-            Бүртгүүлэх
-          </h1>
+    <main className="signup-page">
+      <div className="signup-container">
+        <DataViewLogo />
 
-          <p>
-            14 хоног үнэгүй турших
-          </p>
-        </div>
+        <section className="signup-card">
+          <div className="signup-heading">
+            <h1>Бүртгүүлэх</h1>
 
-        <form
-          className="signup-form"
-          onSubmit={handleSubmit}
-        >
-          <div className="signup-field">
-            <label>
-              Компанийн нэр *
-            </label>
-
-            <input
-              type="text"
-              name="companyName"
-              value={
-                form.companyName
-              }
-              onChange={
-                handleChange
-              }
-              required
-            />
+            <p>
+              14 хоног үнэгүй туршилт ·
+              Карт шаардахгүй
+            </p>
           </div>
 
-          <div className="signup-field">
-            <label>
-              Таны нэр *
-            </label>
-
-            <input
-              type="text"
-              name="fullName"
-              value={
-                form.fullName
-              }
-              onChange={
-                handleChange
-              }
-              required
-            />
-          </div>
-
-          <div className="signup-field">
-            <label>
-              И-мэйл *
-            </label>
-
-            <input
-              type="email"
-              name="email"
-              value={
-                form.email
-              }
-              onChange={
-                handleChange
-              }
-              required
-            />
-          </div>
-
-          <div className="signup-field">
-            <label>
-              Утасны дугаар
-            </label>
-
-            <input
-              type="tel"
-              name="phone"
-              value={
-                form.phone
-              }
-              onChange={
-                handleChange
-              }
-            />
-          </div>
-
-          <div className="signup-field">
-            <label>
-              Нууц үг *
-            </label>
-
-            <div className="signup-password-wrapper">
-              <input
-                type={
-                  showPassword
-                    ? "text"
-                    : "password"
-                }
-                name="password"
-                value={
-                  form.password
-                }
-                onChange={
-                  handleChange
-                }
-                required
-              />
-
-              <button
-                type="button"
-                className="signup-password-toggle"
-                onClick={() =>
-                  setShowPassword(
-                    (prev) =>
-                      !prev
-                  )
-                }
-              >
-                👁
-              </button>
-            </div>
-          </div>
-
-          <div className="signup-field">
-            <label>
-              Нууц үг давтах *
-            </label>
-
-            <div className="signup-password-wrapper">
-              <input
-                type={
-                  showConfirmPassword
-                    ? "text"
-                    : "password"
-                }
-                name="confirmPassword"
-                value={
-                  form.confirmPassword
-                }
-                onChange={
-                  handleChange
-                }
-                required
-              />
-
-              <button
-                type="button"
-                className="signup-password-toggle"
-                onClick={() =>
-                  setShowConfirmPassword(
-                    (prev) =>
-                      !prev
-                  )
-                }
-              >
-                👁
-              </button>
-            </div>
-          </div>
-
-          <div className="signup-field">
-            <label>
-              Салбар сонгох *
-            </label>
-
-            <select
-              name="industry"
-              value={
-                form.industry
-              }
-              onChange={
-                handleChange
-              }
-              required
-            >
-              <option value="">
-                Салбар сонгоно уу
-              </option>
-
-              {industries.map(
-                (industry) => (
-                  <option
-                    key={
-                      industry
-                    }
-                    value={
-                      industry
-                    }
-                  >
-                    {industry}
-                  </option>
-                )
-              )}
-            </select>
-          </div>
-
-          <label className="signup-terms">
-            <input
-              type="checkbox"
-              name="terms"
-              checked={
-                form.terms
-              }
-              onChange={
-                handleChange
-              }
-            />
-
-            <span>
-              Үйлчилгээний нөхцөлийг
-              зөвшөөрч байна
-            </span>
-          </label>
-
-          {error && (
-            <div className="signup-error">
-              {error}
-            </div>
-          )}
-
-          <button
-            type="submit"
-            className="signup-submit"
-            disabled={
-              loading
-            }
+          <form
+            className="signup-form"
+            onSubmit={handleSubmit}
           >
-            {loading
-              ? "Бүртгэж байна..."
-              : "Бүртгүүлэх"}
-          </button>
-        </form>
+            <div className="signup-field">
+              <label htmlFor="companyName">
+                Байгууллагын нэр
+                <b>*</b>
+              </label>
+
+              <input
+                id="companyName"
+                type="text"
+                name="companyName"
+                placeholder="Монголын Компани ХХК"
+                value={form.companyName}
+                onChange={handleChange}
+                required
+              />
+            </div>
+
+            <div className="signup-field">
+              <label htmlFor="fullName">
+                Таны нэр
+                <b>*</b>
+              </label>
+
+              <input
+                id="fullName"
+                type="text"
+                name="fullName"
+                placeholder="Бат-Эрдэнэ"
+                value={form.fullName}
+                onChange={handleChange}
+                required
+              />
+            </div>
+
+            <div className="signup-field">
+              <label htmlFor="signupEmail">
+                И-мэйл
+                <b>*</b>
+              </label>
+
+              <input
+                id="signupEmail"
+                type="email"
+                name="email"
+                placeholder="demo@company.mn"
+                value={form.email}
+                onChange={handleChange}
+                required
+              />
+            </div>
+
+            <div className="signup-field">
+              <label htmlFor="phone">
+                Утасны дугаар
+                <b>*</b>
+              </label>
+
+              <div className="phone-input">
+                <div className="phone-code">
+                  +976
+                </div>
+
+                <input
+                  id="phone"
+                  type="tel"
+                  name="phone"
+                  inputMode="numeric"
+                  placeholder="9911 2233"
+                  value={form.phone}
+                  onChange={handleChange}
+                  required
+                />
+              </div>
+            </div>
+
+            <div className="signup-field">
+              <label htmlFor="signupPassword">
+                Нууц үг
+                <b>*</b>
+              </label>
+
+              <div className="signup-password">
+                <input
+                  id="signupPassword"
+                  type={
+                    showPassword
+                      ? "text"
+                      : "password"
+                  }
+                  name="password"
+                  placeholder="••••••••"
+                  value={form.password}
+                  onChange={handleChange}
+                  required
+                />
+
+                <button
+                  type="button"
+                  className="signup-eye"
+                  onClick={() =>
+                    setShowPassword(
+                      (prev) => !prev
+                    )
+                  }
+                  aria-label={
+                    showPassword
+                      ? "Нууц үг нуух"
+                      : "Нууц үг харах"
+                  }
+                >
+                  {showPassword ? (
+                    <EyeOff size={19} />
+                  ) : (
+                    <Eye size={19} />
+                  )}
+                </button>
+              </div>
+
+              <span className="password-help">
+                8+ тэмдэгт, үсэг ба тоо
+              </span>
+            </div>
+
+            <label className="signup-terms">
+              <input
+                type="checkbox"
+                name="terms"
+                checked={form.terms}
+                onChange={handleChange}
+              />
+
+              <span className="custom-checkbox" />
+
+              <span>
+                <button
+                  type="button"
+                  className="terms-link"
+                >
+                  Үйлчилгээний нөхцөл
+                </button>
+
+                {" "}болон{" "}
+
+                <button
+                  type="button"
+                  className="terms-link"
+                >
+                  Нууцлалын бодлого
+                </button>
+
+                -ыг зөвшөөрч байна
+              </span>
+            </label>
+
+            {error && (
+              <div className="signup-error">
+                {error}
+              </div>
+            )}
+
+            <button
+              type="submit"
+              className="signup-submit"
+              disabled={loading}
+            >
+              {loading
+                ? "Бүртгэж байна..."
+                : "Бүртгүүлэх"}
+            </button>
+          </form>
+
+          <div className="signup-login-row">
+            <span>
+              Бүртгэлтэй юу?
+            </span>
+
+            <button
+              type="button"
+              onClick={() =>
+                navigate("/login")
+              }
+            >
+              Нэвтрэх
+            </button>
+          </div>
+        </section>
       </div>
-    </div>
+    </main>
   );
 }
 

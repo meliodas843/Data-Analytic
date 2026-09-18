@@ -1,32 +1,31 @@
 import { useState } from "react";
-import { Outlet } from "react-router-dom";
 
 import DashboardNavbar from "./DashboardNavbar";
+import DashboardHeader from "./DashboardHeader";
 
-function DashboardLayout() {
-  const [collapsed, setCollapsed] =
-    useState(false);
+import "../styles/Dashboard.css";
 
-  const handleToggleSidebar = () => {
-    setCollapsed((current) => !current);
-  };
+function DashboardLayout({ children }) {
+  const [collapsed, setCollapsed] = useState(false);
 
   return (
     <div
-      className={
-        collapsed
-          ? "dashboard-layout sidebar-collapsed"
-          : "dashboard-layout"
-      }
+      className={`dashboard-layout ${
+        collapsed ? "sidebar-collapsed" : ""
+      }`}
     >
       <DashboardNavbar
         collapsed={collapsed}
-        onToggle={handleToggleSidebar}
+        onToggle={() => setCollapsed((current) => !current)}
       />
 
       <main className="dashboard-main">
-        <div className="dashboard-content">
-          <Outlet />
+        <DashboardHeader />
+
+        <div className="dashboard-body">
+          <div className="dashboard-content">
+            {children}
+          </div>
         </div>
       </main>
     </div>

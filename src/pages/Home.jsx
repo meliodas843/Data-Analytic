@@ -458,6 +458,7 @@ function Home() {
     });
   };
 
+
   if (loading) {
     return (
       <div className="home-page">
@@ -503,7 +504,10 @@ function Home() {
               </span>
             </div>
 
-            <div className="before-after-demo">
+            <div
+              className="before-after-demo"
+              style={{ "--compare-position": `${comparePosition}%` }}
+            >
               <div className="compare-layer compare-excel-layer">
                 <div className="excel-side">
                   <div className="excel-toolbar">
@@ -590,12 +594,7 @@ function Home() {
                 </div>
               </div>
 
-              <div
-                className="compare-layer compare-dataview-layer"
-                style={{
-                  clipPath: `inset(0 0 0 ${comparePosition}%)`,
-                }}
-              >
+              <div className="compare-layer compare-dataview-layer">
                 <div className="dataview-side">
                   <div className="dataview-topbar">
                     <div className="dataview-brand">
@@ -740,19 +739,21 @@ function Home() {
                 max="100"
                 value={comparePosition}
                 onChange={(event) =>
-                  setComparePosition(
-                    Number(event.target.value)
-                  )
+                  setComparePosition(Number(event.target.value))
                 }
+                onWheel={(event) => {
+                  const dashboard = event.currentTarget.parentElement?.querySelector(
+                    ".dataview-dashboard"
+                  );
+
+                  if (dashboard) {
+                    dashboard.scrollTop += event.deltaY;
+                  }
+                }}
                 aria-label="Excel болон DataView харьцуулах"
               />
 
-              <div
-                className="compare-divider"
-                style={{
-                  left: `${comparePosition}%`,
-                }}
-              >
+              <div className="compare-divider">
                 <button type="button" tabIndex="-1">
                   ↔
                 </button>
@@ -761,24 +762,6 @@ function Home() {
 
             <div className="compare-hint">
               {homeContent.hero.compareHint}
-            </div>
-
-            <div className="compare-hero-actions">
-              <button
-                type="button"
-                className="primary-action"
-                onClick={() => scrollTo("contact")}
-              >
-                {homeContent.hero.primaryButton}
-              </button>
-
-              <button
-                type="button"
-                className="secondary-action"
-                onClick={() => navigate("/dashboard")}
-              >
-                {homeContent.hero.secondaryButton}
-              </button>
             </div>
           </div>
         </section>
