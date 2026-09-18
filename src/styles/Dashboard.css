@@ -540,7 +540,7 @@ textarea {
   position: relative;
   width: 100%;
   min-width: 0;
-  height: 164px;
+  height: 184px;
   margin: 0;
   padding: 19px 20px 18px;
   background: #ffffff;
@@ -550,7 +550,178 @@ textarea {
 
 .overview-card {
   width: 100%;
-  height: 164px;
+  height: 184px;
+}
+
+.demo-data-banner {
+  width: 100%;
+  min-height: 46px;
+  padding: 0 24px;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  background: #ecfdf3;
+  border-bottom: 1px solid #bbf7d0;
+
+  box-sizing: border-box;
+
+  font-family: Inter, -apple-system, BlinkMacSystemFont,
+    "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+
+  position: relative;
+  z-index: 110;
+}
+
+.demo-data-message {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+
+  min-width: 0;
+
+  color: #166534;
+  font-size: 13px;
+  font-weight: 500;
+  line-height: 1.4;
+}
+
+.demo-data-message svg {
+  flex-shrink: 0;
+  color: #16a34a;
+}
+
+.demo-data-message span {
+  margin: 0;
+  padding: 0;
+  white-space: nowrap;
+}
+
+.demo-banner-actions {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+
+  gap: 8px;
+  margin-left: 24px;
+
+  flex-shrink: 0;
+}
+
+.connect-data-button {
+  height: 32px;
+  padding: 0 14px;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  border: 1px solid #16a34a;
+  border-radius: 7px;
+
+  background: #16a34a;
+  color: #ffffff;
+
+  font-family: inherit;
+  font-size: 12px;
+  font-weight: 700;
+  line-height: 1;
+
+  white-space: nowrap;
+  cursor: pointer;
+
+  transition:
+    background-color 0.15s ease,
+    border-color 0.15s ease,
+    transform 0.15s ease;
+}
+
+.connect-data-button:hover {
+  background: #15803d;
+  border-color: #15803d;
+}
+
+.connect-data-button:active {
+  transform: translateY(1px);
+}
+
+.demo-banner-close {
+  width: 32px;
+  height: 32px;
+  padding: 0;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  border: none;
+  border-radius: 7px;
+
+  background: transparent;
+  color: #15803d;
+
+  cursor: pointer;
+
+  transition:
+    background-color 0.15s ease,
+    color 0.15s ease;
+}
+
+.demo-banner-close:hover {
+  background: #dcfce7;
+  color: #166534;
+}
+
+.demo-banner-close svg {
+  display: block;
+}
+
+@media (max-width: 900px) {
+  .demo-data-banner {
+    padding: 8px 16px;
+    gap: 16px;
+  }
+
+  .demo-data-message span {
+    white-space: normal;
+  }
+
+  .demo-banner-actions {
+    margin-left: auto;
+  }
+}
+
+@media (max-width: 650px) {
+  .demo-data-banner {
+    min-height: 52px;
+    padding: 9px 12px;
+  }
+
+  .demo-data-message {
+    font-size: 12px;
+    padding-right: 8px;
+  }
+
+  .demo-data-message span {
+    white-space: normal;
+  }
+
+  .demo-banner-actions {
+    gap: 4px;
+    margin-left: auto;
+  }
+
+  .connect-data-button {
+    height: 30px;
+    padding: 0 10px;
+    font-size: 11px;
+  }
+
+  .demo-banner-close {
+    width: 30px;
+    height: 30px;
+  }
 }
 
 .kpi-label {
@@ -1861,6 +2032,121 @@ textarea {
 .arap-dashboard .progress-fill {
   height: 100%;
   border-radius: inherit;
+}
+
+.dashboard-layout,
+.dashboard-layout *,
+.dashboard-main,
+.dashboard-main *,
+.dashboard-navbar,
+.dashboard-navbar *,
+.dashboard-header,
+.dashboard-header * {
+  font-family:
+    Inter,
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    Roboto,
+    Helvetica,
+    Arial,
+    sans-serif;
+}
+
+.dashboard-navbar {
+  font-size: 14px;
+}
+
+.dashboard-navbar a,
+.dashboard-navbar button {
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 1.35;
+}
+
+.dashboard-header {
+  font-size: 14px;
+}
+
+.dashboard-header button,
+.dashboard-header select,
+.dashboard-header input {
+  font-size: 13px;
+}
+
+.dashboard-content h1 {
+  font-size: 28px;
+  line-height: 1.2;
+  font-weight: 750;
+  letter-spacing: -0.025em;
+}
+
+.dashboard-content h2 {
+  font-size: 20px;
+  line-height: 1.3;
+  font-weight: 750;
+  letter-spacing: -0.015em;
+}
+
+.dashboard-content h3 {
+  font-size: 16px;
+  line-height: 1.4;
+  font-weight: 700;
+}
+
+.dashboard-content p {
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+.dashboard-content button,
+.dashboard-content input,
+.dashboard-content select {
+  font-family: inherit;
+  font-size: 13px;
+}
+
+.dashboard-content table {
+  font-family: inherit;
+}
+
+.dashboard-content th {
+  font-family: inherit;
+  font-size: 12px;
+  line-height: 1.35;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+}
+
+.dashboard-content td {
+  font-family: inherit;
+  font-size: 13px;
+  line-height: 1.45;
+}
+
+.dashboard-content strong,
+.dashboard-content b {
+  font-family: inherit;
+}
+
+.dashboard-content [class*="value"],
+.dashboard-content [class*="amount"],
+.dashboard-content [class*="number"],
+.dashboard-content [class*="metric"] {
+  font-family: inherit;
+  font-variant-numeric: tabular-nums;
+}
+
+.dashboard-content svg text {
+  font-family:
+    Inter,
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    Roboto,
+    Helvetica,
+    Arial,
+    sans-serif;
 }
 
 @media (max-width: 1200px) {

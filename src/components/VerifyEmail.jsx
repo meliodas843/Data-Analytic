@@ -8,7 +8,7 @@ import {
   useLocation,
   useNavigate,
 } from "react-router-dom";
-
+import logo from "../assets/logo-default.svg";
 import { Mail } from "lucide-react";
 
 import "../styles/VerifyEmail.css";
@@ -16,15 +16,11 @@ import "../styles/VerifyEmail.css";
 function DataViewLogo() {
   return (
     <div className="verify-brand">
-      <div className="verify-brand-icon">
-        <span />
-        <span />
-        <span />
-      </div>
-
-      <span className="verify-brand-name">
-        DataView Mongolia
-      </span>
+      <img
+        src={logo}
+        alt="DataView"
+        className="navbar-logo-image"
+      />
     </div>
   );
 }

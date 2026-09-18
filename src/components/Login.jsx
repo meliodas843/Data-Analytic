@@ -6,20 +6,17 @@ import {
   EyeOff,
 } from "lucide-react";
 
+import logo from "../assets/logo-default.svg";
 import "../styles/Login.css";
 
 function DataViewLogo() {
   return (
     <div className="auth-brand">
-      <div className="auth-brand-icon">
-        <span />
-        <span />
-        <span />
-      </div>
-
-      <span className="auth-brand-name">
-        DataView Mongolia
-      </span>
+      <img
+        src={logo}
+        alt="DataView"
+        className="navbar-logo-image"
+      />
     </div>
   );
 }
@@ -27,9 +24,7 @@ function DataViewLogo() {
 function Login() {
   const navigate = useNavigate();
 
-  const [mode, setMode] =
-    useState("login");
-
+  const [mode, setMode] = useState("login");
   const [showPassword, setShowPassword] =
     useState(false);
 
@@ -38,6 +33,10 @@ function Login() {
     password: "",
   });
 
+  const [error, setError] = useState("");
+  const [resetMessage, setResetMessage] =
+    useState("");
+
   const handleChange = (e) => {
     const { name, value } = e.target;
 
@@ -45,10 +44,84 @@ function Login() {
       ...prev,
       [name]: value,
     }));
+
+    setError("");
+    setResetMessage("");
+  };
+
+  const getSavedUsers = () => {
+    try {
+      const users = JSON.parse(
+        localStorage.getItem("users") || "[]"
+      );
+
+      return Array.isArray(users)
+        ? users
+        : [];
+    } catch {
+      return [];
+    }
   };
 
   const handleLogin = (e) => {
     e.preventDefault();
+
+    setError("");
+
+    const email = form.email
+      .trim()
+      .toLowerCase();
+
+    const password = form.password;
+
+    const users = getSavedUsers();
+
+    const user = users.find(
+      (item) =>
+        item.email
+          ?.trim()
+          .toLowerCase() === email
+    );
+
+    if (!user) {
+      setError(
+        "Энэ и-мэйл хаягаар бүртгэл олдсонгүй."
+      );
+
+      return;
+    }
+
+    if (user.password !== password) {
+      setError(
+        "Нууц үг буруу байна."
+      );
+
+      return;
+    }
+
+    const currentUser = {
+      id: user.id,
+      name:
+        user.name ||
+        user.fullName ||
+        "Хэрэглэгч",
+      email: user.email,
+      role: user.role || "user",
+      company:
+        user.company ||
+        user.companyName ||
+        "",
+    };
+
+    localStorage.setItem(
+      "currentUser",
+      JSON.stringify(currentUser)
+    );
+
+    localStorage.setItem(
+      "isLoggedIn",
+      "true"
+    );
 
     navigate("/dashboard");
   };
@@ -56,13 +129,36 @@ function Login() {
   const handleReset = (e) => {
     e.preventDefault();
 
-    if (!form.email.trim()) {
+    setError("");
+    setResetMessage("");
+
+    const email = form.email
+      .trim()
+      .toLowerCase();
+
+    if (!email) {
       return;
     }
 
-    console.log(
-      "Reset password:",
-      form.email
+    const users = getSavedUsers();
+
+    const userExists = users.some(
+      (user) =>
+        user.email
+          ?.trim()
+          .toLowerCase() === email
+    );
+
+    if (!userExists) {
+      setError(
+        "Энэ и-мэйл хаягаар бүртгэл олдсонгүй."
+      );
+
+      return;
+    }
+
+    setResetMessage(
+      "Нууц үг сэргээх хүсэлт амжилттай."
     );
   };
 
@@ -97,6 +193,7 @@ function Login() {
                   placeholder="demo@company.mn"
                   value={form.email}
                   onChange={handleChange}
+                  autoComplete="email"
                   required
                 />
               </div>
@@ -110,9 +207,11 @@ function Login() {
                   <button
                     type="button"
                     className="forgot-password-link"
-                    onClick={() =>
-                      setMode("forgot")
-                    }
+                    onClick={() => {
+                      setMode("forgot");
+                      setError("");
+                      setResetMessage("");
+                    }}
                   >
                     Нууц үгээ мартсан?
                   </button>
@@ -130,6 +229,7 @@ function Login() {
                     placeholder="••••••••"
                     value={form.password}
                     onChange={handleChange}
+                    autoComplete="current-password"
                     required
                   />
 
@@ -155,6 +255,12 @@ function Login() {
                   </button>
                 </div>
               </div>
+
+              {error && (
+                <div className="login-error">
+                  {error}
+                </div>
+              )}
 
               <button
                 type="submit"
@@ -184,17 +290,20 @@ function Login() {
             <button
               type="button"
               className="back-to-login"
-              onClick={() =>
-                setMode("login")
-              }
+              onClick={() => {
+                setMode("login");
+                setError("");
+                setResetMessage("");
+              }}
             >
               <ArrowLeft size={17} />
-
               <span>Нэвтрэх</span>
             </button>
 
             <div className="login-heading forgot-heading">
-              <h1>Нууц үг сэргээх</h1>
+              <h1>
+                Нууц үг сэргээх
+              </h1>
 
               <p>
                 Бүртгэлтэй и-мэйл рүү
@@ -207,15 +316,33 @@ function Login() {
               onSubmit={handleReset}
             >
               <div className="login-field">
+                <label htmlFor="reset-email">
+                  И-мэйл
+                </label>
+
                 <input
+                  id="reset-email"
                   type="email"
                   name="email"
                   placeholder="demo@company.mn"
                   value={form.email}
                   onChange={handleChange}
+                  autoComplete="email"
                   required
                 />
               </div>
+
+              {error && (
+                <div className="login-error">
+                  {error}
+                </div>
+              )}
+
+              {resetMessage && (
+                <div className="login-success">
+                  {resetMessage}
+                </div>
+              )}
 
               <button
                 type="submit"

@@ -5,20 +5,17 @@ import {
   EyeOff,
 } from "lucide-react";
 
+import logo from "../assets/logo-default.svg";
 import "../styles/Signup.css";
 
 function DataViewLogo() {
   return (
     <div className="signup-brand">
-      <div className="signup-brand-icon">
-        <span />
-        <span />
-        <span />
-      </div>
-
-      <span className="signup-brand-name">
-        DataView Mongolia
-      </span>
+      <img
+        src={logo}
+        alt="DataView"
+        className="navbar-logo-image"
+      />
     </div>
   );
 }
@@ -63,6 +60,32 @@ function Signup() {
     setError("");
   };
 
+  const getSavedUsers = () => {
+    try {
+      const users = JSON.parse(
+        localStorage.getItem("users") ||
+          "[]"
+      );
+
+      return Array.isArray(users)
+        ? users
+        : [];
+    } catch {
+      return [];
+    }
+  };
+
+  const generateUserId = () => {
+    if (
+      typeof crypto !== "undefined" &&
+      crypto.randomUUID
+    ) {
+      return crypto.randomUUID();
+    }
+
+    return `user-${Date.now()}`;
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -70,9 +93,67 @@ function Signup() {
       setLoading(true);
       setError("");
 
-      if (form.password.length < 8) {
+      const companyName =
+        form.companyName.trim();
+
+      const fullName =
+        form.fullName.trim();
+
+      const email = form.email
+        .trim()
+        .toLowerCase();
+
+      const phone = form.phone
+        .replace(/\s+/g, "")
+        .trim();
+
+      const password = form.password;
+
+      if (!companyName) {
+        throw new Error(
+          "Байгууллагын нэрээ оруулна уу."
+        );
+      }
+
+      if (!fullName) {
+        throw new Error(
+          "Нэрээ оруулна уу."
+        );
+      }
+
+      if (!email) {
+        throw new Error(
+          "И-мэйл хаягаа оруулна уу."
+        );
+      }
+
+      if (!phone) {
+        throw new Error(
+          "Утасны дугаараа оруулна уу."
+        );
+      }
+
+      if (!/^\d{8}$/.test(phone)) {
+        throw new Error(
+          "Утасны дугаар 8 оронтой байна."
+        );
+      }
+
+      if (password.length < 8) {
         throw new Error(
           "Нууц үг хамгийн багадаа 8 тэмдэгт байна."
+        );
+      }
+
+      if (!/[A-Za-zА-Яа-яӨөҮүЁё]/.test(password)) {
+        throw new Error(
+          "Нууц үг дор хаяж нэг үсэг агуулсан байна."
+        );
+      }
+
+      if (!/\d/.test(password)) {
+        throw new Error(
+          "Нууц үг дор хаяж нэг тоо агуулсан байна."
         );
       }
 
@@ -82,41 +163,63 @@ function Signup() {
         );
       }
 
-      /*
-        Backend холбоход энд API request хийнэ.
+      const users =
+        getSavedUsers();
 
-        Жишээ:
-        const response = await fetch(
-          "/api/auth/signup",
-          {
-            method: "POST",
-            headers: {
-              "Content-Type":
-                "application/json",
-            },
-            body: JSON.stringify({
-              companyName:
-                form.companyName,
-              fullName:
-                form.fullName,
-              email:
-                form.email,
-              phone:
-                form.phone,
-              password:
-                form.password,
-            }),
-          }
+      const emailExists =
+        users.some(
+          (user) =>
+            user.email
+              ?.trim()
+              .toLowerCase() === email
         );
-      */
+
+      if (emailExists) {
+        throw new Error(
+          "Энэ и-мэйл хаягаар бүртгэл үүссэн байна. Нэвтэрнэ үү."
+        );
+      }
+
+      const newUser = {
+        id: generateUserId(),
+        companyName,
+        company: companyName,
+        fullName,
+        name: fullName,
+        email,
+        phone: `+976${phone}`,
+        password,
+        role: "admin",
+        emailVerified: false,
+        createdAt:
+          new Date().toISOString(),
+      };
+
+      const updatedUsers = [
+        ...users,
+        newUser,
+      ];
+
+      localStorage.setItem(
+        "users",
+        JSON.stringify(updatedUsers)
+      );
+
+      localStorage.setItem(
+        "pendingVerificationEmail",
+        email
+      );
 
       navigate("/verify-email", {
         state: {
-          email: form.email,
+          email,
         },
       });
     } catch (err) {
-      setError(err.message);
+      setError(
+        err?.message ||
+          "Бүртгэл үүсгэхэд алдаа гарлаа."
+      );
     } finally {
       setLoading(false);
     }
@@ -154,6 +257,7 @@ function Signup() {
                 placeholder="Монголын Компани ХХК"
                 value={form.companyName}
                 onChange={handleChange}
+                autoComplete="organization"
                 required
               />
             </div>
@@ -171,6 +275,7 @@ function Signup() {
                 placeholder="Бат-Эрдэнэ"
                 value={form.fullName}
                 onChange={handleChange}
+                autoComplete="name"
                 required
               />
             </div>
@@ -188,6 +293,7 @@ function Signup() {
                 placeholder="demo@company.mn"
                 value={form.email}
                 onChange={handleChange}
+                autoComplete="email"
                 required
               />
             </div>
@@ -211,6 +317,7 @@ function Signup() {
                   placeholder="9911 2233"
                   value={form.phone}
                   onChange={handleChange}
+                  autoComplete="tel"
                   required
                 />
               </div>
@@ -234,6 +341,7 @@ function Signup() {
                   placeholder="••••••••"
                   value={form.password}
                   onChange={handleChange}
+                  autoComplete="new-password"
                   required
                 />
 
@@ -296,7 +404,10 @@ function Signup() {
             </label>
 
             {error && (
-              <div className="signup-error">
+              <div
+                className="signup-error"
+                role="alert"
+              >
                 {error}
               </div>
             )}

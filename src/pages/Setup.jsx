@@ -6,7 +6,7 @@ import {
 import {
   useNavigate,
 } from "react-router-dom";
-
+import logo from "../assets/logo-default.svg";
 import {
   Database,
   Server,
@@ -76,16 +76,11 @@ const systems = [
 function DataViewLogo() {
   return (
     <div className="setup-brand">
-      <div className="setup-brand-icon">
-        <BarChart3
-          size={22}
-          strokeWidth={3}
-        />
-      </div>
-
-      <span>
-        DataView Mongolia
-      </span>
+      <img
+        src={logo}
+        alt="DataView"
+        className="navbar-logo-image"
+      />
     </div>
   );
 }

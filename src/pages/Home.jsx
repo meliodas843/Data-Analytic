@@ -676,14 +676,6 @@ function Home() {
                               <b>▲ {index === 2 ? "24.0%" : index === 3 ? "41.3%" : "30.0%"}</b>
                             </div>
                           </div>
-
-                          {index === 3 && (
-                            <div className="dashboard-sticky-note">
-                              Энэ ондоо буруу датаа
-                              <br />
-                              шиг санагдлаа? Ган
-                            </div>
-                          )}
                         </div>
                       ))}
                     </div>

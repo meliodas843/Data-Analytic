@@ -2,9 +2,14 @@ import {
   BrowserRouter,
   Routes,
   Route,
+  useLocation,
+  Navigate,
 } from "react-router-dom";
 
-import { useState } from "react";
+import {
+  useEffect,
+  useState,
+} from "react";
 
 import Home from "./pages/Home";
 import Dashboard from "./pages/Dashboard";
@@ -41,12 +46,69 @@ import AdminLayout from "./components/AdminLayout";
 
 import "./styles/Dashboard.css";
 
-function DashboardLayout({ children }) {
+function ScrollToTop() {
+  const { pathname } = useLocation();
+
+  useEffect(() => {
+    window.scrollTo({
+      top: 0,
+      left: 0,
+      behavior: "instant",
+    });
+
+    document.documentElement.scrollTop = 0;
+    document.body.scrollTop = 0;
+
+    const dashboardMain =
+      document.querySelector(
+        ".dashboard-main"
+      );
+
+    if (dashboardMain) {
+      dashboardMain.scrollTop = 0;
+    }
+
+    const dashboardBody =
+      document.querySelector(
+        ".dashboard-body"
+      );
+
+    if (dashboardBody) {
+      dashboardBody.scrollTop = 0;
+    }
+
+    const dashboardContent =
+      document.querySelector(
+        ".dashboard-content"
+      );
+
+    if (dashboardContent) {
+      dashboardContent.scrollTop = 0;
+    }
+
+    const settingsContent =
+      document.querySelector(
+        ".settings-content"
+      );
+
+    if (settingsContent) {
+      settingsContent.scrollTop = 0;
+    }
+  }, [pathname]);
+
+  return null;
+}
+
+function DashboardLayout({
+  children,
+}) {
   const [collapsed, setCollapsed] =
     useState(false);
 
   const handleToggleSidebar = () => {
-    setCollapsed((prev) => !prev);
+    setCollapsed(
+      (prev) => !prev
+    );
   };
 
   return (
@@ -59,7 +121,9 @@ function DashboardLayout({ children }) {
     >
       <DashboardNavbar
         collapsed={collapsed}
-        onToggle={handleToggleSidebar}
+        onToggle={
+          handleToggleSidebar
+        }
       />
 
       <main className="dashboard-main">
@@ -75,9 +139,11 @@ function DashboardLayout({ children }) {
   );
 }
 
-function App() {
+function AppRoutes() {
   return (
-    <BrowserRouter>
+    <>
+      <ScrollToTop />
+
       <Routes>
         <Route
           path="/"
@@ -149,55 +215,63 @@ function App() {
           }
         />
 
-        {/* PROFILE */}
         <Route
           path="/profile"
           element={<Profile />}
         />
 
-        {/* SETTINGS */}
         <Route
           path="/settings"
-          element={<SettingsLayout />}
+          element={
+            <SettingsLayout />
+          }
         >
           <Route
             index
-            element={<OrganizationSettings />}
+            element={
+              <OrganizationSettings />
+            }
           />
 
           <Route
             path="organization"
-            element={<OrganizationSettings />}
+            element={
+              <OrganizationSettings />
+            }
           />
 
           <Route
             path="data"
-            element={<DataConnectionSettings />}
+            element={
+              <DataConnectionSettings />
+            }
           />
 
           <Route
             path="users"
-            element={<UsersSettings />}
+            element={
+              <UsersSettings />
+            }
           />
 
           <Route
             path="billing"
-            element={<BillingSettings />}
+            element={
+              <BillingSettings />
+            }
           />
         </Route>
 
-        {/* DROPDOWN BILLING SHORTCUT */}
         <Route
           path="/billing"
-          element={<SettingsLayout />}
-        >
-          <Route
-            index
-            element={<BillingSettings />}
-          />
-        </Route>
+          element={
+            <Navigate
+              to="/settings/billing"
+              replace
+            />
+          }
+        />
 
-        {/* ADMIN */}
         <Route
           path="/admin/login"
           element={<AdminLogin />}
@@ -209,30 +283,48 @@ function App() {
         >
           <Route
             index
-            element={<AdminDashboard />}
+            element={
+              <AdminDashboard />
+            }
           />
 
           <Route
             path="home"
-            element={<AdminHome />}
+            element={
+              <AdminHome />
+            }
           />
 
           <Route
             path="company"
-            element={<AdminCompany />}
+            element={
+              <AdminCompany />
+            }
           />
 
           <Route
             path="requests"
-            element={<AdminRequests />}
+            element={
+              <AdminRequests />
+            }
           />
 
           <Route
             path="users"
-            element={<AdminUsers />}
+            element={
+              <AdminUsers />
+            }
           />
         </Route>
       </Routes>
+    </>
+  );
+}
+
+function App() {
+  return (
+    <BrowserRouter>
+      <AppRoutes />
     </BrowserRouter>
   );
 }

@@ -1,4 +1,5 @@
 import "../styles/Footer.css";
+import logo from "../assets/logo-default.svg";
 
 function Footer() {
   return (
@@ -6,13 +7,11 @@ function Footer() {
       <div className="footer-inner">
         <div className="footer-top">
           <div className="footer-brand">
-            <div className="footer-logo-icon">
-              D
-            </div>
-
-            <span>
-              DataView Mongolia
-            </span>
+            <img
+              src={logo}
+              alt="DataView"
+              className="navbar-logo-image"
+            />
           </div>
 
           <div className="footer-links">

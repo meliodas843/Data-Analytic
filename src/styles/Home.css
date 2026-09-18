@@ -44,8 +44,8 @@
     sans-serif;
 
   --font-xs: 11px;
-  --font-sm: 12px;
-  --font-md: 13px;
+  --font-sm: 15px;
+  --font-md: 18px;
   --font-base: 14px;
   --font-lg: 16px;
   --font-xl: 18px;
@@ -839,9 +839,9 @@ button:hover {
 }
 
 .compare-hint {
-  margin-top: 13px;
+  margin-top: 14px;
   color: #9aabc2;
-  font-size: 8px;
+  font-size: 14px;
   line-height: 1;
   font-weight: 700;
   letter-spacing: 0.08em;
@@ -1711,7 +1711,7 @@ button:hover {
 
   background: var(--white);
 
-  color: var(--primary-dark);
+  color: black;
 
   font-size: var(--font-sm);
   font-weight: var(--weight-bold);
