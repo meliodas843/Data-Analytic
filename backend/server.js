@@ -240,11 +240,11 @@ async function startServer() {
       await db.getConnection();
 
     console.log(
-      "✅ MySQL connected successfully"
+      "MySQL connected successfully"
     );
 
     console.log(
-      `✅ Database: ${process.env.DB_NAME}`
+      `Database: ${process.env.DB_NAME}`
     );
 
     connection.release();
@@ -275,7 +275,7 @@ async function startServer() {
     error
   ) {
     console.error(
-      "❌ MySQL connection failed:"
+      "MySQL connection failed:"
     );
 
     console.error(
