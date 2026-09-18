@@ -25,91 +25,119 @@ import {
   X,
 } from "lucide-react";
 
+import useSubscription from "../hooks/useSubscription";
+
 function DashboardHeader() {
-  const location = useLocation();
-  const navigate = useNavigate();
+  const location =
+    useLocation();
 
-  const profileRef = useRef(null);
-  const notificationRef = useRef(null);
+  const navigate =
+    useNavigate();
 
-  const [bannerVisible, setBannerVisible] =
-    useState(true);
+  const profileRef =
+    useRef(null);
 
-  const [profileOpen, setProfileOpen] =
-    useState(false);
+  const notificationRef =
+    useRef(null);
+
+  const {
+    active,
+    loading,
+  } = useSubscription();
+
+  const [
+    bannerVisible,
+    setBannerVisible,
+  ] = useState(true);
+
+  const [
+    profileOpen,
+    setProfileOpen,
+  ] = useState(false);
 
   const [
     notificationOpen,
     setNotificationOpen,
   ] = useState(false);
 
-  const [language, setLanguage] = useState(
-    localStorage.getItem("language") || "mn"
+  const [
+    language,
+    setLanguage,
+  ] = useState(
+    localStorage.getItem(
+      "language"
+    ) || "mn"
   );
 
-  const dataConnected =
-    localStorage.getItem("dataConnected") ===
-    "true";
-
-  const usingDemoData =
-    localStorage.getItem("usingDemoData") ===
-    "true";
-
-  const demoMode =
-    usingDemoData && !dataConnected;
-
   const pageNames = {
-    "/dashboard": "Удирдлагын самбар",
-    "/finance": "Санхүү",
-    "/sales": "Борлуулалт",
-    "/cash-flow": "Мөнгөн урсгал",
-    "/ar-ap": "AR / AP",
-    "/inventory": "Бараа материал",
-    "/settings": "Тохиргоо",
-    "/profile": "Миний профайл",
-    "/billing": "Багц & Төлбөр",
-    "/help": "Тусламж & дэмжлэг",
+    "/dashboard":
+      "Удирдлагын самбар",
+
+    "/finance":
+      "Санхүү",
+
+    "/sales":
+      "Борлуулалт",
+
+    "/cash-flow":
+      "Мөнгөн урсгал",
+
+    "/ar-ap":
+      "AR / AP",
+
+    "/inventory":
+      "Бараа материал",
+
+    "/settings":
+      "Тохиргоо",
+
+    "/profile":
+      "Миний профайл",
+
+    "/billing":
+      "Багц & Төлбөр",
+
+    "/settings/billing":
+      "Багц & Төлбөр",
+
+    "/help":
+      "Тусламж & дэмжлэг",
   };
 
   const currentPage =
-    pageNames[location.pathname] ||
+    pageNames[
+      location.pathname
+    ] ||
     "Удирдлагын самбар";
-
-  let onboarding = {};
-
-  try {
-    onboarding = JSON.parse(
-      sessionStorage.getItem(
-        "onboardingCompany"
-      ) || "{}"
-    );
-  } catch {
-    onboarding = {};
-  }
 
   let user = {};
 
   try {
-    user = JSON.parse(
-      localStorage.getItem("user") || "{}"
-    );
+    user =
+      JSON.parse(
+        localStorage.getItem(
+          "currentUser"
+        ) || "{}"
+      );
   } catch {
     user = {};
   }
 
   const companyName =
-    onboarding.companyName ||
+    user.company_name ||
     user.companyName ||
+    user.company ||
     "Монголын Компани ХХК";
 
   const userName =
+    user.full_name ||
     user.fullName ||
     user.name ||
-    "Бат-Эрдэнэ";
+    "Хэрэглэгч";
 
   const userEmail =
     user.email ||
-    "demo@company.mn";
+    "";
 
   const userRole =
     user.role ||
@@ -119,28 +147,39 @@ function DashboardHeader() {
     userName
       .trim()
       .charAt(0)
-      .toUpperCase() || "Б";
+      .toUpperCase() ||
+    "Х";
+
+  const showDemoBanner =
+    !loading &&
+    !active &&
+    bannerVisible;
 
   useEffect(() => {
-    const handleOutsideClick = (event) => {
-      if (
-        profileRef.current &&
-        !profileRef.current.contains(
-          event.target
-        )
-      ) {
-        setProfileOpen(false);
-      }
+    const handleOutsideClick =
+      (event) => {
+        if (
+          profileRef.current &&
+          !profileRef.current.contains(
+            event.target
+          )
+        ) {
+          setProfileOpen(
+            false
+          );
+        }
 
-      if (
-        notificationRef.current &&
-        !notificationRef.current.contains(
-          event.target
-        )
-      ) {
-        setNotificationOpen(false);
-      }
-    };
+        if (
+          notificationRef.current &&
+          !notificationRef.current.contains(
+            event.target
+          )
+        ) {
+          setNotificationOpen(
+            false
+          );
+        }
+      };
 
     document.addEventListener(
       "mousedown",
@@ -157,101 +196,185 @@ function DashboardHeader() {
 
   useEffect(() => {
     setProfileOpen(false);
-    setNotificationOpen(false);
-  }, [location.pathname]);
 
-  const connectData = () => {
-    setProfileOpen(false);
-    setNotificationOpen(false);
-
-    navigate("/setup", {
-      state: {
-        step: 2,
-      },
-    });
-  };
-
-  const toggleProfile = () => {
-    setProfileOpen(
-      (current) => !current
-    );
-
-    setNotificationOpen(false);
-  };
-
-  const toggleNotifications = () => {
     setNotificationOpen(
-      (current) => !current
+      false
     );
+  }, [
+    location.pathname,
+  ]);
 
-    setProfileOpen(false);
-  };
+  useEffect(() => {
+    if (!active) {
+      setBannerVisible(
+        true
+      );
+    }
+  }, [active]);
 
-  const changeLanguage = (value) => {
-    setLanguage(value);
+  const connectData =
+    () => {
+      setProfileOpen(
+        false
+      );
 
-    localStorage.setItem(
-      "language",
-      value
-    );
-  };
+      setNotificationOpen(
+        false
+      );
 
-  const goTo = (path) => {
-    setProfileOpen(false);
-    setNotificationOpen(false);
+      navigate(
+        "/setup",
+        {
+          state: {
+            step: 2,
+          },
+        }
+      );
+    };
 
-    navigate(path);
-  };
+  const toggleProfile =
+    () => {
+      setProfileOpen(
+        (current) =>
+          !current
+      );
 
-  const handleProfile = () => {
-    goTo("/profile");
-  };
+      setNotificationOpen(
+        false
+      );
+    };
 
-  const handleSettings = () => {
-    goTo("/settings");
-  };
+  const toggleNotifications =
+    () => {
+      setNotificationOpen(
+        (current) =>
+          !current
+      );
 
-  const handleBilling = () => {
-    goTo("/billing");
-  };
+      setProfileOpen(
+        false
+      );
+    };
 
-  const handleHelp = () => {
-    goTo("/help");
-  };
+  const changeLanguage =
+    (value) => {
+      setLanguage(
+        value
+      );
 
-  const handleLogout = () => {
-    localStorage.removeItem("token");
-    localStorage.removeItem("user");
-    localStorage.removeItem(
-      "dataConnected"
-    );
-    localStorage.removeItem(
-      "usingDemoData"
-    );
+      localStorage.setItem(
+        "language",
+        value
+      );
+    };
 
-    sessionStorage.removeItem(
-      "onboardingCompany"
-    );
+  const goTo =
+    (path) => {
+      setProfileOpen(
+        false
+      );
 
-    setProfileOpen(false);
-    setNotificationOpen(false);
+      setNotificationOpen(
+        false
+      );
 
-    navigate("/");
-  };
+      navigate(path);
+    };
+
+  const handleProfile =
+    () => {
+      goTo(
+        "/profile"
+      );
+    };
+
+  const handleSettings =
+    () => {
+      goTo(
+        "/settings"
+      );
+    };
+
+  const handleBilling =
+    () => {
+      goTo(
+        "/settings/billing"
+      );
+    };
+
+  const handleHelp =
+    () => {
+      goTo(
+        "/help"
+      );
+    };
+
+  const handleLogout =
+    () => {
+      localStorage.removeItem(
+        "token"
+      );
+
+      localStorage.removeItem(
+        "currentUser"
+      );
+
+      localStorage.removeItem(
+        "isLoggedIn"
+      );
+
+      localStorage.removeItem(
+        "subscription"
+      );
+
+      localStorage.removeItem(
+        "dataConnected"
+      );
+
+      localStorage.removeItem(
+        "usingDemoData"
+      );
+
+      localStorage.removeItem(
+        "connectionType"
+      );
+
+      sessionStorage.removeItem(
+        "onboardingCompany"
+      );
+
+      setProfileOpen(
+        false
+      );
+
+      setNotificationOpen(
+        false
+      );
+
+      navigate(
+        "/login",
+        {
+          replace: true,
+        }
+      );
+    };
 
   return (
     <>
-      {demoMode && bannerVisible && (
+      {showDemoBanner && (
         <div className="demo-data-banner">
           <div className="demo-data-message">
             <CircleAlert
               size={17}
-              strokeWidth={1.9}
+              strokeWidth={
+                1.9
+              }
             />
 
             <span>
-              Та жишээ датаар харж байна.
-              Өөрийн датагаа холбоод бодит
+              Та жишээ датаар
+              харж байна. Өөрийн
+              датагаа холбоод бодит
               тоогоо харна уу.
             </span>
           </div>
@@ -260,7 +383,9 @@ function DashboardHeader() {
             <button
               type="button"
               className="connect-data-button"
-              onClick={connectData}
+              onClick={
+                connectData
+              }
             >
               Дата холбох
             </button>
@@ -269,13 +394,17 @@ function DashboardHeader() {
               type="button"
               className="demo-banner-close"
               onClick={() =>
-                setBannerVisible(false)
+                setBannerVisible(
+                  false
+                )
               }
               aria-label="Хаах"
             >
               <X
                 size={17}
-                strokeWidth={1.8}
+                strokeWidth={
+                  1.8
+                }
               />
             </button>
           </div>
@@ -340,7 +469,9 @@ function DashboardHeader() {
           >
             <Download
               size={16}
-              strokeWidth={1.8}
+              strokeWidth={
+                1.8
+              }
             />
 
             <span>
@@ -350,7 +481,9 @@ function DashboardHeader() {
 
           <div
             className="dashboard-notification-wrapper"
-            ref={notificationRef}
+            ref={
+              notificationRef
+            }
           >
             <button
               type="button"
@@ -369,7 +502,9 @@ function DashboardHeader() {
             >
               <Bell
                 size={18}
-                strokeWidth={1.8}
+                strokeWidth={
+                  1.8
+                }
               />
             </button>
 
@@ -382,16 +517,21 @@ function DashboardHeader() {
                 <div className="notification-empty">
                   <Bell
                     size={22}
-                    strokeWidth={1.45}
+                    strokeWidth={
+                      1.45
+                    }
                   />
 
                   <strong>
-                    Шинэ мэдэгдэл алга
+                    Шинэ мэдэгдэл
+                    алга
                   </strong>
 
                   <p>
-                    Sync алдаа, урилга,
-                    туршилтын сануулга энд
+                    Sync алдаа,
+                    урилга,
+                    туршилтын
+                    сануулга энд
                     гарна
                   </p>
                 </div>
@@ -401,7 +541,9 @@ function DashboardHeader() {
 
           <div
             className="dashboard-profile-wrapper"
-            ref={profileRef}
+            ref={
+              profileRef
+            }
           >
             <button
               type="button"
@@ -410,11 +552,17 @@ function DashboardHeader() {
                   ? "active"
                   : ""
               }`}
-              aria-expanded={profileOpen}
-              onClick={toggleProfile}
+              aria-expanded={
+                profileOpen
+              }
+              onClick={
+                toggleProfile
+              }
             >
               <span className="dashboard-profile-avatar">
-                {avatarLetter}
+                {
+                  avatarLetter
+                }
               </span>
 
               <span className="dashboard-profile-name">
@@ -424,12 +572,16 @@ function DashboardHeader() {
               {profileOpen ? (
                 <ChevronUp
                   size={14}
-                  strokeWidth={1.8}
+                  strokeWidth={
+                    1.8
+                  }
                 />
               ) : (
                 <ChevronDown
                   size={14}
-                  strokeWidth={1.8}
+                  strokeWidth={
+                    1.8
+                  }
                 />
               )}
             </button>
@@ -443,7 +595,9 @@ function DashboardHeader() {
                     </strong>
 
                     <span className="profile-admin-badge">
-                      {userRole}
+                      {
+                        userRole
+                      }
                     </span>
                   </div>
 
@@ -452,18 +606,23 @@ function DashboardHeader() {
                   </span>
 
                   <span className="profile-dropdown-company">
-                    {companyName}
+                    {
+                      companyName
+                    }
                   </span>
 
-                  {demoMode && (
+                  {!active && (
                     <div className="profile-trial-status">
                       <Clock3
                         size={14}
-                        strokeWidth={1.7}
+                        strokeWidth={
+                          1.7
+                        }
                       />
 
                       <span>
-                        Туршилт дата холбоход
+                        Туршилт дата
+                        холбоход
                         эхэлнэ
                       </span>
                     </div>
@@ -482,7 +641,9 @@ function DashboardHeader() {
                   >
                     <UserRound
                       size={17}
-                      strokeWidth={1.7}
+                      strokeWidth={
+                        1.7
+                      }
                     />
 
                     <span>
@@ -499,7 +660,9 @@ function DashboardHeader() {
                   >
                     <Settings
                       size={17}
-                      strokeWidth={1.7}
+                      strokeWidth={
+                        1.7
+                      }
                     />
 
                     <span>
@@ -516,7 +679,9 @@ function DashboardHeader() {
                   >
                     <CreditCard
                       size={17}
-                      strokeWidth={1.7}
+                      strokeWidth={
+                        1.7
+                      }
                     />
 
                     <span>
@@ -528,7 +693,9 @@ function DashboardHeader() {
                     <div className="profile-language-label">
                       <Globe2
                         size={17}
-                        strokeWidth={1.7}
+                        strokeWidth={
+                          1.7
+                        }
                       />
 
                       <span>
@@ -540,7 +707,8 @@ function DashboardHeader() {
                       <button
                         type="button"
                         className={
-                          language === "mn"
+                          language ===
+                          "mn"
                             ? "active"
                             : ""
                         }
@@ -556,7 +724,8 @@ function DashboardHeader() {
                       <button
                         type="button"
                         className={
-                          language === "en"
+                          language ===
+                          "en"
                             ? "active"
                             : ""
                         }
@@ -574,15 +743,20 @@ function DashboardHeader() {
                   <button
                     type="button"
                     className="profile-dropdown-item"
-                    onClick={handleHelp}
+                    onClick={
+                      handleHelp
+                    }
                   >
                     <CircleHelp
                       size={17}
-                      strokeWidth={1.7}
+                      strokeWidth={
+                        1.7
+                      }
                     />
 
                     <span>
-                      Тусламж & дэмжлэг
+                      Тусламж &
+                      дэмжлэг
                     </span>
                   </button>
                 </div>
@@ -592,11 +766,15 @@ function DashboardHeader() {
                 <button
                   type="button"
                   className="profile-logout"
-                  onClick={handleLogout}
+                  onClick={
+                    handleLogout
+                  }
                 >
                   <LogOut
                     size={17}
-                    strokeWidth={1.8}
+                    strokeWidth={
+                      1.8
+                    }
                   />
 
                   <span>

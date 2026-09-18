@@ -1,76 +1,38 @@
-import { LockKeyhole } from "lucide-react";
-import { useNavigate } from "react-router-dom";
+import {
+  useNavigate,
+} from "react-router-dom";
 
-import "../styles/Dashboard.css";
+import {
+  LockKeyhole,
+  CheckCircle2,
+  ShieldCheck,
+  Clock3,
+} from "lucide-react";
 
-const LOCKED_CONTENT = {
-  finance: {
-    title: "Санхүүгийн тайлан",
-    items: [
-      "Ашиг алдагдлын waterfall",
-      "Маржины өөрчлөлт",
-      "НӨАТ ба улирлын харьцуулалт",
-    ],
-  },
+import useSubscription from "../hooks/useSubscription";
 
-  sales: {
-    title: "Борлуулалт & Авлага",
-    items: [
-      "Цуглуулалтын хувь",
-      "Авлагын насжилт",
-      "Топ 10 өртэй харилцагч",
-    ],
-  },
-
-  cashflow: {
-    title: "Мөнгөн урсгал",
-    items: [
-      "Мөнгөн үлдэгдлийн хяналт",
-      "Орлого, зарлагын мөнгөн урсгал",
-      "Runway ба таамаглал",
-    ],
-  },
-
-  arap: {
-    title: "AR / AP",
-    items: [
-      "Авлага ба өглөгийн үлдэгдэл",
-      "Насжилтын шинжилгээ",
-      "Харилцагчийн дэлгэрэнгүй",
-    ],
-  },
-};
-
-export default function LockedDashboard({
-  type,
+function LockedDashboard({
   children,
 }) {
-  const navigate = useNavigate();
+  const navigate =
+    useNavigate();
 
-  const dataConnected =
-    localStorage.getItem("dataConnected") === "true";
+  const {
+    active,
+    loading,
+  } = useSubscription();
 
-  const usingDemoData =
-    localStorage.getItem("usingDemoData") === "true";
-
-  const locked =
-    usingDemoData && !dataConnected;
-
-  const content =
-    LOCKED_CONTENT[type] ||
-    LOCKED_CONTENT.finance;
-
-  if (!locked) {
-    return children;
+  if (loading) {
+    return (
+      <div className="locked-dashboard-loading">
+        Багцын мэдээллийг шалгаж байна...
+      </div>
+    );
   }
 
-  const handleConnect = () => {
-    navigate("/setup", {
-      state: {
-        step: 2,
-      },
-    });
-  };
+  if (active) {
+    return children;
+  }
 
   return (
     <div className="locked-dashboard">
@@ -82,41 +44,81 @@ export default function LockedDashboard({
         <div className="locked-connect-card">
           <div className="locked-icon">
             <LockKeyhole
-              size={28}
+              size={27}
               strokeWidth={2}
             />
           </div>
 
-          <h2>{content.title}</h2>
+          <h2>
+            Датагаа холбоод
+            dashboard-аа нээнэ үү
+          </h2>
 
           <ul>
-            {content.items.map((item) => (
-              <li key={item}>
-                {item}
-              </li>
-            ))}
+            <li>
+              Санхүүгийн мэдээллээ
+              нэг дор харах
+            </li>
+
+            <li>
+              Борлуулалтын
+              үзүүлэлтүүдийг хянах
+            </li>
+
+            <li>
+              Мөнгөн урсгал болон
+              AR / AP мэдээлэл харах
+            </li>
           </ul>
 
           <button
             type="button"
             className="locked-connect-button"
-            onClick={handleConnect}
+            onClick={() =>
+              navigate(
+                "/setup",
+                {
+                  state: {
+                    step: 2,
+                  },
+                }
+              )
+            }
           >
-            Дата холбож туршиж үзэх
+            Дата холбох
           </button>
 
           <div className="locked-connect-time">
-            Холбоход 5–10 минут
+            Дата холболт хэдхэн минут
+            үргэлжилнэ
           </div>
 
           <div className="locked-connect-support">
-            <span>▣ Odoo</span>
-            <span>▣ 1C</span>
-            <span>▦ Excel</span>
-            <span>дэмжинэ</span>
+            <span>
+              <CheckCircle2
+                size={14}
+              />
+              Аюулгүй холболт
+            </span>
+
+            <span>
+              <ShieldCheck
+                size={14}
+              />
+              Нууцлал хамгаалагдсан
+            </span>
+
+            <span>
+              <Clock3
+                size={14}
+              />
+              Хурдан тохиргоо
+            </span>
           </div>
         </div>
       </div>
     </div>
   );
 }
+
+export default LockedDashboard;

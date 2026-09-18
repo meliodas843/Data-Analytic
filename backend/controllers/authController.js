@@ -1,6 +1,11 @@
-const bcrypt = require("bcryptjs");
-const jwt = require("jsonwebtoken");
-const db = require("../config/db");
+const bcrypt =
+  require("bcryptjs");
+
+const jwt =
+  require("jsonwebtoken");
+
+const db =
+  require("../config/db");
 
 function createToken(user) {
   return jwt.sign(
@@ -8,7 +13,8 @@ function createToken(user) {
       id: user.id,
       email: user.email,
       role: user.role,
-      company_id: user.company_id || null,
+      company_id:
+        user.company_id || null,
     },
     process.env.JWT_SECRET,
     {
@@ -17,7 +23,92 @@ function createToken(user) {
   );
 }
 
-exports.signup = async (req, res) => {
+async function getSubscription(
+  userId
+) {
+  const [subscriptions] =
+    await db.query(
+      `
+      SELECT
+        id,
+        user_id,
+        plan,
+        status,
+        started_at,
+        expires_at,
+        created_at,
+        updated_at
+      FROM subscriptions
+      WHERE user_id = ?
+      ORDER BY id DESC
+      LIMIT 1
+      `,
+      [userId]
+    );
+
+  if (
+    subscriptions.length === 0
+  ) {
+    return {
+      subscribed: false,
+      plan: null,
+      status: "none",
+      started_at: null,
+      expires_at: null,
+    };
+  }
+
+  const subscription =
+    subscriptions[0];
+
+  let status =
+    subscription.status;
+
+  if (
+    status === "active" &&
+    subscription.expires_at &&
+    new Date(
+      subscription.expires_at
+    ).getTime() <= Date.now()
+  ) {
+    status = "expired";
+
+    await db.query(
+      `
+      UPDATE subscriptions
+      SET status = 'expired'
+      WHERE id = ?
+      `,
+      [
+        subscription.id,
+      ]
+    );
+  }
+
+  return {
+    id:
+      subscription.id,
+
+    subscribed:
+      status === "active",
+
+    plan:
+      subscription.plan,
+
+    status,
+
+    started_at:
+      subscription.started_at,
+
+    expires_at:
+      subscription.expires_at,
+  };
+}
+
+exports.signup = async (
+  req,
+  res
+) => {
   try {
     const {
       companyName,
@@ -25,52 +116,101 @@ exports.signup = async (req, res) => {
       email,
       phone,
       password,
-      industry,
     } = req.body;
 
     if (
       !companyName ||
       !fullName ||
       !email ||
-      !password ||
-      !industry
+      !phone ||
+      !password
     ) {
-      return res.status(400).json({
-        success: false,
-        message:
-          "Бүх шаардлагатай мэдээллийг бөглөнө үү.",
-      });
-    }
+      return res
+        .status(400)
+        .json({
+          success: false,
 
-    if (password.length < 6) {
-      return res.status(400).json({
-        success: false,
-        message:
-          "Нууц үг хамгийн багадаа 6 тэмдэгт байна.",
-      });
+          message:
+            "Бүх шаардлагатай мэдээллийг бөглөнө үү.",
+        });
     }
 
     const normalizedEmail =
-      email.trim().toLowerCase();
+      email
+        .trim()
+        .toLowerCase();
 
-    const [existingUsers] =
+    const normalizedPhone =
+      phone
+        .trim();
+
+    if (
+      password.length < 8
+    ) {
+      return res
+        .status(400)
+        .json({
+          success: false,
+
+          message:
+            "Нууц үг хамгийн багадаа 8 тэмдэгт байна.",
+        });
+    }
+
+    if (
+      !/[A-Za-zА-Яа-яӨөҮүЁё]/.test(
+        password
+      )
+    ) {
+      return res
+        .status(400)
+        .json({
+          success: false,
+
+          message:
+            "Нууц үг дор хаяж нэг үсэг агуулсан байна.",
+        });
+    }
+
+    if (
+      !/\d/.test(password)
+    ) {
+      return res
+        .status(400)
+        .json({
+          success: false,
+
+          message:
+            "Нууц үг дор хаяж нэг тоо агуулсан байна.",
+        });
+    }
+
+    const [
+      existingUsers,
+    ] =
       await db.query(
         `
-        SELECT
-          id
+        SELECT id
         FROM users
         WHERE email = ?
         LIMIT 1
         `,
-        [normalizedEmail]
+        [
+          normalizedEmail,
+        ]
       );
 
-    if (existingUsers.length > 0) {
-      return res.status(409).json({
-        success: false,
-        message:
-          "Энэ имэйлээр бүртгэл үүссэн байна.",
-      });
+    if (
+      existingUsers.length > 0
+    ) {
+      return res
+        .status(409)
+        .json({
+          success: false,
+
+          message:
+            "Энэ и-мэйл хаягаар бүртгэл үүссэн байна.",
+        });
     }
 
     const hashedPassword =
@@ -100,36 +240,33 @@ exports.signup = async (req, res) => {
           ?,
           ?,
           ?,
+          NULL,
           ?,
           ?,
           ?,
           ?,
-          ?,
-          ?,
-          ?
+          NULL,
+          NULL
         )
         `,
         [
           companyName.trim(),
           fullName.trim(),
           normalizedEmail,
-          phone
-            ? phone.trim()
-            : null,
-          industry,
+          normalizedPhone,
           hashedPassword,
           "admin",
           "active",
           1,
-          null,
-          null,
         ]
       );
 
     const user = {
-      id: result.insertId,
+      id:
+        result.insertId,
 
-      company_id: null,
+      company_id:
+        null,
 
       company_name:
         companyName.trim(),
@@ -141,74 +278,91 @@ exports.signup = async (req, res) => {
         normalizedEmail,
 
       phone:
-        phone
-          ? phone.trim()
-          : null,
+        normalizedPhone,
 
-      industry,
+      role:
+        "admin",
 
-      role: "admin",
+      status:
+        "active",
 
-      status: "active",
+      email_verified:
+        1,
     };
 
     const token =
       createToken(user);
 
-    return res.status(201).json({
-      success: true,
+    const subscription = {
+      subscribed: false,
+      plan: null,
+      status: "none",
+      started_at: null,
+      expires_at: null,
+    };
 
-      message:
-        "Бүртгэл амжилттай үүслээ.",
+    return res
+      .status(201)
+      .json({
+        success: true,
 
-      token,
+        message:
+          "Бүртгэл амжилттай үүслээ.",
 
-      user,
-    });
+        token,
+
+        user,
+
+        subscription,
+      });
   } catch (error) {
     console.error(
       "SIGNUP ERROR:",
       error
     );
 
-    return res.status(500).json({
-      success: false,
+    return res
+      .status(500)
+      .json({
+        success: false,
 
-      message:
-        "Бүртгэл үүсгэхэд алдаа гарлаа.",
+        message:
+          "Бүртгэл үүсгэхэд алдаа гарлаа.",
 
-      error:
-        error.message,
-
-      code:
-        error.code || null,
-
-      errno:
-        error.errno || null,
-
-      sqlMessage:
-        error.sqlMessage || null,
-    });
+        error:
+          error.message,
+      });
   }
 };
 
-exports.login = async (req, res) => {
+exports.login = async (
+  req,
+  res
+) => {
   try {
     const {
       email,
       password,
     } = req.body;
 
-    if (!email || !password) {
-      return res.status(400).json({
-        success: false,
-        message:
-          "Email and password are required.",
-      });
+    if (
+      !email ||
+      !password
+    ) {
+      return res
+        .status(400)
+        .json({
+          success: false,
+
+          message:
+            "Имэйл болон нууц үгээ оруулна уу.",
+        });
     }
 
     const normalizedEmail =
-      email.trim().toLowerCase();
+      email
+        .trim()
+        .toLowerCase();
 
     const [users] =
       await db.query(
@@ -220,7 +374,6 @@ exports.login = async (req, res) => {
           full_name,
           email,
           phone,
-          industry,
           password,
           role,
           status,
@@ -229,15 +382,22 @@ exports.login = async (req, res) => {
         WHERE email = ?
         LIMIT 1
         `,
-        [normalizedEmail]
+        [
+          normalizedEmail,
+        ]
       );
 
-    if (users.length === 0) {
-      return res.status(401).json({
-        success: false,
-        message:
-          "Invalid email or password.",
-      });
+    if (
+      users.length === 0
+    ) {
+      return res
+        .status(401)
+        .json({
+          success: false,
+
+          message:
+            "Имэйл хаяг эсвэл нууц үг буруу байна.",
+        });
     }
 
     const user =
@@ -249,24 +409,36 @@ exports.login = async (req, res) => {
         user.password
       );
 
-    if (!passwordMatches) {
-      return res.status(401).json({
-        success: false,
-        message:
-          "Invalid email or password.",
-      });
+    if (
+      !passwordMatches
+    ) {
+      return res
+        .status(401)
+        .json({
+          success: false,
+
+          message:
+            "Имэйл хаяг эсвэл нууц үг буруу байна.",
+        });
     }
 
     if (
-      user.status !==
-      "active"
+      user.status !== "active"
     ) {
-      return res.status(403).json({
-        success: false,
-        message:
-          "This account is not active.",
-      });
+      return res
+        .status(403)
+        .json({
+          success: false,
+
+          message:
+            "Таны бүртгэл идэвхгүй байна.",
+        });
     }
+
+    const subscription =
+      await getSubscription(
+        user.id
+      );
 
     const token =
       createToken(user);
@@ -295,15 +467,17 @@ exports.login = async (req, res) => {
         phone:
           user.phone,
 
-        industry:
-          user.industry,
-
         role:
           user.role,
 
         status:
           user.status,
+
+        email_verified:
+          user.email_verified,
       },
+
+      subscription,
     });
   } catch (error) {
     console.error(
@@ -311,14 +485,102 @@ exports.login = async (req, res) => {
       error
     );
 
-    return res.status(500).json({
-      success: false,
+    return res
+      .status(500)
+      .json({
+        success: false,
 
-      message:
-        "Login failed.",
+        message:
+          "Нэвтрэх үед алдаа гарлаа.",
 
-      error:
-        error.message,
+        error:
+          error.message,
+      });
+  }
+};
+
+exports.me = async (
+  req,
+  res
+) => {
+  try {
+    const [users] =
+      await db.query(
+        `
+        SELECT
+          id,
+          company_id,
+          company_name,
+          full_name,
+          email,
+          phone,
+          role,
+          status,
+          email_verified
+        FROM users
+        WHERE id = ?
+        LIMIT 1
+        `,
+        [
+          req.user.id,
+        ]
+      );
+
+    if (
+      users.length === 0
+    ) {
+      return res
+        .status(404)
+        .json({
+          success: false,
+
+          message:
+            "Хэрэглэгч олдсонгүй.",
+        });
+    }
+
+    const user =
+      users[0];
+
+    if (
+      user.status !== "active"
+    ) {
+      return res
+        .status(403)
+        .json({
+          success: false,
+
+          message:
+            "Таны бүртгэл идэвхгүй байна.",
+        });
+    }
+
+    const subscription =
+      await getSubscription(
+        user.id
+      );
+
+    return res.json({
+      success: true,
+      user,
+      subscription,
     });
+  } catch (error) {
+    console.error(
+      "AUTH ME ERROR:",
+      error
+    );
+
+    return res
+      .status(500)
+      .json({
+        success: false,
+
+        message:
+          "Хэрэглэгчийн мэдээлэл авахад алдаа гарлаа.",
+
+        error:
+          error.message,
+      });
   }
 };

@@ -4,12 +4,18 @@ import {
   Route,
   useLocation,
   Navigate,
+  Outlet,
+  useNavigate,
 } from "react-router-dom";
 
 import {
   useEffect,
   useState,
 } from "react";
+
+import {
+  Info,
+} from "lucide-react";
 
 import Home from "./pages/Home";
 import Dashboard from "./pages/Dashboard";
@@ -44,10 +50,40 @@ import AdminUsers from "./Admin/AdminUsers";
 
 import AdminLayout from "./components/AdminLayout";
 
+import useSubscription from "./hooks/useSubscription";
+
 import "./styles/Dashboard.css";
 
+const ADMIN_SESSION_KEY =
+  "adminAuthenticated";
+
+const ADMIN_USER_KEY =
+  "adminUser";
+
+const ADMIN_LAST_ACTIVITY_KEY =
+  "adminLastActivity";
+
+const ADMIN_TIMEOUT =
+  10 * 60 * 1000;
+
+function clearAdminSession() {
+  sessionStorage.removeItem(
+    ADMIN_SESSION_KEY
+  );
+
+  sessionStorage.removeItem(
+    ADMIN_USER_KEY
+  );
+
+  sessionStorage.removeItem(
+    ADMIN_LAST_ACTIVITY_KEY
+  );
+}
+
 function ScrollToTop() {
-  const { pathname } = useLocation();
+  const {
+    pathname,
+  } = useLocation();
 
   useEffect(() => {
     window.scrollTo({
@@ -56,44 +92,34 @@ function ScrollToTop() {
       behavior: "instant",
     });
 
-    document.documentElement.scrollTop = 0;
-    document.body.scrollTop = 0;
+    document.documentElement.scrollTop =
+      0;
 
-    const dashboardMain =
-      document.querySelector(
-        ".dashboard-main"
-      );
+    document.body.scrollTop =
+      0;
 
-    if (dashboardMain) {
-      dashboardMain.scrollTop = 0;
-    }
+    const selectors = [
+      ".dashboard-main",
+      ".dashboard-body",
+      ".dashboard-content",
+      ".settings-content",
+      ".admin-main",
+      ".admin-content",
+    ];
 
-    const dashboardBody =
-      document.querySelector(
-        ".dashboard-body"
-      );
+    selectors.forEach(
+      (selector) => {
+        const element =
+          document.querySelector(
+            selector
+          );
 
-    if (dashboardBody) {
-      dashboardBody.scrollTop = 0;
-    }
-
-    const dashboardContent =
-      document.querySelector(
-        ".dashboard-content"
-      );
-
-    if (dashboardContent) {
-      dashboardContent.scrollTop = 0;
-    }
-
-    const settingsContent =
-      document.querySelector(
-        ".settings-content"
-      );
-
-    if (settingsContent) {
-      settingsContent.scrollTop = 0;
-    }
+        if (element) {
+          element.scrollTop =
+            0;
+        }
+      }
+    );
   }, [pathname]);
 
   return null;
@@ -102,14 +128,25 @@ function ScrollToTop() {
 function DashboardLayout({
   children,
 }) {
-  const [collapsed, setCollapsed] =
-    useState(false);
+  const navigate =
+    useNavigate();
 
-  const handleToggleSidebar = () => {
-    setCollapsed(
-      (prev) => !prev
-    );
-  };
+  const [
+    collapsed,
+    setCollapsed,
+  ] = useState(false);
+
+  const {
+    active,
+    loading,
+  } = useSubscription();
+
+  const handleToggleSidebar =
+    () => {
+      setCollapsed(
+        (prev) => !prev
+      );
+    };
 
   return (
     <div
@@ -120,7 +157,9 @@ function DashboardLayout({
       }`}
     >
       <DashboardNavbar
-        collapsed={collapsed}
+        collapsed={
+          collapsed
+        }
         onToggle={
           handleToggleSidebar
         }
@@ -131,11 +170,284 @@ function DashboardLayout({
 
         <div className="dashboard-body">
           <div className="dashboard-content">
+            {!loading &&
+              !active && (
+                <div className="subscription-connect-banner">
+                </div>
+              )}
+
             {children}
           </div>
         </div>
       </main>
     </div>
+  );
+}
+
+function ProtectedUserRoute() {
+  const token =
+    localStorage.getItem(
+      "token"
+    );
+
+  const isLoggedIn =
+    localStorage.getItem(
+      "isLoggedIn"
+    ) === "true";
+
+  if (
+    !token ||
+    !isLoggedIn
+  ) {
+    return (
+      <Navigate
+        to="/login"
+        replace
+      />
+    );
+  }
+
+  return <Outlet />;
+}
+
+function ProtectedAdminRoute() {
+  const navigate =
+    useNavigate();
+
+  const adminAuthenticated =
+    sessionStorage.getItem(
+      ADMIN_SESSION_KEY
+    ) === "true";
+
+  useEffect(() => {
+    if (
+      !adminAuthenticated
+    ) {
+      return;
+    }
+
+    let timeoutId;
+
+    const logoutAdmin =
+      () => {
+        clearAdminSession();
+
+        navigate(
+          "/admin/login",
+          {
+            replace: true,
+          }
+        );
+      };
+
+    const checkSession =
+      () => {
+        const lastActivity =
+          Number(
+            sessionStorage.getItem(
+              ADMIN_LAST_ACTIVITY_KEY
+            )
+          );
+
+        if (!lastActivity) {
+          sessionStorage.setItem(
+            ADMIN_LAST_ACTIVITY_KEY,
+            Date.now().toString()
+          );
+
+          return false;
+        }
+
+        if (
+          Date.now() -
+            lastActivity >=
+          ADMIN_TIMEOUT
+        ) {
+          logoutAdmin();
+
+          return true;
+        }
+
+        return false;
+      };
+
+    const resetTimer =
+      () => {
+        if (
+          checkSession()
+        ) {
+          return;
+        }
+
+        sessionStorage.setItem(
+          ADMIN_LAST_ACTIVITY_KEY,
+          Date.now().toString()
+        );
+
+        clearTimeout(
+          timeoutId
+        );
+
+        timeoutId =
+          setTimeout(
+            logoutAdmin,
+            ADMIN_TIMEOUT
+          );
+      };
+
+    const existingLastActivity =
+      Number(
+        sessionStorage.getItem(
+          ADMIN_LAST_ACTIVITY_KEY
+        )
+      );
+
+    if (
+      existingLastActivity &&
+      Date.now() -
+        existingLastActivity >=
+        ADMIN_TIMEOUT
+    ) {
+      logoutAdmin();
+
+      return;
+    }
+
+    if (
+      !existingLastActivity
+    ) {
+      sessionStorage.setItem(
+        ADMIN_LAST_ACTIVITY_KEY,
+        Date.now().toString()
+      );
+    }
+
+    timeoutId =
+      setTimeout(
+        logoutAdmin,
+        ADMIN_TIMEOUT
+      );
+
+    const events = [
+      "mousedown",
+      "mousemove",
+      "keydown",
+      "scroll",
+      "touchstart",
+      "click",
+    ];
+
+    events.forEach(
+      (eventName) => {
+        window.addEventListener(
+          eventName,
+          resetTimer,
+          {
+            passive: true,
+          }
+        );
+      }
+    );
+
+    const handleVisibilityChange =
+      () => {
+        if (
+          document.visibilityState ===
+          "visible"
+        ) {
+          if (
+            !checkSession()
+          ) {
+            resetTimer();
+          }
+        }
+      };
+
+    document.addEventListener(
+      "visibilitychange",
+      handleVisibilityChange
+    );
+
+    return () => {
+      clearTimeout(
+        timeoutId
+      );
+
+      events.forEach(
+        (eventName) => {
+          window.removeEventListener(
+            eventName,
+            resetTimer
+          );
+        }
+      );
+
+      document.removeEventListener(
+        "visibilitychange",
+        handleVisibilityChange
+      );
+    };
+  }, [
+    adminAuthenticated,
+    navigate,
+  ]);
+
+  if (
+    !adminAuthenticated
+  ) {
+    return (
+      <Navigate
+        to="/admin/login"
+        replace
+      />
+    );
+  }
+
+  return <Outlet />;
+}
+
+function AdminLoginRedirect() {
+  const adminAuthenticated =
+    sessionStorage.getItem(
+      ADMIN_SESSION_KEY
+    ) === "true";
+
+  if (
+    adminAuthenticated
+  ) {
+    return (
+      <Navigate
+        to="/admin/dashboard"
+        replace
+      />
+    );
+  }
+
+  return <AdminLogin />;
+}
+
+function AdminIndexRedirect() {
+  const adminAuthenticated =
+    sessionStorage.getItem(
+      ADMIN_SESSION_KEY
+    ) === "true";
+
+  if (
+    !adminAuthenticated
+  ) {
+    return (
+      <Navigate
+        to="/admin/login"
+        replace
+      />
+    );
+  }
+
+  return (
+    <Navigate
+      to="/admin/dashboard"
+      replace
+    />
   );
 }
 
@@ -147,175 +459,220 @@ function AppRoutes() {
       <Routes>
         <Route
           path="/"
-          element={<Home />}
+          element={
+            <Home />
+          }
         />
 
         <Route
           path="/login"
-          element={<Login />}
+          element={
+            <Login />
+          }
         />
 
         <Route
           path="/signup"
-          element={<Signup />}
+          element={
+            <Signup />
+          }
         />
 
         <Route
           path="/verify-email"
-          element={<VerifyEmail />}
+          element={
+            <VerifyEmail />
+          }
         />
 
         <Route
           path="/setup"
-          element={<Setup />}
-        />
-
-        <Route
-          path="/dashboard"
           element={
-            <DashboardLayout>
-              <Dashboard />
-            </DashboardLayout>
+            <Setup />
           }
         />
 
         <Route
-          path="/finance"
           element={
-            <DashboardLayout>
-              <FinanceDashboard />
-            </DashboardLayout>
-          }
-        />
-
-        <Route
-          path="/sales"
-          element={
-            <DashboardLayout>
-              <SalesDashboard />
-            </DashboardLayout>
-          }
-        />
-
-        <Route
-          path="/cash-flow"
-          element={
-            <DashboardLayout>
-              <InventoryDashboard />
-            </DashboardLayout>
-          }
-        />
-
-        <Route
-          path="/ar-ap"
-          element={
-            <DashboardLayout>
-              <ArApDashboard />
-            </DashboardLayout>
-          }
-        />
-
-        <Route
-          path="/profile"
-          element={<Profile />}
-        />
-
-        <Route
-          path="/settings"
-          element={
-            <SettingsLayout />
+            <ProtectedUserRoute />
           }
         >
           <Route
-            index
+            path="/dashboard"
             element={
-              <OrganizationSettings />
+              <DashboardLayout>
+                <Dashboard />
+              </DashboardLayout>
             }
           />
 
           <Route
-            path="organization"
+            path="/finance"
             element={
-              <OrganizationSettings />
+              <DashboardLayout>
+                <FinanceDashboard />
+              </DashboardLayout>
             }
           />
 
           <Route
-            path="data"
+            path="/sales"
             element={
-              <DataConnectionSettings />
+              <DashboardLayout>
+                <SalesDashboard />
+              </DashboardLayout>
             }
           />
 
           <Route
-            path="users"
+            path="/cash-flow"
             element={
-              <UsersSettings />
+              <DashboardLayout>
+                <InventoryDashboard />
+              </DashboardLayout>
             }
           />
 
           <Route
-            path="billing"
+            path="/ar-ap"
             element={
-              <BillingSettings />
+              <DashboardLayout>
+                <ArApDashboard />
+              </DashboardLayout>
+            }
+          />
+
+          <Route
+            path="/profile"
+            element={
+              <Profile />
+            }
+          />
+
+          <Route
+            path="/settings"
+            element={
+              <SettingsLayout />
+            }
+          >
+            <Route
+              index
+              element={
+                <OrganizationSettings />
+              }
+            />
+
+            <Route
+              path="organization"
+              element={
+                <OrganizationSettings />
+              }
+            />
+
+            <Route
+              path="data"
+              element={
+                <DataConnectionSettings />
+              }
+            />
+
+            <Route
+              path="users"
+              element={
+                <UsersSettings />
+              }
+            />
+
+            <Route
+              path="billing"
+              element={
+                <BillingSettings />
+              }
+            />
+          </Route>
+
+          <Route
+            path="/billing"
+            element={
+              <Navigate
+                to="/settings/billing"
+                replace
+              />
             }
           />
         </Route>
 
         <Route
-          path="/billing"
-          element={
-            <Navigate
-              to="/settings/billing"
-              replace
-            />
-          }
-        />
-
-        <Route
           path="/admin/login"
-          element={<AdminLogin />}
+          element={
+            <AdminLoginRedirect />
+          }
         />
 
         <Route
           path="/admin"
-          element={<AdminLayout />}
+          element={
+            <AdminIndexRedirect />
+          }
+        />
+
+        <Route
+          element={
+            <ProtectedAdminRoute />
+          }
         >
           <Route
-            index
+            path="/admin"
             element={
-              <AdminDashboard />
+              <AdminLayout />
             }
-          />
+          >
+            <Route
+              path="dashboard"
+              element={
+                <AdminDashboard />
+              }
+            />
 
-          <Route
-            path="home"
-            element={
-              <AdminHome />
-            }
-          />
+            <Route
+              path="home"
+              element={
+                <AdminHome />
+              }
+            />
 
-          <Route
-            path="company"
-            element={
-              <AdminCompany />
-            }
-          />
+            <Route
+              path="company"
+              element={
+                <AdminCompany />
+              }
+            />
 
-          <Route
-            path="requests"
-            element={
-              <AdminRequests />
-            }
-          />
+            <Route
+              path="requests"
+              element={
+                <AdminRequests />
+              }
+            />
 
-          <Route
-            path="users"
-            element={
-              <AdminUsers />
-            }
-          />
+            <Route
+              path="users"
+              element={
+                <AdminUsers />
+              }
+            />
+          </Route>
         </Route>
+
+        <Route
+          path="*"
+          element={
+            <Navigate
+              to="/"
+              replace
+            />
+          }
+        />
       </Routes>
     </>
   );

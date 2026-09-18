@@ -8,6 +8,9 @@ import {
 import logo from "../assets/logo-default.svg";
 import "../styles/Signup.css";
 
+const API_URL =
+  "http://localhost:5000/api";
+
 function DataViewLogo() {
   return (
     <div className="signup-brand">
@@ -21,18 +24,28 @@ function DataViewLogo() {
 }
 
 function Signup() {
-  const navigate = useNavigate();
+  const navigate =
+    useNavigate();
 
-  const [showPassword, setShowPassword] =
-    useState(false);
+  const [
+    showPassword,
+    setShowPassword,
+  ] = useState(false);
 
-  const [loading, setLoading] =
-    useState(false);
+  const [
+    loading,
+    setLoading,
+  ] = useState(false);
 
-  const [error, setError] =
-    useState("");
+  const [
+    error,
+    setError,
+  ] = useState("");
 
-  const [form, setForm] = useState({
+  const [
+    form,
+    setForm,
+  ] = useState({
     companyName: "",
     fullName: "",
     email: "",
@@ -41,7 +54,9 @@ function Signup() {
     terms: false,
   });
 
-  const handleChange = (e) => {
+  const handleChange = (
+    e
+  ) => {
     const {
       name,
       value,
@@ -49,173 +64,211 @@ function Signup() {
       checked,
     } = e.target;
 
-    setForm((prev) => ({
-      ...prev,
-      [name]:
-        type === "checkbox"
-          ? checked
-          : value,
-    }));
+    setForm(
+      (prev) => ({
+        ...prev,
+        [name]:
+          type === "checkbox"
+            ? checked
+            : value,
+      })
+    );
 
     setError("");
   };
 
-  const getSavedUsers = () => {
-    try {
-      const users = JSON.parse(
-        localStorage.getItem("users") ||
-          "[]"
-      );
-
-      return Array.isArray(users)
-        ? users
-        : [];
-    } catch {
-      return [];
-    }
-  };
-
-  const generateUserId = () => {
-    if (
-      typeof crypto !== "undefined" &&
-      crypto.randomUUID
-    ) {
-      return crypto.randomUUID();
-    }
-
-    return `user-${Date.now()}`;
-  };
-
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (
+    e
+  ) => {
     e.preventDefault();
 
-    try {
-      setLoading(true);
-      setError("");
+    setError("");
 
-      const companyName =
-        form.companyName.trim();
+    const companyName =
+      form.companyName.trim();
 
-      const fullName =
-        form.fullName.trim();
+    const fullName =
+      form.fullName.trim();
 
-      const email = form.email
+    const email =
+      form.email
         .trim()
         .toLowerCase();
 
-      const phone = form.phone
+    const phone =
+      form.phone
         .replace(/\s+/g, "")
+        .replace("+976", "")
         .trim();
 
-      const password = form.password;
+    const password =
+      form.password;
 
-      if (!companyName) {
-        throw new Error(
-          "Байгууллагын нэрээ оруулна уу."
-        );
-      }
-
-      if (!fullName) {
-        throw new Error(
-          "Нэрээ оруулна уу."
-        );
-      }
-
-      if (!email) {
-        throw new Error(
-          "И-мэйл хаягаа оруулна уу."
-        );
-      }
-
-      if (!phone) {
-        throw new Error(
-          "Утасны дугаараа оруулна уу."
-        );
-      }
-
-      if (!/^\d{8}$/.test(phone)) {
-        throw new Error(
-          "Утасны дугаар 8 оронтой байна."
-        );
-      }
-
-      if (password.length < 8) {
-        throw new Error(
-          "Нууц үг хамгийн багадаа 8 тэмдэгт байна."
-        );
-      }
-
-      if (!/[A-Za-zА-Яа-яӨөҮүЁё]/.test(password)) {
-        throw new Error(
-          "Нууц үг дор хаяж нэг үсэг агуулсан байна."
-        );
-      }
-
-      if (!/\d/.test(password)) {
-        throw new Error(
-          "Нууц үг дор хаяж нэг тоо агуулсан байна."
-        );
-      }
-
-      if (!form.terms) {
-        throw new Error(
-          "Үйлчилгээний нөхцөл болон нууцлалын бодлогыг зөвшөөрнө үү."
-        );
-      }
-
-      const users =
-        getSavedUsers();
-
-      const emailExists =
-        users.some(
-          (user) =>
-            user.email
-              ?.trim()
-              .toLowerCase() === email
-        );
-
-      if (emailExists) {
-        throw new Error(
-          "Энэ и-мэйл хаягаар бүртгэл үүссэн байна. Нэвтэрнэ үү."
-        );
-      }
-
-      const newUser = {
-        id: generateUserId(),
-        companyName,
-        company: companyName,
-        fullName,
-        name: fullName,
-        email,
-        phone: `+976${phone}`,
-        password,
-        role: "admin",
-        emailVerified: false,
-        createdAt:
-          new Date().toISOString(),
-      };
-
-      const updatedUsers = [
-        ...users,
-        newUser,
-      ];
-
-      localStorage.setItem(
-        "users",
-        JSON.stringify(updatedUsers)
+    if (!companyName) {
+      setError(
+        "Байгууллагын нэрээ оруулна уу."
       );
+
+      return;
+    }
+
+    if (!fullName) {
+      setError(
+        "Нэрээ оруулна уу."
+      );
+
+      return;
+    }
+
+    if (!email) {
+      setError(
+        "И-мэйл хаягаа оруулна уу."
+      );
+
+      return;
+    }
+
+    if (!phone) {
+      setError(
+        "Утасны дугаараа оруулна уу."
+      );
+
+      return;
+    }
+
+    if (
+      !/^\d{8}$/.test(phone)
+    ) {
+      setError(
+        "Утасны дугаар 8 оронтой байна."
+      );
+
+      return;
+    }
+
+    if (
+      password.length < 8
+    ) {
+      setError(
+        "Нууц үг хамгийн багадаа 8 тэмдэгт байна."
+      );
+
+      return;
+    }
+
+    if (
+      !/[A-Za-zА-Яа-яӨөҮүЁё]/.test(
+        password
+      )
+    ) {
+      setError(
+        "Нууц үг дор хаяж нэг үсэг агуулсан байна."
+      );
+
+      return;
+    }
+
+    if (
+      !/\d/.test(password)
+    ) {
+      setError(
+        "Нууц үг дор хаяж нэг тоо агуулсан байна."
+      );
+
+      return;
+    }
+
+    if (!form.terms) {
+      setError(
+        "Үйлчилгээний нөхцөл болон нууцлалын бодлогыг зөвшөөрнө үү."
+      );
+
+      return;
+    }
+
+    try {
+      setLoading(true);
+
+      const response =
+        await fetch(
+          `${API_URL}/auth/signup`,
+          {
+            method: "POST",
+
+            headers: {
+              "Content-Type":
+                "application/json",
+            },
+
+            body:
+              JSON.stringify({
+                companyName,
+                fullName,
+                email,
+                phone:
+                  `+976${phone}`,
+                password,
+              }),
+          }
+        );
+
+      let data;
+
+      try {
+        data =
+          await response.json();
+      } catch {
+        throw new Error(
+          "Backend буруу хариу буцаалаа."
+        );
+      }
+
+      if (
+        !response.ok ||
+        !data.success
+      ) {
+        throw new Error(
+          data.message ||
+            "Бүртгэл үүсгэхэд алдаа гарлаа."
+        );
+      }
 
       localStorage.setItem(
         "pendingVerificationEmail",
         email
       );
 
-      navigate("/verify-email", {
-        state: {
-          email,
-        },
-      });
+      localStorage.setItem(
+        "pendingSignupUser",
+        JSON.stringify(
+          data.user
+        )
+      );
+
+      navigate(
+        "/verify-email",
+        {
+          state: {
+            email,
+          },
+        }
+      );
     } catch (err) {
+      console.error(
+        "SIGNUP ERROR:",
+        err
+      );
+
+      if (
+        err instanceof TypeError
+      ) {
+        setError(
+          "Backend сервертэй холбогдож чадсангүй. Сервер ажиллаж байгаа эсэхийг шалгана уу."
+        );
+
+        return;
+      }
+
       setError(
         err?.message ||
           "Бүртгэл үүсгэхэд алдаа гарлаа."
@@ -232,7 +285,9 @@ function Signup() {
 
         <section className="signup-card">
           <div className="signup-heading">
-            <h1>Бүртгүүлэх</h1>
+            <h1>
+              Бүртгүүлэх
+            </h1>
 
             <p>
               14 хоног үнэгүй туршилт ·
@@ -242,7 +297,9 @@ function Signup() {
 
           <form
             className="signup-form"
-            onSubmit={handleSubmit}
+            onSubmit={
+              handleSubmit
+            }
           >
             <div className="signup-field">
               <label htmlFor="companyName">
@@ -255,9 +312,16 @@ function Signup() {
                 type="text"
                 name="companyName"
                 placeholder="Монголын Компани ХХК"
-                value={form.companyName}
-                onChange={handleChange}
+                value={
+                  form.companyName
+                }
+                onChange={
+                  handleChange
+                }
                 autoComplete="organization"
+                disabled={
+                  loading
+                }
                 required
               />
             </div>
@@ -273,9 +337,16 @@ function Signup() {
                 type="text"
                 name="fullName"
                 placeholder="Бат-Эрдэнэ"
-                value={form.fullName}
-                onChange={handleChange}
+                value={
+                  form.fullName
+                }
+                onChange={
+                  handleChange
+                }
                 autoComplete="name"
+                disabled={
+                  loading
+                }
                 required
               />
             </div>
@@ -291,9 +362,16 @@ function Signup() {
                 type="email"
                 name="email"
                 placeholder="demo@company.mn"
-                value={form.email}
-                onChange={handleChange}
+                value={
+                  form.email
+                }
+                onChange={
+                  handleChange
+                }
                 autoComplete="email"
+                disabled={
+                  loading
+                }
                 required
               />
             </div>
@@ -315,9 +393,16 @@ function Signup() {
                   name="phone"
                   inputMode="numeric"
                   placeholder="9911 2233"
-                  value={form.phone}
-                  onChange={handleChange}
+                  value={
+                    form.phone
+                  }
+                  onChange={
+                    handleChange
+                  }
                   autoComplete="tel"
+                  disabled={
+                    loading
+                  }
                   required
                 />
               </div>
@@ -339,9 +424,16 @@ function Signup() {
                   }
                   name="password"
                   placeholder="••••••••"
-                  value={form.password}
-                  onChange={handleChange}
+                  value={
+                    form.password
+                  }
+                  onChange={
+                    handleChange
+                  }
                   autoComplete="new-password"
+                  disabled={
+                    loading
+                  }
                   required
                 />
 
@@ -350,7 +442,8 @@ function Signup() {
                   className="signup-eye"
                   onClick={() =>
                     setShowPassword(
-                      (prev) => !prev
+                      (prev) =>
+                        !prev
                     )
                   }
                   aria-label={
@@ -358,11 +451,18 @@ function Signup() {
                       ? "Нууц үг нуух"
                       : "Нууц үг харах"
                   }
+                  disabled={
+                    loading
+                  }
                 >
                   {showPassword ? (
-                    <EyeOff size={19} />
+                    <EyeOff
+                      size={19}
+                    />
                   ) : (
-                    <Eye size={19} />
+                    <Eye
+                      size={19}
+                    />
                   )}
                 </button>
               </div>
@@ -376,8 +476,15 @@ function Signup() {
               <input
                 type="checkbox"
                 name="terms"
-                checked={form.terms}
-                onChange={handleChange}
+                checked={
+                  form.terms
+                }
+                onChange={
+                  handleChange
+                }
+                disabled={
+                  loading
+                }
               />
 
               <span className="custom-checkbox" />
@@ -390,7 +497,9 @@ function Signup() {
                   Үйлчилгээний нөхцөл
                 </button>
 
-                {" "}болон{" "}
+                {" "}
+                болон
+                {" "}
 
                 <button
                   type="button"
@@ -415,7 +524,9 @@ function Signup() {
             <button
               type="submit"
               className="signup-submit"
-              disabled={loading}
+              disabled={
+                loading
+              }
             >
               {loading
                 ? "Бүртгэж байна..."
@@ -431,7 +542,9 @@ function Signup() {
             <button
               type="button"
               onClick={() =>
-                navigate("/login")
+                navigate(
+                  "/login"
+                )
               }
             >
               Нэвтрэх

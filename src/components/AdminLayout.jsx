@@ -23,22 +23,46 @@ import logo from "../assets/logo-default.svg";
 function AdminLayout() {
   const navigate = useNavigate();
 
-  const [sidebarCollapsed, setSidebarCollapsed] =
-    useState(false);
+  const [
+    sidebarCollapsed,
+    setSidebarCollapsed,
+  ] = useState(false);
 
-  const getLinkClass = ({ isActive }) =>
-    `admin-nav-item ${isActive ? "active" : ""}`;
+  const getLinkClass = ({
+    isActive,
+  }) =>
+    `admin-nav-item ${
+      isActive ? "active" : ""
+    }`;
 
   const handleLogout = () => {
-    localStorage.removeItem("token");
-    localStorage.removeItem("user");
+    sessionStorage.removeItem(
+      "adminAuthenticated"
+    );
 
-    navigate("/admin/login");
+    sessionStorage.removeItem(
+      "adminUser"
+    );
+
+    sessionStorage.removeItem(
+      "adminLastActivity"
+    );
+
+    navigate(
+      "/admin/login",
+      {
+        replace: true,
+      }
+    );
+  };
+
+  const handleViewWebsite = () => {
+    navigate("/");
   };
 
   const menuItems = [
     {
-      to: "/admin",
+      to: "/admin/dashboard",
       label: "Хяналтын самбар",
       icon: LayoutDashboard,
       end: true,
@@ -47,28 +71,34 @@ function AdminLayout() {
       to: "/admin/home",
       label: "Нүүр хуудас",
       icon: House,
+      end: true,
     },
     {
       to: "/admin/company",
       label: "Харилцагчид",
       icon: Building2,
+      end: true,
     },
     {
       to: "/admin/users",
       label: "Хэрэглэгчид",
       icon: Users,
+      end: true,
     },
     {
       to: "/admin/requests",
       label: "Хүсэлтүүд",
       icon: ClipboardList,
+      end: true,
     },
   ];
 
   return (
     <div
       className={`admin-layout ${
-        sidebarCollapsed ? "sidebar-collapsed" : ""
+        sidebarCollapsed
+          ? "sidebar-collapsed"
+          : ""
       }`}
     >
       <aside className="admin-sidebar">
@@ -77,7 +107,11 @@ function AdminLayout() {
             <button
               type="button"
               className="admin-logo-button"
-              onClick={() => navigate("/admin")}
+              onClick={() =>
+                navigate(
+                  "/admin/dashboard"
+                )
+              }
               aria-label="DataView admin"
             >
               <img
@@ -92,15 +126,11 @@ function AdminLayout() {
               className="admin-sidebar-toggle"
               onClick={() =>
                 setSidebarCollapsed(
-                  (current) => !current
+                  (current) =>
+                    !current
                 )
               }
               aria-label={
-                sidebarCollapsed
-                  ? "Меню дэлгэх"
-                  : "Меню агшаах"
-              }
-              title={
                 sidebarCollapsed
                   ? "Меню дэлгэх"
                   : "Меню агшаах"
@@ -109,12 +139,12 @@ function AdminLayout() {
               {sidebarCollapsed ? (
                 <PanelLeftOpen
                   size={18}
-                  strokeWidth={2}
+                  strokeWidth={1.9}
                 />
               ) : (
                 <PanelLeftClose
                   size={18}
-                  strokeWidth={2}
+                  strokeWidth={1.9}
                 />
               )}
             </button>
@@ -136,12 +166,10 @@ function AdminLayout() {
                   key={to}
                   to={to}
                   end={end}
-                  className={getLinkClass}
-                  title={
-                    sidebarCollapsed
-                      ? label
-                      : undefined
+                  className={
+                    getLinkClass
                   }
+                  aria-label={label}
                 >
                   <span className="admin-nav-icon">
                     <Icon
@@ -165,12 +193,10 @@ function AdminLayout() {
           <button
             type="button"
             className="admin-view-site"
-            onClick={() => navigate("/")}
-            title={
-              sidebarCollapsed
-                ? "Вэбсайт үзэх"
-                : undefined
+            onClick={
+              handleViewWebsite
             }
+            aria-label="Вэбсайт үзэх"
           >
             <span className="admin-bottom-icon">
               <Globe2
@@ -188,11 +214,7 @@ function AdminLayout() {
             type="button"
             className="admin-logout"
             onClick={handleLogout}
-            title={
-              sidebarCollapsed
-                ? "Гарах"
-                : undefined
-            }
+            aria-label="Гарах"
           >
             <span className="admin-bottom-icon">
               <LogOut
@@ -216,8 +238,8 @@ function AdminLayout() {
             </h1>
 
             <p>
-              Вэбсайтын агуулга болон хэрэглэгчдийг
-              удирдах
+              Вэбсайтын агуулга болон
+              хэрэглэгчдийг удирдах
             </p>
           </div>
         </header>

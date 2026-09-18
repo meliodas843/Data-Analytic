@@ -17,36 +17,62 @@ import {
 
 import logo from "../assets/logo-default.svg";
 
+import useSubscription from "../hooks/useSubscription";
+
 function DashboardNavbar({
   collapsed,
   onToggle,
 }) {
-  const navigate = useNavigate();
+  const navigate =
+    useNavigate();
 
-  const dataConnected =
-    localStorage.getItem("dataConnected") === "true";
-
-  const usingDemoData =
-    localStorage.getItem("usingDemoData") === "true";
+  const {
+    active,
+    loading,
+  } = useSubscription();
 
   const locked =
-    usingDemoData && !dataConnected;
+    loading || !active;
 
-  const getLinkClass = ({
-    isActive,
-  }) =>
-    `sidebar-item ${
-      isActive ? "active" : ""
-    }`;
-
-  const handleSettings = () => {
-    navigate("/setup");
-  };
+  const menuItems = [
+    {
+      to: "/dashboard",
+      label: "Тойм",
+      icon: LayoutGrid,
+      paid: false,
+    },
+    {
+      to: "/finance",
+      label: "Санхүү",
+      icon: DollarSign,
+      paid: true,
+    },
+    {
+      to: "/sales",
+      label: "Борлуулалт",
+      icon: TrendingUp,
+      paid: true,
+    },
+    {
+      to: "/cash-flow",
+      label: "Мөнгөн урсгал",
+      icon: ArrowUpDown,
+      paid: true,
+    },
+    {
+      to: "/ar-ap",
+      label: "AR / AP",
+      icon: BookOpen,
+      paid: true,
+    },
+  ];
 
   return (
     <aside
       className={`dashboard-sidebar ${
-        collapsed ? "collapsed" : ""
+        collapsed
+          ? "collapsed"
+          : ""
       }`}
     >
       <div className="sidebar-main">
@@ -54,7 +80,7 @@ function DashboardNavbar({
           {!collapsed && (
             <img
               src={logo}
-              alt="DataView Mongolia"
+              alt="DataView"
               className="sidebar-logo-image"
             />
           )}
@@ -62,176 +88,112 @@ function DashboardNavbar({
           <button
             type="button"
             className="sidebar-toggle"
-            onClick={onToggle}
+            onClick={
+              onToggle
+            }
             aria-label={
               collapsed
                 ? "Меню дэлгэх"
-                : "Меню хураах"
+                : "Меню агшаах"
             }
           >
             {collapsed ? (
               <PanelLeftOpen
                 size={19}
-                strokeWidth={1.8}
               />
             ) : (
               <PanelLeftClose
                 size={19}
-                strokeWidth={1.8}
               />
             )}
           </button>
         </div>
 
         <nav className="sidebar-navigation">
-          <NavLink
-            to="/dashboard"
-            end
-            className={getLinkClass}
-            title="Тойм"
-          >
-            <span className="sidebar-item-icon">
-              <LayoutGrid
-                size={18}
-                strokeWidth={1.8}
-              />
-            </span>
+          {menuItems.map(
+            (item) => {
+              const Icon =
+                item.icon;
 
-            {!collapsed && (
-              <span className="sidebar-item-text">
-                Тойм
-              </span>
-            )}
-          </NavLink>
+              const itemLocked =
+                item.paid &&
+                locked;
 
-          <NavLink
-            to="/finance"
-            className={getLinkClass}
-            title="Санхүү"
-          >
-            <span className="sidebar-item-icon">
-              <DollarSign
-                size={19}
-                strokeWidth={1.8}
-              />
-            </span>
+              return (
+                <NavLink
+                  key={
+                    item.to
+                  }
+                  to={
+                    item.to
+                  }
+                  end={
+                    item.to ===
+                    "/dashboard"
+                  }
+                  className={({
+                    isActive,
+                  }) =>
+                    `sidebar-item ${
+                      isActive
+                        ? "active"
+                        : ""
+                    } ${
+                      itemLocked
+                        ? "sidebar-item-locked"
+                        : ""
+                    }`
+                  }
+                >
+                  <span className="sidebar-item-icon">
+                    <Icon
+                      size={19}
+                      strokeWidth={
+                        1.8
+                      }
+                    />
+                  </span>
 
-            {!collapsed && (
-              <>
-                <span className="sidebar-item-text">
-                  Санхүү
-                </span>
+                  {!collapsed && (
+                    <span className="sidebar-item-text">
+                      {
+                        item.label
+                      }
+                    </span>
+                  )}
 
-                {locked && (
-                  <LockKeyhole
-                    className="sidebar-lock"
-                    size={14}
-                    strokeWidth={1.9}
-                  />
-                )}
-              </>
-            )}
-          </NavLink>
-
-          <NavLink
-            to="/sales"
-            className={getLinkClass}
-            title="Борлуулалт"
-          >
-            <span className="sidebar-item-icon">
-              <TrendingUp
-                size={19}
-                strokeWidth={1.8}
-              />
-            </span>
-
-            {!collapsed && (
-              <>
-                <span className="sidebar-item-text">
-                  Борлуулалт
-                </span>
-
-                {locked && (
-                  <LockKeyhole
-                    className="sidebar-lock"
-                    size={14}
-                    strokeWidth={1.9}
-                  />
-                )}
-              </>
-            )}
-          </NavLink>
-
-          <NavLink
-            to="/cash-flow"
-            className={getLinkClass}
-            title="Мөнгөн урсгал"
-          >
-            <span className="sidebar-item-icon">
-              <ArrowUpDown
-                size={19}
-                strokeWidth={1.8}
-              />
-            </span>
-
-            {!collapsed && (
-              <>
-                <span className="sidebar-item-text">
-                  Мөнгөн урсгал
-                </span>
-
-                {locked && (
-                  <LockKeyhole
-                    className="sidebar-lock"
-                    size={14}
-                    strokeWidth={1.9}
-                  />
-                )}
-              </>
-            )}
-          </NavLink>
-
-          <NavLink
-            to="/ar-ap"
-            className={getLinkClass}
-            title="AR / AP"
-          >
-            <span className="sidebar-item-icon">
-              <BookOpen
-                size={19}
-                strokeWidth={1.8}
-              />
-            </span>
-
-            {!collapsed && (
-              <>
-                <span className="sidebar-item-text">
-                  AR / AP
-                </span>
-
-                {locked && (
-                  <LockKeyhole
-                    className="sidebar-lock"
-                    size={14}
-                    strokeWidth={1.9}
-                  />
-                )}
-              </>
-            )}
-          </NavLink>
+                  {itemLocked &&
+                    !collapsed && (
+                      <LockKeyhole
+                        className="sidebar-lock"
+                        size={14}
+                        strokeWidth={
+                          2
+                        }
+                      />
+                    )}
+                </NavLink>
+              );
+            }
+          )}
 
           <div className="sidebar-divider" />
 
           <button
             type="button"
             className="sidebar-item"
-            onClick={handleSettings}
-            title="Тохиргоо"
+            onClick={() =>
+              navigate(
+                "/settings"
+              )
+            }
           >
             <span className="sidebar-item-icon">
               <Settings
                 size={19}
-                strokeWidth={1.8}
+                strokeWidth={
+                  1.8
+                }
               />
             </span>
 
@@ -242,21 +204,6 @@ function DashboardNavbar({
             )}
           </button>
         </nav>
-      </div>
-
-      <div className="sidebar-bottom">
-        {locked && !collapsed && (
-          <div className="sidebar-trial-card">
-            <strong>
-              Туршилт эхлээгүй
-            </strong>
-
-            <span>
-              Дата холбосноор 14 хоногийн
-              туршилт эхэлнэ
-            </span>
-          </div>
-        )}
       </div>
     </aside>
   );

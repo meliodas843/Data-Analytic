@@ -1,5 +1,8 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import {
+  useNavigate,
+} from "react-router-dom";
+
 import {
   ArrowLeft,
   Eye,
@@ -8,6 +11,9 @@ import {
 
 import logo from "../assets/logo-default.svg";
 import "../styles/Login.css";
+
+const API_URL =
+  "http://localhost:5000/api";
 
 function DataViewLogo() {
   return (
@@ -22,143 +28,201 @@ function DataViewLogo() {
 }
 
 function Login() {
-  const navigate = useNavigate();
+  const navigate =
+    useNavigate();
 
-  const [mode, setMode] = useState("login");
-  const [showPassword, setShowPassword] =
-    useState(false);
+  const [
+    mode,
+    setMode,
+  ] = useState("login");
 
-  const [form, setForm] = useState({
+  const [
+    showPassword,
+    setShowPassword,
+  ] = useState(false);
+
+  const [
+    loading,
+    setLoading,
+  ] = useState(false);
+
+  const [
+    form,
+    setForm,
+  ] = useState({
     email: "",
     password: "",
   });
 
-  const [error, setError] = useState("");
-  const [resetMessage, setResetMessage] =
-    useState("");
+  const [
+    error,
+    setError,
+  ] = useState("");
 
-  const handleChange = (e) => {
-    const { name, value } = e.target;
+  const [
+    resetMessage,
+    setResetMessage,
+  ] = useState("");
 
-    setForm((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
+  const handleChange = (
+    e
+  ) => {
+    const {
+      name,
+      value,
+    } = e.target;
+
+    setForm(
+      (prev) => ({
+        ...prev,
+        [name]: value,
+      })
+    );
 
     setError("");
     setResetMessage("");
   };
 
-  const getSavedUsers = () => {
+  const handleLogin = async (
+    e
+  ) => {
+    e.preventDefault();
+
+    setError("");
+
+    const email =
+      form.email
+        .trim()
+        .toLowerCase();
+
+    const password =
+      form.password;
+
+    if (
+      !email ||
+      !password
+    ) {
+      setError(
+        "Имэйл болон нууц үгээ оруулна уу."
+      );
+
+      return;
+    }
+
     try {
-      const users = JSON.parse(
-        localStorage.getItem("users") || "[]"
+      setLoading(true);
+
+      const response =
+        await fetch(
+          `${API_URL}/auth/login`,
+          {
+            method: "POST",
+
+            headers: {
+              "Content-Type":
+                "application/json",
+            },
+
+            body:
+              JSON.stringify({
+                email,
+                password,
+              }),
+          }
+        );
+
+      const data =
+        await response.json();
+
+      if (
+        !response.ok ||
+        !data.success
+      ) {
+        setError(
+          data.message ||
+            "Имэйл хаяг эсвэл нууц үг буруу байна."
+        );
+
+        return;
+      }
+
+      localStorage.setItem(
+        "token",
+        data.token
       );
 
-      return Array.isArray(users)
-        ? users
-        : [];
-    } catch {
-      return [];
+      localStorage.setItem(
+        "currentUser",
+        JSON.stringify(
+          data.user
+        )
+      );
+
+      localStorage.setItem(
+        "isLoggedIn",
+        "true"
+      );
+
+      localStorage.setItem(
+        "subscription",
+        JSON.stringify(
+          data.subscription || {
+            subscribed: false,
+            status: "none",
+            plan: null,
+          }
+        )
+      );
+
+      window.dispatchEvent(
+        new Event(
+          "subscriptionChanged"
+        )
+      );
+
+      navigate(
+        "/dashboard",
+        {
+          replace: true,
+        }
+      );
+    } catch (err) {
+      console.error(
+        "LOGIN ERROR:",
+        err
+      );
+
+      setError(
+        "Сервертэй холбогдож чадсангүй."
+      );
+    } finally {
+      setLoading(false);
     }
   };
 
-  const handleLogin = (e) => {
-    e.preventDefault();
-
-    setError("");
-
-    const email = form.email
-      .trim()
-      .toLowerCase();
-
-    const password = form.password;
-
-    const users = getSavedUsers();
-
-    const user = users.find(
-      (item) =>
-        item.email
-          ?.trim()
-          .toLowerCase() === email
-    );
-
-    if (!user) {
-      setError(
-        "Энэ и-мэйл хаягаар бүртгэл олдсонгүй."
-      );
-
-      return;
-    }
-
-    if (user.password !== password) {
-      setError(
-        "Нууц үг буруу байна."
-      );
-
-      return;
-    }
-
-    const currentUser = {
-      id: user.id,
-      name:
-        user.name ||
-        user.fullName ||
-        "Хэрэглэгч",
-      email: user.email,
-      role: user.role || "user",
-      company:
-        user.company ||
-        user.companyName ||
-        "",
-    };
-
-    localStorage.setItem(
-      "currentUser",
-      JSON.stringify(currentUser)
-    );
-
-    localStorage.setItem(
-      "isLoggedIn",
-      "true"
-    );
-
-    navigate("/dashboard");
-  };
-
-  const handleReset = (e) => {
+  const handleReset = (
+    e
+  ) => {
     e.preventDefault();
 
     setError("");
     setResetMessage("");
 
-    const email = form.email
-      .trim()
-      .toLowerCase();
+    const email =
+      form.email
+        .trim()
+        .toLowerCase();
 
     if (!email) {
-      return;
-    }
-
-    const users = getSavedUsers();
-
-    const userExists = users.some(
-      (user) =>
-        user.email
-          ?.trim()
-          .toLowerCase() === email
-    );
-
-    if (!userExists) {
       setError(
-        "Энэ и-мэйл хаягаар бүртгэл олдсонгүй."
+        "Имэйл хаягаа оруулна уу."
       );
 
       return;
     }
 
     setResetMessage(
-      "Нууц үг сэргээх хүсэлт амжилттай."
+      "Нууц үг сэргээх хүсэлтийг дараагийн алхамд backend-тэй холбоно."
     );
   };
 
@@ -170,16 +234,21 @@ function Login() {
         {mode === "login" ? (
           <section className="login-card">
             <div className="login-heading">
-              <h1>Нэвтрэх</h1>
+              <h1>
+                Нэвтрэх
+              </h1>
 
               <p>
-                Dashboard-даа нэвтэрнэ үү
+                Dashboard-даа
+                нэвтэрнэ үү
               </p>
             </div>
 
             <form
               className="login-form"
-              onSubmit={handleLogin}
+              onSubmit={
+                handleLogin
+              }
             >
               <div className="login-field">
                 <label htmlFor="email">
@@ -191,9 +260,16 @@ function Login() {
                   type="email"
                   name="email"
                   placeholder="demo@company.mn"
-                  value={form.email}
-                  onChange={handleChange}
+                  value={
+                    form.email
+                  }
+                  onChange={
+                    handleChange
+                  }
                   autoComplete="email"
+                  disabled={
+                    loading
+                  }
                   required
                 />
               </div>
@@ -208,9 +284,15 @@ function Login() {
                     type="button"
                     className="forgot-password-link"
                     onClick={() => {
-                      setMode("forgot");
+                      setMode(
+                        "forgot"
+                      );
+
                       setError("");
-                      setResetMessage("");
+
+                      setResetMessage(
+                        ""
+                      );
                     }}
                   >
                     Нууц үгээ мартсан?
@@ -227,9 +309,16 @@ function Login() {
                     }
                     name="password"
                     placeholder="••••••••"
-                    value={form.password}
-                    onChange={handleChange}
+                    value={
+                      form.password
+                    }
+                    onChange={
+                      handleChange
+                    }
                     autoComplete="current-password"
+                    disabled={
+                      loading
+                    }
                     required
                   />
 
@@ -238,7 +327,8 @@ function Login() {
                     className="password-eye"
                     onClick={() =>
                       setShowPassword(
-                        (prev) => !prev
+                        (prev) =>
+                          !prev
                       )
                     }
                     aria-label={
@@ -246,11 +336,18 @@ function Login() {
                         ? "Нууц үг нуух"
                         : "Нууц үг харах"
                     }
+                    disabled={
+                      loading
+                    }
                   >
                     {showPassword ? (
-                      <EyeOff size={19} />
+                      <EyeOff
+                        size={19}
+                      />
                     ) : (
-                      <Eye size={19} />
+                      <Eye
+                        size={19}
+                      />
                     )}
                   </button>
                 </div>
@@ -265,8 +362,13 @@ function Login() {
               <button
                 type="submit"
                 className="login-submit"
+                disabled={
+                  loading
+                }
               >
-                Нэвтрэх
+                {loading
+                  ? "Нэвтэрч байна..."
+                  : "Нэвтрэх"}
               </button>
             </form>
 
@@ -278,7 +380,9 @@ function Login() {
               <button
                 type="button"
                 onClick={() =>
-                  navigate("/signup")
+                  navigate(
+                    "/signup"
+                  )
                 }
               >
                 Үнэгүй бүртгүүлэх
@@ -291,13 +395,24 @@ function Login() {
               type="button"
               className="back-to-login"
               onClick={() => {
-                setMode("login");
+                setMode(
+                  "login"
+                );
+
                 setError("");
-                setResetMessage("");
+
+                setResetMessage(
+                  ""
+                );
               }}
             >
-              <ArrowLeft size={17} />
-              <span>Нэвтрэх</span>
+              <ArrowLeft
+                size={17}
+              />
+
+              <span>
+                Нэвтрэх
+              </span>
             </button>
 
             <div className="login-heading forgot-heading">
@@ -306,14 +421,17 @@ function Login() {
               </h1>
 
               <p>
-                Бүртгэлтэй и-мэйл рүү
-                сэргээх холбоос илгээнэ
+                Бүртгэлтэй
+                и-мэйл рүү сэргээх
+                холбоос илгээнэ
               </p>
             </div>
 
             <form
               className="login-form"
-              onSubmit={handleReset}
+              onSubmit={
+                handleReset
+              }
             >
               <div className="login-field">
                 <label htmlFor="reset-email">
@@ -324,10 +442,13 @@ function Login() {
                   id="reset-email"
                   type="email"
                   name="email"
+                  value={
+                    form.email
+                  }
+                  onChange={
+                    handleChange
+                  }
                   placeholder="demo@company.mn"
-                  value={form.email}
-                  onChange={handleChange}
-                  autoComplete="email"
                   required
                 />
               </div>
@@ -347,20 +468,13 @@ function Login() {
               <button
                 type="submit"
                 className="login-submit"
-                disabled={!form.email.trim()}
               >
-                Холбоос илгээх
+                Сэргээх холбоос
+                илгээх
               </button>
             </form>
           </section>
         )}
-
-        <button
-          type="button"
-          className="invitation-example"
-        >
-          Урилгын холбоосын жишээ харах
-        </button>
       </div>
     </main>
   );

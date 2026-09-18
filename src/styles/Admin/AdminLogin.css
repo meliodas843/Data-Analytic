@@ -168,37 +168,63 @@
 
 .admin-password-toggle {
   position: absolute;
-
-  top: 50%;
+  top: 7px;
   right: 8px;
 
   width: 32px;
   height: 32px;
+  padding: 0;
 
   display: flex;
   align-items: center;
   justify-content: center;
 
-  padding: 0;
-
-  transform: translateY(-50%);
-
   background: transparent;
-
   border: 0;
   border-radius: 6px;
 
   color: #7b8ba0;
-
-  font-size: 17px;
-
   cursor: pointer;
 }
 
-.admin-password-toggle:hover {
-  background: #eef8f5;
+.admin-login-error {
+  width: 100%;
+  margin: -2px 0 16px;
+  padding: 10px 12px;
 
-  color: #319b84;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+
+  box-sizing: border-box;
+
+  background: #fef2f2;
+  border: 1px solid #fecaca;
+  border-radius: 8px;
+
+  color: #dc2626;
+  font-size: 12px;
+  font-weight: 600;
+  line-height: 1.4;
+}
+
+.admin-login-error svg {
+  flex-shrink: 0;
+}
+
+.admin-login-field input.admin-input-error {
+  border-color: #ef4444;
+  background: #fffafa;
+}
+
+.admin-login-field input.admin-input-error:focus {
+  border-color: #ef4444;
+  box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.1);
+}
+
+.admin-login-button:disabled {
+  opacity: 0.65;
+  cursor: not-allowed;
 }
 
 .admin-login-button {
@@ -246,6 +272,42 @@
   color: #95a2b2;
 
   font-size: 11px;
+}
+
+.password-toggle {
+  position: absolute;
+  top: 50%;
+  right: 14px;
+  transform: translateY(-50%);
+  width: 34px;
+  height: 34px;
+  padding: 0;
+  border: 0;
+  border-radius: 8px;
+  background: transparent;
+  color: #7890ad;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition:
+    color 0.2s ease,
+    background-color 0.2s ease;
+}
+
+.password-toggle:hover {
+  color: #173b69;
+  background: #f1f5f9;
+}
+
+.password-toggle:focus-visible {
+  outline: 2px solid #16a34a;
+  outline-offset: 2px;
+}
+
+.password-toggle svg {
+  display: block;
+  pointer-events: none;
 }
 
 @media (max-width: 500px) {
