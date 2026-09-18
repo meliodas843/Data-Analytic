@@ -1767,7 +1767,7 @@ button:hover {
 }
 
 .submit-button:hover {
-  background: var(--primary-hover);
+  background: var(--primary);
 }
 
 .contact-info {

@@ -18,7 +18,7 @@ import {
 } from "lucide-react";
 
 import "../styles/Admin/Admin.css";
-import logo from "../assets/logo-default.svg";
+import logo from "../assets/logo-default white.svg";
 
 function AdminLayout() {
   const navigate = useNavigate();
