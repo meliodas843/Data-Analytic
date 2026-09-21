@@ -1,3 +1,73 @@
+:root {
+  --primary: #16a34a;
+  --primary-dark: #15803d;
+  --primary-hover: #159947;
+  --primary-light: #f0fdf4;
+  --primary-soft: #ecfdf3;
+  --navy: #203f70;
+  --navy-dark: #19365f;
+  --navy-medium: #244673;
+  --navy-light: #314867;
+  --text: #40536f;
+  --text-dark: #203d66;
+  --text-secondary: #64748b;
+  --text-muted: #7185a0;
+  --text-light: #8495ab;
+  --white: #ffffff;
+  --bg: #ffffff;
+  --bg-soft: #f7f9fc;
+  --bg-hover: #f5f8fb;
+  --border: #dce5ef;
+  --border-light: #e2e9f1;
+  --border-extra-light: #edf1f5;
+  --border-input: #d7e1ec;
+  --success: #16a34a;
+  --success-dark: #15803d;
+  --success-bg: #ecfdf3;
+  --success-border: #bbf7d0;
+  --warning: #f59e0b;
+  --warning-dark: #d97706;
+  --warning-bg: #fffbeb;
+  --warning-border: #fde68a;
+  --danger: #ef4444;
+  --danger-dark: #dc2626;
+  --danger-bg: #fef2f2;
+  --danger-border: #fecaca;
+  --font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  --font-xs: 11px;
+  --font-sm: 12px;
+  --font-md: 13px;
+  --font-base: 14px;
+  --font-lg: 16px;
+  --font-xl: 18px;
+  --font-2xl: 20px;
+  --font-3xl: 30px;
+  --weight-normal: 400;
+  --weight-medium: 500;
+  --weight-semibold: 600;
+  --weight-bold: 700;
+  --weight-extra-bold: 800;
+  --radius-sm: 6px;
+  --radius-md: 8px;
+  --radius-lg: 9px;
+  --radius-xl: 12px;
+  --radius-pill: 999px;
+  --shadow-sm: 0 1px 4px rgba(31, 59, 100, 0.12);
+  --shadow-dropdown: 0 18px 45px rgba(15, 23, 42, 0.14), 0 4px 12px rgba(15, 23, 42, 0.06);
+  --transition-fast: 0.15s ease;
+  --transition: 0.2s ease;
+  --header-height: 64px;
+  --sidebar-width: 240px;
+  --z-header: 100;
+  --z-dropdown: 9999;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
 .settings-layout {
   min-height: 100vh;
   width: 100%;
@@ -170,7 +240,7 @@
 }
 
 .settings-sidebar-item.active svg {
-  color: #12a94e;
+  color: var(--primary);
 }
 
 .settings-status-button {
@@ -277,7 +347,7 @@
 
 .settings-field input:focus,
 .settings-field select:focus {
-  border-color: #20ad57;
+  border-color: var(--primary);
   box-shadow: 0 0 0 3px rgba(32, 173, 87, 0.09);
 }
 
@@ -333,7 +403,7 @@
 }
 
 .settings-toggle.active {
-  background: #12aa4d;
+  background: var(--primary);
 }
 
 .settings-toggle.active span {
@@ -481,9 +551,9 @@
 .settings-primary-button {
   min-height: 42px;
   padding: 0 22px;
-  border: 1px solid #12a94e;
+  border: 1px solid var(--primary);
   border-radius: 8px;
-  background: #12a94e;
+  background: var(--primary);
   color: #ffffff;
   display: inline-flex;
   align-items: center;
@@ -497,8 +567,8 @@
 }
 
 .settings-primary-button:hover {
-  background: #0e9845;
-  border-color: #0e9845;
+  background: var(--primary-dark);
+  border-color: var(--primary-dark);
 }
 
 .data-settings-grid {
@@ -569,7 +639,7 @@
   height: 25px;
   border-radius: 50%;
   background: #e9faef;
-  color: #149c49;
+  color: var(--primary);
   display: grid;
   place-items: center;
   font-size: 12px;
@@ -605,7 +675,7 @@
 .security-list svg {
   flex: 0 0 auto;
   margin-top: 2px;
-  color: #14a94e;
+  color: var(--primary);
 }
 
 .security-list p {
@@ -695,7 +765,7 @@
   width: 60%;
   height: 100%;
   border-radius: inherit;
-  background: #14a94e;
+  background: var(--primary);
 }
 
 .users-table-card {
@@ -802,7 +872,7 @@
   display: grid;
   place-items: center;
   background: #dff9e9;
-  color: #159848;
+  color: var(--primary);
   font-size: 12px;
   font-weight: 800;
 }
@@ -907,7 +977,7 @@
   padding: 2px 7px;
   border-radius: 999px;
   background: #d9f7e4;
-  color: #149447;
+  color: var(--primary);
   font-size: 10px;
   font-weight: 800;
 }
@@ -930,7 +1000,7 @@
 }
 
 .pricing-card.popular {
-  border: 2px solid #12a94e;
+  border: 2px solid var(--primary);
 }
 
 .popular-badge {
@@ -939,7 +1009,7 @@
   right: 18px;
   padding: 4px 8px;
   border-radius: 999px;
-  background: #168d42;
+  background: var(--primary-dark);
   color: #ffffff;
   font-size: 10px;
   font-weight: 800;
@@ -998,7 +1068,7 @@
 .pricing-card li svg {
   flex: 0 0 auto;
   margin-top: 1px;
-  color: #12a94e;
+  color: var(--primary);
 }
 
 .pricing-card > button {
@@ -1177,7 +1247,7 @@
   padding: 3px 7px;
   border-radius: 5px;
   background: #e8f8ef;
-  color: #14914b;
+  color: var(--primary);
   font-size: 9px;
   font-weight: 800;
 }
@@ -1224,7 +1294,7 @@
 
 .settings-profile-menu button:hover {
   background: #f4f8f6;
-  color: #15934b;
+  color: var(--primary);
 }
 
 .settings-profile-menu button svg {
@@ -1275,7 +1345,7 @@
 }
 
 .payment-method.active {
-  border-color: #12a94e;
+  border-color: var(--primary);
   background: #effbf3;
 }
 
@@ -1307,7 +1377,7 @@
 }
 
 .payment-method > svg {
-  color: #12a94e;
+  color: var(--primary);
 }
 
 .invoice-head {
@@ -1493,13 +1563,13 @@
 }
 
 .profile-language-buttons button.active {
-  border: 2px solid #13a94e;
+  border: 2px solid var(--primary);
   background: #f2fcf5;
   color: #203d66;
 }
 
 .profile-language-buttons button.active svg {
-  color: #13a94e;
+  color: var(--primary);
 }
 
 .profile-save-button {
@@ -1508,7 +1578,7 @@
   padding: 0 20px;
   border: 0;
   border-radius: 8px;
-  background: #168d42;
+  background: var(--primary-dark);
   color: #ffffff;
   font-family: inherit;
   font-size: 13px;
@@ -1517,7 +1587,7 @@
 }
 
 .profile-save-button:hover {
-  background: #117c39;
+  background: var(--primary-dark);
 }
 
 .profile-notification-row {
@@ -1571,7 +1641,7 @@
 }
 
 .profile-switch.active {
-  background: #12a94e;
+  background: var(--primary);
 }
 
 .profile-switch.active span {
@@ -1625,15 +1695,7 @@
 .settings-layout *,
 .profile-page,
 .profile-page * {
-  font-family:
-    Inter,
-    -apple-system,
-    BlinkMacSystemFont,
-    "Segoe UI",
-    Roboto,
-    Helvetica,
-    Arial,
-    sans-serif;
+  font-family: var(--font-family);
 }
 
 .settings-page-title h1 {

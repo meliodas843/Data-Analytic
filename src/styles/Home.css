@@ -1726,7 +1726,7 @@ button:hover {
 }
 
 .interest-buttons button:hover {
-  background: var(--primary-light);
+  background: var(--primary);
 }
 
 .interest-buttons button.selected {

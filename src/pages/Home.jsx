@@ -6,7 +6,6 @@ import "../styles/Home.css";
 
 const defaultHomeContent = {
   hero: {
-    eyebrow: "DATAVIEW MONGOLIA — ХАРЬЦУУЛАЛТ",
     title: "Мэдээлэлд суурилсан шийдвэр — нэг харцаар.",
     description:
       "Excel-ийн хаосыг орхиж — бодит цагийн санхүүгийн мэдээлэлд шилж.",
