@@ -1,352 +1,746 @@
 import { Fragment, useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import "../styles/Home.css";
+import { useLanguage } from "../context/LanguageContext";
 
-const defaultHomeContent = {
-  hero: {
-    title: "Мэдээлэлд суурилсан шийдвэр — нэг харцаар.",
-    description:
-      "Excel-ийн хаосыг орхиж — бодит цагийн санхүүгийн мэдээлэлд шилж.",
-    beforeLabel: "ӨМНӨ · EXCEL",
-    afterLabel: "ДАРАА · DATAVIEW",
-    compareHint: "↔ Чирж харьцуулах ↔",
-    primaryButton: "Холбогдох",
-    secondaryButton: "Загварууд үзэх",
-    note: "",
-    badge: "Бодит цаг ⚡",
-    previewTitle: "DataView Mongolia",
-    previewTime: "Excel → DataView",
-    previewKpis: [
-      {
-        label: "НИЙТ БОРЛУУЛАЛТ",
-        value: "₮ 2,847.6M",
-        className: "",
-      },
-      {
-        label: "НӨАТ ТАТВАР",
-        value: "₮ 284.8M",
-        className: "",
-      },
-      {
-        label: "ИДЭВХТЭЙ ЗАХИАЛГА",
-        value: "3,284",
-        className: "",
-      },
-      {
-        label: "ЦЭВЭР АШИГ",
-        value: "₮ 712.4M",
-        className: "",
-      },
-    ],
-    barChartTitle: "Сар бүрийн борлуулалт",
-    lineChartTitle: "Борлуулалтын чиг",
+const homeContents = {
+  mn: {
+    hero: {
+      eyebrow: "DAAS PLATFORM",
+      title: "Мэдээлэлд суурилсан шийдвэр",
+      titleHighlight: "нэг харцаар.",
+      description:
+        "Сар бүрийн Excel тайланг хүлээхээ боль — шийдвэрээ шууд гарга.",
+      beforeLabel: "ӨМНӨ · EXCEL",
+      afterLabel: "ДАРАА · DATAVIEW",
+      compareHint: "↔ Чирж харьцуулах ↔",
+      previewTitle: "DataView Mongolia",
+      period: "2024 оны 12-р сар",
+      barChartTitle: "Сар бүрийн борлуулалт",
+      sales: "Борлуулалт",
+      vat: "НӨАТ",
+      electronics: "Электроникс",
+      previousMonth: "Өмнөх сар (11-р сар)",
+      previousYear: "Өмнөх жил (2023/12)",
+      afterExpenses: "Зардлаа хассан",
+      confirmed: "Нийт баталгаажсан",
+      previewKpis: [
+        {
+          label: "НИЙТ БОРЛУУЛАЛТ",
+          value: "₮ 2,847.6M",
+        },
+        {
+          label: "НӨАТ ТАТВАР",
+          value: "₮ 284.8M",
+        },
+        {
+          label: "ИДЭВХТЭЙ ЗАХИАЛГА",
+          value: "3,284",
+        },
+        {
+          label: "ЦЭВЭР АШИГ",
+          value: "₮ 712.4M",
+        },
+      ],
+    },
+
+    excel: {
+      file: "Файл",
+      edit: "Засах",
+      view: "Харах",
+      insert: "Оруулах",
+      product: "Бараа",
+      unitPrice: "Нэгж үнэ",
+      quantity: "Тоо",
+      total: "Нийт",
+      vat: "НӨАТ",
+      amount: "Дүн",
+      date: "Огноо",
+      order: "Захиалга",
+      grandTotal: "НИЙТ",
+      check: "ШАЛГАЛТ",
+      urgent: "ЯАРАЛТАЙ!",
+      note: "D баганын алдааг засах хэрэгтэй...",
+      compareLabel: "Excel болон DataView харьцуулах",
+    },
+
+    problem: {
+      kicker: "АСУУДАЛ",
+      title: "Та одоо хэрхэн шийдвэр гаргаж байна вэ?",
+      items: [
+        {
+          icon: "◷",
+          title: "Хуучирсан мэдээлэл",
+          description:
+            "Шийдвэр гаргах үед мэдээлэл аль хэдийн хуучирсан байдаг",
+        },
+        {
+          icon: "✎",
+          title: "Гар ажиллагаа, алдаа ихтэй",
+          description:
+            "Нэг нүдний алдаа бүх тайлангаар дамжин тархдаг",
+        },
+        {
+          icon: "⚡",
+          title: "Бодит цагийн мэдээлэл байхгүй",
+          description:
+            "Өнөөдрийн борлуулалт, мөнгөн үлдэгдэл хэд вэ? Хэн ч шууд хариулж чадахгүй",
+        },
+      ],
+    },
+
+    templates: {
+      kicker: "ШИЙДЭЛ",
+      title: "Туршигдсан 5 загвар — тэгээс эхлэх шаардлагагүй",
+      note:
+        "Загвар бүр бүрэн монгол хэлээр, гар утас болон компьютер дээр ажиллана.",
+      items: [
+        {
+          icon: "🏢",
+          title: "Захирлын тойм (CEO)",
+          description:
+            "Компанийн гол үзүүлэлт — орлого, ашиг, зардлыг нэг дороос харна",
+          className: "template-cyan",
+        },
+        {
+          icon: "💰",
+          title: "Санхүү",
+          description:
+            "Ашиг алдагдлын тайлан, зардлын бүтэц, НӨАТ, улирлын харьцуулалт",
+          className: "template-blue",
+        },
+        {
+          icon: "📈",
+          title: "Борлуулалт",
+          description:
+            "Борлуулалтын дүн, бүтээгдэхүүн, борлуулалтын менежерийн гүйцэтгэл",
+          className: "template-orange",
+        },
+        {
+          icon: "🧾",
+          title: "Авлага, Өглөг (AR/AP)",
+          description:
+            "Авлагын насжилт, үлдэгдэл, харилцагчийн тооцооны байдал",
+          className: "template-purple",
+        },
+        {
+          icon: "📦",
+          title: "Мөнгөн урсгал",
+          description:
+            "Мөнгөн орлого, зарлага, үлдэгдлийн чиг хандлага, дараа сарын таамаг",
+          className: "template-green",
+        },
+      ],
+    },
+
+    benefits: {
+      kicker: "ЯАГААД DATAVIEW?",
+      title: "Бид юугаараа ялгаатай вэ?",
+      items: [
+        {
+          icon: "🌐",
+          title: "Бүрэн монгол хэлээр",
+          description:
+            "Тайлан, дашбоард, дэмжлэг — бүгд монгол хэлээр",
+        },
+        {
+          icon: "▱",
+          title: "Бэлэн 5 загвар",
+          description:
+            "Тэгээс эхлэхгүй — туршигдсан загвараас сонгоно",
+        },
+        {
+          icon: "♙",
+          title: "Бид холболтыг хариуцна",
+          description:
+            "IT мэдлэг эсвэл тусдаа аналитикч шаардлагагүй",
+        },
+        {
+          icon: "⚡",
+          title: "Олон сарын төсөл биш",
+          description:
+            "Дотоод BI баг шинээр байгуулахаас хавьгүй хурдан",
+        },
+        {
+          icon: "▤",
+          title: "Ямар ч дата эх үүсвэртэй",
+          description:
+            "Oracle, Excel, 1C болон бусад системтэй ажиллана",
+        },
+        {
+          icon: "$",
+          title: "ЖДБ-ийн төсөвт тохирно",
+          description:
+            "Нэмэлт BI лиценз болон аналитикч авах шаардлагагүй",
+        },
+      ],
+    },
+
+    steps: {
+      kicker: "ХЭРХЭН АЖИЛЛАДАГ",
+      title: "4 энгийн алхам",
+      note:
+        "Танай талаас зөвхөн шаардлагатай хандалтыг өгөхөд хангалттай.",
+      items: [
+        {
+          number: "①",
+          title: "Зөвлөгөө",
+          description:
+            "Маягт бөглөх эсвэл бидэн рүү залгаж Odoo, 1C, Excel зэрэг ашигладаг системийнхээ талаар хэлнэ. 1 минут.",
+        },
+        {
+          number: "②",
+          title: "Дата холболт",
+          description:
+            "Бид зөвхөн унших эрхээр холбогдож, таны өгөгдлийн чанарыг үнэлнэ.",
+        },
+        {
+          number: "③",
+          title: "Дашбоард бүтээнэ",
+          description:
+            "Сонгосон загварыг бодит датагаар дүүргэж, бүх үзүүлэлтийг шалгана.",
+        },
+        {
+          number: "④",
+          title: "Танилцуулга ба нэвтрэх",
+          description:
+            "Demo танилцуулга хийж, тохиргоог эцэслээд та өөрийн эрхээр нэвтэрнэ.",
+        },
+      ],
+    },
+
+    guarantee: {
+      kicker: "БИДНИЙ БАТАЛГАА",
+      title: "Яагаад бидэнд итгэж болох вэ?",
+      items: [
+        {
+          icon: "♙",
+          title: "Туршлагатай баг",
+          description:
+            "Санхүүгийн салбарт 5+ жилийн туршлагатай дата инженерийн баг — банкны ETL, Power BI болон санхүүгийн тайлангийн системүүд дээр ажилласан туршлагатай.",
+        },
+        {
+          icon: "✓",
+          title: "Бодит датагаар туршигдсан",
+          description:
+            "Манай 5 загвар Монголын компаниудын бодит санхүүгийн дата — НӨАТ, улирлын хэлбэлзэл, Цагаан сарын нөлөөлөл зэрэг нөхцөл дээр туршигдсан.",
+        },
+      ],
+    },
+
+    faq: {
+      kicker: "ТҮГЭЭМЭЛ АСУУЛТ",
+      title: "Асуулт хариулт",
+      items: [
+        {
+          question: "Ямар системтэй ажилладаг вэ?",
+          answer:
+            "Oracle, Excel, 1C, Odoo, PostgreSQL, MS SQL болон бусад өгөгдлийн эх үүсвэртэй холбогдох боломжтой.",
+        },
+        {
+          question: "Хэр хурдан бэлэн болох вэ?",
+          answer:
+            "Хугацаа нь дата эх үүсвэр, дата чанар болон сонгосон загвараас хамаарна. Анхны үнэлгээний дараа хэрэгжүүлэх хугацааг тодорхой өгнө.",
+        },
+        {
+          question: "Манай IT баг юу хийх хэрэгтэй вэ?",
+          answer:
+            "Шаардлагатай дата эх үүсвэрт зөвхөн унших эрх бүхий хандалт өгөхөд хангалттай.",
+        },
+        {
+          question: "Дата аюулгүй байдал хэрхэн хангагддаг вэ?",
+          answer:
+            "Read-only хандалт, эрхийн удирдлага болон хамгаалалттай холболтыг ашиглан байгууллагын шаардлагад нийцүүлэн тохируулна.",
+        },
+        {
+          question: "Загвараа өөрчилж болох уу?",
+          answer:
+            "Тийм. KPI, хүснэгт, график болон дашбоардын бүтцийг байгууллагын хэрэгцээнд тохируулж болно.",
+        },
+        {
+          question: "Гэрээгээ цуцалж болох уу?",
+          answer:
+            "Тийм. Үйлчилгээний гэрээнд заасан нөхцөлийн дагуу цуцлах боломжтой.",
+        },
+      ],
+    },
+
+    contact: {
+      kicker: "ХОЛБОО БАРИХ",
+      title: "Бидэнтэй холбогдох",
+      description:
+        "Маягтыг бөглөж илгээнэ үү — бид 1–3 ажлын өдрийн дотор хариу өгнө.",
+      name: "Нэр",
+      namePlaceholder: "Бат-Эрдэнэ",
+      company: "Компани",
+      companyPlaceholder: "ХХК нэр",
+      phoneLabel: "Утас",
+      phonePlaceholder: "+976 9900 0000",
+      emailLabel: "Имэйл",
+      emailPlaceholder: "email@company.mn",
+      system: "Ашигладаг систем",
+      select: "Сонгох...",
+      interestedTemplate: "Сонирхсон загвар",
+      phone: "+976 7700 0000",
+      email: "hello@dataview.mn",
+      addressLabel: "Хаяг",
+      address: "Улаанбаатар, Хан-Уул дүүрэг",
+      submitButton: "Илгээх →",
+      sending: "Илгээж байна...",
+      required:
+        "Нэр, компани, утас, имэйлээ бүрэн оруулна уу.",
+      success: "Хүсэлт амжилттай илгээгдлээ.",
+      error: "Хүсэлт илгээхэд алдаа гарлаа.",
+      options: [
+        "CEO",
+        "Санхүү",
+        "Борлуулалт",
+        "Авлага, Өглөг",
+        "Мөнгөн урсгал",
+        "Бүгд",
+      ],
+    },
   },
 
-  problem: {
-    kicker: "АСУУДАЛ",
-    title: "Та одоо хэрхэн шийдвэр гаргаж байна вэ?",
-    items: [
-      {
-        icon: "◷",
-        title: "Нягтлангийн Excel-ийг хүлээнэ",
-        description: "Сар бүрийн тайлан 2 долоо хоног хоцорч ирнэ",
-      },
-      {
-        icon: "✎",
-        title: "Гар ажил, алдаатай",
-        description: "Pivot table, copy-paste, зөрүү тоо",
-      },
-      {
-        icon: "⚡",
-        title: "Бодит цагийн мэдээлэл байхгүй",
-        description:
-          "Өнөөдрийн борлуулалт, мөнгөн үлдэгдэл хэд вэ? — Хэн ч хариулж чадахгүй",
-      },
-    ],
-  },
+  en: {
+    hero: {
+      eyebrow: "DAAS PLATFORM",
+      title: "Data-driven decisions",
+      titleHighlight: "at a glance.",
+      description:
+        "Stop waiting for the monthly Excel report — make your decision instantly.",
+      beforeLabel: "BEFORE · EXCEL",
+      afterLabel: "AFTER · DATAVIEW",
+      compareHint: "↔ Drag to compare ↔",
+      previewTitle: "DataView Mongolia",
+      period: "December 2024",
+      barChartTitle: "Monthly Sales",
+      sales: "Sales",
+      vat: "VAT",
+      electronics: "Electronics",
+      previousMonth: "Previous month (Nov)",
+      previousYear: "Previous year (Dec 2023)",
+      afterExpenses: "After expenses",
+      confirmed: "Total confirmed",
+      previewKpis: [
+        {
+          label: "TOTAL SALES",
+          value: "₮ 2,847.6M",
+        },
+        {
+          label: "VAT TAX",
+          value: "₮ 284.8M",
+        },
+        {
+          label: "ACTIVE ORDERS",
+          value: "3,284",
+        },
+        {
+          label: "NET PROFIT",
+          value: "₮ 712.4M",
+        },
+      ],
+    },
 
-  templates: {
-    kicker: "ШИЙДЭЛ",
-    title: "Туршигдсан 5 загвар — тэг-ээс эхлэх шаардлагагүй",
-    note: "Загвар бүр бүрэн монгол хэлээр, утас компьютер хоёуланд нь",
-    items: [
-      {
-        icon: "🏢",
-        title: "Захирлын тойм (CEO)",
-        description:
-          "Компанийн гол үзүүлэлт, орлого, ашиг, зардал нэг хараанд",
-        className: "template-cyan",
-      },
-      {
-        icon: "💰",
-        title: "Санхүү (Financial)",
-        description:
-          "Ашиг орлогын тайлан, мөнгөн урсгал, зардлын задаргаа",
-        className: "template-blue",
-      },
-      {
-        icon: "📈",
-        title: "Борлуулалт (Sales)",
-        description:
-          "Борлуулалтын дүн, бүтээгдэхүүн, менежерийн ажлын үр дүн",
-        className: "template-orange",
-      },
-      {
-        icon: "🧾",
-        title: "Авлага, Өглөг (AR/AP)",
-        description:
-          "Авлагын хууль, үлдэгдэл, харилцагчийн тооцооны байдал",
-        className: "template-purple",
-      },
-      {
-        icon: "📦",
-        title: "Бараа материал (Inventory)",
-        description:
-          "Нөөцийн үлдэгдэл, эргэлт, дутагдал, илүүдэл дохиолол",
-        className: "template-green",
-      },
-    ],
-  },
+    excel: {
+      file: "File",
+      edit: "Edit",
+      view: "View",
+      insert: "Insert",
+      product: "Item",
+      unitPrice: "Unit price",
+      quantity: "Qty",
+      total: "Total",
+      vat: "VAT",
+      amount: "Amount",
+      date: "Date",
+      order: "Order",
+      grandTotal: "TOTAL",
+      check: "CHECK",
+      urgent: "URGENT!",
+      note: "Need to fix the error in column D...",
+      compareLabel: "Compare Excel and DataView",
+    },
 
-  benefits: {
-    kicker: "ЯАГААД DATAVIEW?",
-    title: "Бусдаас юугаараа ялгаатай вэ",
-    items: [
-      {
-        icon: "🌐",
-        title: "Бүрэн монгол хэлээр",
-        description: "Тайлан, дашбоард, дэмжлэг — бүгд монголоор",
-      },
-      {
-        icon: "▱",
-        title: "Бэлэн 5 загвар",
-        description: "Тэг-ээс эхлэх биш, туршигдсан загвараас сонгоно",
-      },
-      {
-        icon: "♙",
-        title: "Бид өөрсдөө холбож өгнө",
-        description: "IT мэдлэг, аналитикч шаардлагагүй",
-      },
-      {
-        icon: "⚡",
-        title: "2–3 долоо хоногт бэлэн",
-        description: "Олон сарын төсөл биш",
-      },
-      {
-        icon: "▤",
-        title: "Ямар ч эх үүсвэрээс",
-        description: "Oracle, Excel, 1C — ямар системтэй ч ажиллана",
-      },
-      {
-        icon: "$",
-        title: "ЖДБ-ийн төсөвт багтана",
-        description: "BI лиценз, аналитикч авахгүйгээр",
-      },
-    ],
-  },
+    problem: {
+      kicker: "PROBLEM",
+      title: "How are you making decisions right now?",
+      items: [
+        {
+          icon: "◷",
+          title: "Outdated information",
+          description:
+            "By the time a decision is made, the data is already stale",
+        },
+        {
+          icon: "✎",
+          title: "Manual work, error-prone",
+          description:
+            "One cell error propagates through the entire report",
+        },
+        {
+          icon: "⚡",
+          title: "No real-time data",
+          description:
+            "What are today's sales or cash balance? Nobody can answer",
+        },
+      ],
+    },
 
-  steps: {
-    kicker: "ХЭРХЭН АЖИЛЛАДАГ",
-    title: "3 энгийн алхам",
-    note: "Танай талаас зөвхөн эрх өгөх л хангалттай",
-    items: [
-      {
-        number: "①",
-        title: "Холбогдоно",
-        description: "Маягт бөглөх эсвэл утасдах — 1 минут",
-      },
-      {
-        number: "②",
-        title: "Бид датаг тань холбоно",
-        description:
-          "Манай баг танай системд холбогдож, дата цэвэрлэнэ — 2–3 долоо хоног",
-      },
-      {
-        number: "③",
-        title: "Дашбоардаa үзнэ",
-        description: "Өөрийн хаягаас нэвтэрч, бүх тоогоо харна",
-      },
-    ],
-  },
+    templates: {
+      kicker: "SOLUTION",
+      title: "5 proven templates — no need to start from zero",
+      note:
+        "Each template is fully in Mongolian, on both mobile and desktop.",
+      items: [
+        {
+          icon: "🏢",
+          title: "Executive Overview (CEO)",
+          description:
+            "Company's key metrics — revenue, profit, and expenses at a glance",
+          className: "template-cyan",
+        },
+        {
+          icon: "💰",
+          title: "Finance",
+          description:
+            "Profit & loss statement, cost structure, VAT, quarterly comparisons",
+          className: "template-blue",
+        },
+        {
+          icon: "📈",
+          title: "Sales",
+          description:
+            "Sales figures, products, sales manager performance",
+          className: "template-orange",
+        },
+        {
+          icon: "🧾",
+          title: "Receivables & Payables (AR/AP)",
+          description:
+            "Receivables aging, balances, customer account status",
+          className: "template-purple",
+        },
+        {
+          icon: "📦",
+          title: "Cash Flow",
+          description:
+            "Cash inflow/outflow, balance trends, next month's forecast",
+          className: "template-green",
+        },
+      ],
+    },
 
-  testimonials: {
-    kicker: "ТУРШЛАГА",
-    title: "Харилцагчдын сэтгэгдэл",
-    items: [
-      {
-        text: "Сар бүр Excel тайлан хийхэд 3 хоног зарцуулдаг байсан. Одоо захирал утаснаасаа шууд харна. Бидний санхүүгийн хяналт бодитоор сайжирсан.",
-        initials: "БЭ",
-        name: "Б. Энхтуяа",
-        position: "ГТЗ, Алтан Говь ХХК",
-      },
-      {
-        text: "Манай борлуулалт, авлага, нөөцийг нэг дэлгэцнээс харах боломжтой болсноор шийдвэр гаргах хурд маш эрс нэмэгдсэн. DataView-г бүх ЖДБ-д зөвлөе.",
-        initials: "ГС",
-        name: "Г. Солонго",
-        position: "Гүйцэтгэх захирал, Эрдэнэт Фуд",
-      },
-    ],
-  },
+    benefits: {
+      kicker: "WHY DATAVIEW?",
+      title: "What sets us apart",
+      items: [
+        {
+          icon: "🌐",
+          title: "Fully in Mongolian",
+          description:
+            "Reports, dashboards, support — all in Mongolian",
+        },
+        {
+          icon: "▱",
+          title: "5 ready-made templates",
+          description:
+            "No starting from scratch; choose from proven templates",
+        },
+        {
+          icon: "♙",
+          title: "We handle the integration",
+          description:
+            "No IT knowledge or analyst required",
+        },
+        {
+          icon: "⚡",
+          title: "Not a months-long project",
+          description:
+            "Far faster than building an in-house BI team",
+        },
+        {
+          icon: "▤",
+          title: "Works with any data source",
+          description:
+            "Oracle, Excel, 1C — works with any system",
+        },
+        {
+          icon: "$",
+          title: "Fits an SME budget",
+          description:
+            "No BI licenses or analyst hires needed",
+        },
+      ],
+    },
 
-  faq: {
-    kicker: "ТҮГЭЭМЭЛ АСУУЛТ",
-    title: "Асуулт хариулт",
-    items: [
-      {
-        question: "Ямар системтэй ажилладаг вэ?",
-        answer:
-          "Oracle, Excel, 1C болон бусад PostgreSQL, MS SQL суурьтай системүүдтэй.",
-      },
-      {
-        question: "Хэр хурдан бэлэн болох вэ?",
-        answer:
-          "Ихэвчлэн 2–3 долоо хоногийн дотор эхний хувилбарыг бэлэн болгоно.",
-      },
-      {
-        question: "Манай IT баг юу хийх хэрэгтэй вэ?",
-        answer:
-          "Зөвхөн шаардлагатай өгөгдлийн эх үүсвэрийн хандалт өгөхөд хангалттай.",
-      },
-      {
-        question: "Дата аюулгүй байдал хэрхэн хангагддаг вэ?",
-        answer:
-          "Хандалтын эрх, хамгаалалттай холболт болон байгууллагын шаардлагад нийцүүлэн тохируулна.",
-      },
-      {
-        question: "Загвараа өөрчилж болох уу?",
-        answer:
-          "Тийм. KPI, өнгө, хүснэгт, график болон бүтэц бүрийг өөрчилж болно.",
-      },
-      {
-        question: "Гэрээгээ цуцалж болох уу?",
-        answer:
-          "Тийм. Гэрээний нөхцөлийн дагуу үйлчилгээг цуцлах боломжтой.",
-      },
-    ],
-  },
+    steps: {
+      kicker: "HOW IT WORKS",
+      title: "4 simple steps",
+      note: "All we need from you is to grant access.",
+      items: [
+        {
+          number: "①",
+          title: "Consultation",
+          description:
+            "Fill out the form or call us and tell us about your system (Odoo/1C/Excel). 1 minute.",
+        },
+        {
+          number: "②",
+          title: "Data connection",
+          description:
+            "We connect with read-only access and assess your data quality.",
+        },
+        {
+          number: "③",
+          title: "Dashboard build",
+          description:
+            "We populate your chosen template with real data and verify the figures.",
+        },
+        {
+          number: "④",
+          title: "Onboarding & login",
+          description:
+            "We run a demo, finalize the setup, and you log in with your own account.",
+        },
+      ],
+    },
 
-  contact: {
-    kicker: "ХОЛБОО БАРИХ",
-    title: "Бидэнтэй холбогдох",
-    description:
-      "Маягт бөглөөд илгээнэ үү, бид 1 ажлын өдрийн дотор хариу өгнө",
-    phone: "+976 7700 0000",
-    email: "hello@dataview.mn",
-    address: "Улаанбаатар, Хан-Уул дүүрэг",
-    submitButton: "Илгээх →",
+    guarantee: {
+      kicker: "OUR GUARANTEE",
+      title: "Why you can trust us now",
+      items: [
+        {
+          icon: "♙",
+          title: "Team experience",
+          description:
+            "A data engineering team with 5+ years in the financial sector — having worked on bank ETL, Power BI, and financial reporting systems.",
+        },
+        {
+          icon: "✓",
+          title: "Tested with real data",
+          description:
+            "Our 5 templates have been tested on real Mongolian company financial data, including VAT, seasonal patterns, and Lunar New Year effects.",
+        },
+      ],
+    },
+
+    faq: {
+      kicker: "FREQUENTLY ASKED QUESTIONS",
+      title: "Q&A",
+      items: [
+        {
+          question: "What systems does it work with?",
+          answer:
+            "We can connect to Oracle, Excel, 1C, Odoo, PostgreSQL, MS SQL, and other data sources.",
+        },
+        {
+          question: "How quickly will it be ready?",
+          answer:
+            "Timing depends on your data source, data quality, and selected template. We provide a clear implementation timeline after the initial assessment.",
+        },
+        {
+          question: "What does our IT team need to do?",
+          answer:
+            "Your team only needs to provide the required read-only access to the data source.",
+        },
+        {
+          question: "How is data security ensured?",
+          answer:
+            "We use read-only access, access controls, and secure connections configured according to your organization's requirements.",
+        },
+        {
+          question: "Can we customize the template?",
+          answer:
+            "Yes. KPIs, tables, charts, and dashboard structure can be customized for your organization's needs.",
+        },
+        {
+          question: "Can we cancel the contract?",
+          answer:
+            "Yes. The service can be cancelled according to the terms defined in your service agreement.",
+        },
+      ],
+    },
+
+    contact: {
+      kicker: "CONTACT US",
+      title: "Get in touch with us",
+      description:
+        "Fill out the form and send it — we'll respond within 1–3 business days.",
+      name: "Name",
+      namePlaceholder: "Bat-Erdene",
+      company: "Company",
+      companyPlaceholder: "LLC name",
+      phoneLabel: "Phone",
+      phonePlaceholder: "+976 9900 0000",
+      emailLabel: "Email",
+      emailPlaceholder: "email@company.mn",
+      system: "System you use",
+      select: "Select...",
+      interestedTemplate: "Template of interest",
+      phone: "+976 7700 0000",
+      email: "hello@dataview.mn",
+      addressLabel: "Address",
+      address: "Ulaanbaatar, Khan-Uul District",
+      submitButton: "Send →",
+      sending: "Sending...",
+      required:
+        "Please enter your name, company, phone number, and email.",
+      success: "Your request was sent successfully.",
+      error: "An error occurred while sending your request.",
+      options: [
+        "CEO",
+        "Finance",
+        "Sales",
+        "AR/AP",
+        "Cash Flow",
+        "All",
+      ],
+    },
   },
 };
 
-function mergeHomeContent(data) {
-  if (!data) return defaultHomeContent;
-
-  return {
-    ...defaultHomeContent,
-    ...data,
-    hero: {
-      ...defaultHomeContent.hero,
-      ...(data.hero || {}),
-      previewKpis:
-        data.hero?.previewKpis || defaultHomeContent.hero.previewKpis,
-    },
-    problem: {
-      ...defaultHomeContent.problem,
-      ...(data.problem || {}),
-      items: data.problem?.items || defaultHomeContent.problem.items,
-    },
-    templates: {
-      ...defaultHomeContent.templates,
-      ...(data.templates || {}),
-      items: data.templates?.items || defaultHomeContent.templates.items,
-    },
-    benefits: {
-      ...defaultHomeContent.benefits,
-      ...(data.benefits || {}),
-      items: data.benefits?.items || defaultHomeContent.benefits.items,
-    },
-    steps: {
-      ...defaultHomeContent.steps,
-      ...(data.steps || {}),
-      items: data.steps?.items || defaultHomeContent.steps.items,
-    },
-    testimonials: {
-      ...defaultHomeContent.testimonials,
-      ...(data.testimonials || {}),
-      items:
-        data.testimonials?.items || defaultHomeContent.testimonials.items,
-    },
-    faq: {
-      ...defaultHomeContent.faq,
-      ...(data.faq || {}),
-      items: data.faq?.items || defaultHomeContent.faq.items,
-    },
-    contact: {
-      ...defaultHomeContent.contact,
-      ...(data.contact || {}),
-    },
-  };
-}
-
 function Home() {
-  const navigate = useNavigate();
+  const { language } = useLanguage();
 
-  const [homeContent, setHomeContent] = useState(defaultHomeContent);
-  const [loading, setLoading] = useState(true);
+  const homeContent = homeContents[language];
+
   const [selectedTemplates, setSelectedTemplates] = useState([]);
   const [sendingRequest, setSendingRequest] = useState(false);
   const [requestMessage, setRequestMessage] = useState("");
   const [requestSuccess, setRequestSuccess] = useState(false);
   const [comparePosition, setComparePosition] = useState(50);
 
-  const templateOptions = [
-    "CEO",
-    "Санхүү",
-    "Борлуулалт",
-    "Авлага,Өглөг",
-    "Нөөц",
-    "Бүгд",
-  ];
+  const templateOptions = homeContent.contact.options;
+  const allOption = language === "mn" ? "Бүгд" : "All";
 
   const excelRows = [
-    ["Компьютер", "1,250,000", "12", "#REF!", "150,000", "#DIV/0!", "2024-01-15", "ЗА-2401"],
-    ["Принтер", "480,000", "5", "2,400,000", "288,000", "2,688,000", "2024-01-16", "ЗА-2402"],
-    ["Монитор", "620,000", "8", "4,960,000", "#VALUE!", "???", "???", "ЗА-2403"],
-    ["Keyboard", "45,000", "50", "2,250,000", "270,000", "2,520,000", "2024-01-18", "ЗА-2404"],
-    ["Mouse", "38,000", "100", "1,900,000", "228,000", "2,128,000", "2024-01-18", "ЗА-2405"],
-    ["SSD 512GB", "185,000", "20", "#REF!", "222,000", "#DIV/0!", "2024-01-19", "ЗА-2406"],
-    ["RAM 16GB", "120,000", "15", "1,800,000", "216,000", "2,016,000", "2024-01-20", "ЗА-2407"],
-    ["Роутер", "95,000", "10", "950,000", "114,000", "1,064,000", "2024-01-21", "ЗА-2408"],
-    ["Веб камер", "75,000", "25", "1,875,000", "225,000", "2,100,000", "2024-01-22", "ЗА-2409"],
-    ["UPS", "320,000", "6", "#REF!", "230,400", "#VALUE!", "2024-01-23", "ЗА-2410"],
-    ["Утас", "890,000", "3", "2,670,000", "320,400", "2,990,400", "2024-01-24", "ЗА-2411"],
-    ["Принтер тоо", "150,000", "4", "600,000", "72,000", "672,000", "???", "ЗА-2412"],
+    [
+      language === "mn" ? "Компьютер" : "Computer",
+      "1,250,000",
+      "12",
+      "#REF!",
+      "150,000",
+      "#DIV/0!",
+      "2024-01-15",
+      "ORD-2401",
+    ],
+    [
+      language === "mn" ? "Принтер" : "Printer",
+      "480,000",
+      "5",
+      "2,400,000",
+      "288,000",
+      "2,688,000",
+      "2024-01-16",
+      "ORD-2402",
+    ],
+    [
+      language === "mn" ? "Монитор" : "Monitor",
+      "620,000",
+      "8",
+      "4,960,000",
+      "#VALUE!",
+      "???",
+      "???",
+      "ORD-2403",
+    ],
+    [
+      "Keyboard",
+      "45,000",
+      "50",
+      "2,250,000",
+      "270,000",
+      "2,520,000",
+      "2024-01-18",
+      "ORD-2404",
+    ],
+    [
+      "Mouse",
+      "38,000",
+      "100",
+      "1,900,000",
+      "228,000",
+      "2,128,000",
+      "2024-01-18",
+      "ORD-2405",
+    ],
+    [
+      "SSD 512GB",
+      "185,000",
+      "20",
+      "#REF!",
+      "222,000",
+      "#DIV/0!",
+      "2024-01-19",
+      "ORD-2406",
+    ],
+    [
+      "RAM 16GB",
+      "120,000",
+      "15",
+      "1,800,000",
+      "216,000",
+      "2,016,000",
+      "2024-01-20",
+      "ORD-2407",
+    ],
+    [
+      language === "mn" ? "Роутер" : "Router",
+      "95,000",
+      "10",
+      "950,000",
+      "114,000",
+      "1,064,000",
+      "2024-01-21",
+      "ORD-2408",
+    ],
+    [
+      language === "mn" ? "Веб камер" : "Web camera",
+      "75,000",
+      "25",
+      "1,875,000",
+      "225,000",
+      "2,100,000",
+      "2024-01-22",
+      "ORD-2409",
+    ],
+    [
+      "UPS",
+      "320,000",
+      "6",
+      "#REF!",
+      "230,400",
+      "#VALUE!",
+      "2024-01-23",
+      "ORD-2410",
+    ],
+    [
+      language === "mn" ? "Утас" : "Phone",
+      "890,000",
+      "3",
+      "2,670,000",
+      "320,400",
+      "2,990,400",
+      "2024-01-24",
+      "ORD-2411",
+    ],
+    [
+      language === "mn" ? "Принтер тоо" : "Printer qty",
+      "150,000",
+      "4",
+      "600,000",
+      "72,000",
+      "672,000",
+      "???",
+      "ORD-2412",
+    ],
   ];
 
   useEffect(() => {
-    const loadHomeContent = async () => {
-      try {
-        const response = await fetch("http://localhost:5000/api/home");
-
-        if (!response.ok) {
-          throw new Error(`Home API returned ${response.status}`);
-        }
-
-        const result = await response.json();
-
-        setHomeContent(
-          result.data ? mergeHomeContent(result.data) : defaultHomeContent
-        );
-      } catch {
-        setHomeContent(defaultHomeContent);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    loadHomeContent();
-  }, []);
+    setSelectedTemplates([]);
+  }, [language]);
 
   useEffect(() => {
     if (!requestMessage) return;
@@ -360,9 +754,9 @@ function Home() {
   }, [requestMessage]);
 
   const toggleTemplate = (template) => {
-    if (template === "Бүгд") {
+    if (template === allOption) {
       const individualTemplates = templateOptions.filter(
-        (item) => item !== "Бүгд"
+        (item) => item !== allOption
       );
 
       setSelectedTemplates((current) =>
@@ -403,28 +797,23 @@ function Home() {
       const systemType = formData.get("system");
 
       if (!name || !company || !phone || !email) {
-        throw new Error(
-          "Нэр, компани, утас, имэйлээ бүрэн оруулна уу."
-        );
+        throw new Error(homeContent.contact.required);
       }
 
-      const response = await fetch(
-        "http://localhost:5000/api/requests",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            name,
-            company,
-            phone,
-            email,
-            system_type: systemType || null,
-            models: selectedTemplates,
-          }),
-        }
-      );
+      const response = await fetch("/api/requests", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          name,
+          company,
+          phone,
+          email,
+          system_type: systemType || null,
+          models: selectedTemplates,
+        }),
+      });
 
       const result = await response.json();
 
@@ -435,38 +824,23 @@ function Home() {
       }
 
       setRequestSuccess(true);
+
       setRequestMessage(
-        result.message || "Хүсэлт амжилттай илгээгдлээ."
+        result.message || homeContent.contact.success
       );
 
       formElement.reset();
       setSelectedTemplates([]);
     } catch (error) {
       setRequestSuccess(false);
+
       setRequestMessage(
-        error.message || "Хүсэлт илгээхэд алдаа гарлаа."
+        error.message || homeContent.contact.error
       );
     } finally {
       setSendingRequest(false);
     }
   };
-
-  const scrollTo = (id) => {
-    document.getElementById(id)?.scrollIntoView({
-      behavior: "smooth",
-    });
-  };
-
-
-  if (loading) {
-    return (
-      <div className="home-page">
-        <Navbar />
-        <div className="home-loading">Loading...</div>
-        <Footer />
-      </div>
-    );
-  }
 
   return (
     <div className="home-page">
@@ -482,9 +856,9 @@ function Home() {
               </div>
 
               <h1>
-                Мэдээлэлд суурилсан шийдвэр —{" "}
+                {homeContent.hero.title} —{" "}
                 <span className="compare-gradient-text">
-                  нэг харцаар.
+                  {homeContent.hero.titleHighlight}
                 </span>
               </h1>
 
@@ -505,17 +879,19 @@ function Home() {
 
             <div
               className="before-after-demo"
-              style={{ "--compare-position": `${comparePosition}%` }}
+              style={{
+                "--compare-position": `${comparePosition}%`,
+              }}
             >
               <div className="compare-layer compare-excel-layer">
                 <div className="excel-side">
                   <div className="excel-toolbar">
                     <strong>Excel</strong>
                     <span>|</span>
-                    <span>Файл</span>
-                    <span>Засах</span>
-                    <span>Харах</span>
-                    <span>Оруулах</span>
+                    <span>{homeContent.excel.file}</span>
+                    <span>{homeContent.excel.edit}</span>
+                    <span>{homeContent.excel.view}</span>
+                    <span>{homeContent.excel.insert}</span>
                   </div>
 
                   <div className="excel-formula">
@@ -527,14 +903,14 @@ function Home() {
                     <table>
                       <thead>
                         <tr>
-                          <th>Бараа</th>
-                          <th>Нэгж үнэ</th>
-                          <th>Тоо</th>
-                          <th>Нийт</th>
-                          <th>НӨАТ</th>
-                          <th>Дүн</th>
-                          <th>Огноо</th>
-                          <th>Захиалга</th>
+                          <th>{homeContent.excel.product}</th>
+                          <th>{homeContent.excel.unitPrice}</th>
+                          <th>{homeContent.excel.quantity}</th>
+                          <th>{homeContent.excel.total}</th>
+                          <th>{homeContent.excel.vat}</th>
+                          <th>{homeContent.excel.amount}</th>
+                          <th>{homeContent.excel.date}</th>
+                          <th>{homeContent.excel.order}</th>
                         </tr>
                       </thead>
 
@@ -561,7 +937,7 @@ function Home() {
                         ))}
 
                         <tr className="excel-total">
-                          <td>НИЙТ ДҮН</td>
+                          <td>{homeContent.excel.grandTotal}</td>
                           <td />
                           <td />
                           <td>=SUM(D2:D13)</td>
@@ -572,7 +948,7 @@ function Home() {
                         </tr>
 
                         <tr className="excel-total">
-                          <td>ШАЛГАЛТ</td>
+                          <td>{homeContent.excel.check}</td>
                           <td />
                           <td />
                           <td className="excel-error">#REF!</td>
@@ -586,8 +962,8 @@ function Home() {
                   </div>
 
                   <div className="excel-note">
-                    <strong>ЯАРАЛТАЙ!</strong>
-                    <span>Д баганын алдааг хэрэгтэй...</span>
+                    <strong>{homeContent.excel.urgent}</strong>
+                    <span>{homeContent.excel.note}</span>
                     <b>☎</b>
                   </div>
                 </div>
@@ -611,102 +987,162 @@ function Home() {
 
                     <div className="dataview-topbar-right">
                       <div className="dataview-period">
-                        2024 оны 12-р сар
+                        {homeContent.hero.period}
                       </div>
 
-                      <div className="dataview-user">Б</div>
+                      <div className="dataview-user">
+                        D
+                      </div>
                     </div>
                   </div>
 
                   <div className="dataview-dashboard dataview-dashboard-dark">
                     <div className="dataview-kpis">
-                      {homeContent.hero.previewKpis.map((item, index) => (
-                        <div className="dark-kpi" key={index}>
-                          <div className="dark-kpi-top">
-                            <div>
-                              <small>{item.label}</small>
-                              <span>
-                                {index === 3
-                                  ? "Зардлаа хассан"
-                                  : index === 2
-                                    ? "Нийт баталгаажсан"
-                                    : "2024 оны 12-р сар"}
-                              </span>
-                            </div>
+                      {homeContent.hero.previewKpis.map(
+                        (item, index) => (
+                          <div
+                            className="dark-kpi"
+                            key={index}
+                          >
+                            <div className="dark-kpi-top">
+                              <div>
+                                <small>{item.label}</small>
 
-                            <svg viewBox="0 0 90 32" className="kpi-sparkline">
-                              <polyline
-                                points="0,27 10,21 18,23 29,14 40,16 51,9 62,12 72,5 80,8 90,1"
-                                fill="none"
-                                stroke="currentColor"
-                                strokeWidth="2"
-                              />
-                            </svg>
-                          </div>
-
-                          <strong>{item.value}</strong>
-
-                          <div className="kpi-comparison">
-                            <div>
-                              <span>Өмнөх сар (11-р сар)</span>
-                              <span className="kpi-old-value">
-                                {index === 0
-                                  ? "₮ 2,541.2M"
-                                  : index === 1
-                                    ? "₮ 254.3M"
+                                <span>
+                                  {index === 3
+                                    ? homeContent.hero.afterExpenses
                                     : index === 2
-                                      ? "2,971"
-                                      : "₮ 504.2M"}
-                              </span>
-                              <b>▲ {index === 2 ? "10.5%" : index === 3 ? "41.3%" : "12.1%"}</b>
+                                      ? homeContent.hero.confirmed
+                                      : homeContent.hero.period}
+                                </span>
+                              </div>
+
+                              <svg
+                                viewBox="0 0 90 32"
+                                className="kpi-sparkline"
+                              >
+                                <polyline
+                                  points="0,27 10,21 18,23 29,14 40,16 51,9 62,12 72,5 80,8 90,1"
+                                  fill="none"
+                                  stroke="currentColor"
+                                  strokeWidth="2"
+                                />
+                              </svg>
                             </div>
 
-                            <div>
-                              <span>Өмнөх жил (2023/12)</span>
-                              <span className="kpi-old-value">
-                                {index === 0
-                                  ? "₮ 2,190.4M"
-                                  : index === 1
-                                    ? "₮ 219.0M"
-                                    : index === 2
-                                      ? "2,648"
-                                      : "₮ 504.2M"}
-                              </span>
-                              <b>▲ {index === 2 ? "24.0%" : index === 3 ? "41.3%" : "30.0%"}</b>
+                            <strong>{item.value}</strong>
+
+                            <div className="kpi-comparison">
+                              <div>
+                                <span>
+                                  {homeContent.hero.previousMonth}
+                                </span>
+
+                                <span className="kpi-old-value">
+                                  {index === 0
+                                    ? "₮ 2,541.2M"
+                                    : index === 1
+                                      ? "₮ 254.3M"
+                                      : index === 2
+                                        ? "2,971"
+                                        : "₮ 504.2M"}
+                                </span>
+
+                                <b>
+                                  ▲{" "}
+                                  {index === 2
+                                    ? "10.5%"
+                                    : index === 3
+                                      ? "41.3%"
+                                      : "12.1%"}
+                                </b>
+                              </div>
+
+                              <div>
+                                <span>
+                                  {homeContent.hero.previousYear}
+                                </span>
+
+                                <span className="kpi-old-value">
+                                  {index === 0
+                                    ? "₮ 2,190.4M"
+                                    : index === 1
+                                      ? "₮ 219.0M"
+                                      : index === 2
+                                        ? "2,648"
+                                        : "₮ 504.2M"}
+                                </span>
+
+                                <b>
+                                  ▲{" "}
+                                  {index === 2
+                                    ? "24.0%"
+                                    : index === 3
+                                      ? "41.3%"
+                                      : "30.0%"}
+                                </b>
+                              </div>
                             </div>
                           </div>
-                        </div>
-                      ))}
+                        )
+                      )}
                     </div>
 
                     <div className="dashboard-bottom-row">
                       <div className="dark-chart-card">
                         <div className="dark-chart-heading">
-                          <strong>{homeContent.hero.barChartTitle}</strong>
+                          <strong>
+                            {homeContent.hero.barChartTitle}
+                          </strong>
 
                           <div>
-                            <span className="legend-sales">● Борлуулалт</span>
-                            <span className="legend-tax">● НӨАТ</span>
+                            <span className="legend-sales">
+                              ● {homeContent.hero.sales}
+                            </span>
+
+                            <span className="legend-tax">
+                              ● {homeContent.hero.vat}
+                            </span>
                           </div>
                         </div>
 
                         <div className="dark-bars">
-                          {[45, 38, 52, 61, 55, 68, 48, 72, 66, 77, 73, 88].map(
-                            (height, index) => (
-                              <div className="dark-bar-group" key={index}>
-                                <span
-                                  className="sales-bar"
-                                  style={{ height: `${height}%` }}
-                                />
-                                <span
-                                  className="tax-bar"
-                                  style={{
-                                    height: `${Math.max(6, height * 0.12)}%`,
-                                  }}
-                                />
-                              </div>
-                            )
-                          )}
+                          {[
+                            45,
+                            38,
+                            52,
+                            61,
+                            55,
+                            68,
+                            48,
+                            72,
+                            66,
+                            77,
+                            73,
+                            88,
+                          ].map((height, index) => (
+                            <div
+                              className="dark-bar-group"
+                              key={index}
+                            >
+                              <span
+                                className="sales-bar"
+                                style={{
+                                  height: `${height}%`,
+                                }}
+                              />
+
+                              <span
+                                className="tax-bar"
+                                style={{
+                                  height: `${Math.max(
+                                    6,
+                                    height * 0.12
+                                  )}%`,
+                                }}
+                              />
+                            </div>
+                          ))}
                         </div>
                       </div>
 
@@ -714,7 +1150,9 @@ function Home() {
                         <div className="dark-donut">
                           <div>
                             <strong>36%</strong>
-                            <span>Электроникс</span>
+                            <span>
+                              {homeContent.hero.electronics}
+                            </span>
                           </div>
                         </div>
                       </div>
@@ -730,18 +1168,21 @@ function Home() {
                 max="100"
                 value={comparePosition}
                 onChange={(event) =>
-                  setComparePosition(Number(event.target.value))
+                  setComparePosition(
+                    Number(event.target.value)
+                  )
                 }
                 onWheel={(event) => {
-                  const dashboard = event.currentTarget.parentElement?.querySelector(
-                    ".dataview-dashboard"
-                  );
+                  const dashboard =
+                    event.currentTarget.parentElement?.querySelector(
+                      ".dataview-dashboard"
+                    );
 
                   if (dashboard) {
                     dashboard.scrollTop += event.deltaY;
                   }
                 }}
-                aria-label="Excel болон DataView харьцуулах"
+                aria-label={homeContent.excel.compareLabel}
               />
 
               <div className="compare-divider">
@@ -768,16 +1209,21 @@ function Home() {
             </div>
 
             <div className="problem-grid">
-              {homeContent.problem.items.map((item, index) => (
-                <div className="problem-card" key={index}>
-                  <div className="problem-icon">
-                    {item.icon}
-                  </div>
+              {homeContent.problem.items.map(
+                (item, index) => (
+                  <div
+                    className="problem-card"
+                    key={index}
+                  >
+                    <div className="problem-icon">
+                      {item.icon}
+                    </div>
 
-                  <h3>{item.title}</h3>
-                  <p>{item.description}</p>
-                </div>
-              ))}
+                    <h3>{item.title}</h3>
+                    <p>{item.description}</p>
+                  </div>
+                )
+              )}
             </div>
           </div>
         </section>
@@ -864,7 +1310,10 @@ function Home() {
           </div>
         </section>
 
-        <section className="section steps-section">
+        <section
+          className="section steps-section"
+          id="how-it-works"
+        >
           <div className="landing-container">
             <div className="section-heading">
               <span className="section-kicker">
@@ -904,38 +1353,30 @@ function Home() {
 
         <section
           className="section testimonials-section"
-          id="testimonials"
+          id="guarantee"
         >
           <div className="landing-container">
             <div className="section-heading">
               <span className="section-kicker">
-                {homeContent.testimonials.kicker}
+                {homeContent.guarantee.kicker}
               </span>
 
-              <h2>{homeContent.testimonials.title}</h2>
+              <h2>{homeContent.guarantee.title}</h2>
             </div>
 
             <div className="testimonial-grid">
-              {homeContent.testimonials.items.map(
+              {homeContent.guarantee.items.map(
                 (item, index) => (
                   <div
                     className="testimonial-card"
                     key={index}
                   >
-                    <div className="quote-mark">”</div>
-
-                    <p>{item.text}</p>
-
-                    <div className="testimonial-person">
-                      <div className="testimonial-avatar">
-                        {item.initials}
-                      </div>
-
-                      <div>
-                        <strong>{item.name}</strong>
-                        <span>{item.position}</span>
-                      </div>
+                    <div className="quote-mark">
+                      {item.icon}
                     </div>
+
+                    <h3>{item.title}</h3>
+                    <p>{item.description}</p>
                   </div>
                 )
               )}
@@ -957,7 +1398,7 @@ function Home() {
               {homeContent.faq.items.map(
                 (item, index) => (
                   <details
-                    key={index}
+                    key={`${language}-${index}`}
                     className="faq-item"
                   >
                     <summary>
@@ -984,6 +1425,7 @@ function Home() {
               </span>
 
               <h2>{homeContent.contact.title}</h2>
+
               <p>{homeContent.contact.description}</p>
             </div>
 
@@ -994,21 +1436,27 @@ function Home() {
               >
                 <div className="form-row">
                   <label>
-                    Нэр
+                    {homeContent.contact.name}
+
                     <input
                       type="text"
                       name="name"
-                      placeholder="Бат-Эрдэнэ"
+                      placeholder={
+                        homeContent.contact.namePlaceholder
+                      }
                       required
                     />
                   </label>
 
                   <label>
-                    Компани
+                    {homeContent.contact.company}
+
                     <input
                       type="text"
                       name="company"
-                      placeholder="ХХК нэр"
+                      placeholder={
+                        homeContent.contact.companyPlaceholder
+                      }
                       required
                     />
                   </label>
@@ -1016,55 +1464,64 @@ function Home() {
 
                 <div className="form-row">
                   <label>
-                    Утас
+                    {homeContent.contact.phoneLabel}
+
                     <input
                       type="tel"
                       name="phone"
-                      placeholder="+976 9900 0000"
+                      placeholder={
+                        homeContent.contact.phonePlaceholder
+                      }
                       required
                     />
                   </label>
 
                   <label>
-                    Имэйл
+                    {homeContent.contact.emailLabel}
+
                     <input
                       type="email"
                       name="email"
-                      placeholder="email@company.mn"
+                      placeholder={
+                        homeContent.contact.emailPlaceholder
+                      }
                       required
                     />
                   </label>
                 </div>
 
                 <label>
-                  Ашигладаг систем
+                  {homeContent.contact.system}
 
                   <select
                     name="system"
                     defaultValue=""
                   >
                     <option value="" disabled>
-                      Сонгох...
+                      {homeContent.contact.select}
                     </option>
 
                     <option value="Excel">Excel</option>
-                    <option value="Oracle">Oracle</option>
+                    <option value="Odoo">Odoo</option>
                     <option value="1C">1C</option>
+                    <option value="Oracle">Oracle</option>
                     <option value="PostgreSQL">
                       PostgreSQL
                     </option>
-                    <option value="MS SQL">MS SQL</option>
+                    <option value="MS SQL">
+                      MS SQL
+                    </option>
                   </select>
                 </label>
 
                 <div className="interest-label">
-                  Сонирхсон загвар
+                  {homeContent.contact.interestedTemplate}
                 </div>
 
                 <div className="interest-buttons">
                   {templateOptions.map((template) => {
                     const selected =
-                      template === "Бүгд"
+                      template === allOption
                         ? isAllSelected
                         : selectedTemplates.includes(
                             template
@@ -1112,7 +1569,7 @@ function Home() {
                   disabled={sendingRequest}
                 >
                   {sendingRequest
-                    ? "Илгээж байна..."
+                    ? homeContent.contact.sending
                     : homeContent.contact.submitButton}
                 </button>
               </form>
@@ -1124,7 +1581,10 @@ function Home() {
                   </div>
 
                   <div>
-                    <span>Утас</span>
+                    <span>
+                      {homeContent.contact.phoneLabel}
+                    </span>
+
                     <strong>
                       {homeContent.contact.phone}
                     </strong>
@@ -1137,7 +1597,10 @@ function Home() {
                   </div>
 
                   <div>
-                    <span>Имэйл</span>
+                    <span>
+                      {homeContent.contact.emailLabel}
+                    </span>
+
                     <strong>
                       {homeContent.contact.email}
                     </strong>
@@ -1150,7 +1613,10 @@ function Home() {
                   </div>
 
                   <div>
-                    <span>Хаяг</span>
+                    <span>
+                      {homeContent.contact.addressLabel}
+                    </span>
+
                     <strong>
                       {homeContent.contact.address}
                     </strong>

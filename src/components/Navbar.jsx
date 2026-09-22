@@ -2,9 +2,33 @@ import { useNavigate } from "react-router-dom";
 
 import "../styles/Navbar.css";
 import logo from "../assets/logo-default.svg";
+import { useLanguage } from "../context/LanguageContext";
+
+const navbarContent = {
+  mn: {
+    templates: "Загварууд",
+    whyDataView: "Яагаад DataView?",
+    howItWorks: "Хэрхэн ажилладаг",
+    guarantee: "Бидний баталгаа",
+    login: "Нэвтрэх",
+    contact: "Холбогдох",
+  },
+
+  en: {
+    templates: "Templates",
+    whyDataView: "Why DataView?",
+    howItWorks: "How it works",
+    guarantee: "Our guarantee",
+    login: "Log In",
+    contact: "Contact Us",
+  },
+};
 
 function Navbar() {
   const navigate = useNavigate();
+  const { language, toggleLanguage } = useLanguage();
+
+  const content = navbarContent[language];
 
   const scrollToSection = (id) => {
     document.getElementById(id)?.scrollIntoView({
@@ -15,8 +39,6 @@ function Navbar() {
   return (
     <header className="navbar">
       <div className="navbar-inner">
-
-        {/* LEFT - LOGO */}
         <div className="navbar-left">
           <button
             type="button"
@@ -31,37 +53,52 @@ function Navbar() {
           </button>
         </div>
 
-        {/* CENTER - MENU */}
         <nav className="navbar-menu">
           <button
             type="button"
             onClick={() => scrollToSection("templates")}
           >
-            Загварууд
+            {content.templates}
           </button>
 
           <button
             type="button"
-            onClick={() => scrollToSection("why-dataview")}
+            onClick={() =>
+              scrollToSection("why-dataview")
+            }
           >
-            Яагаад DataView?
+            {content.whyDataView}
           </button>
 
           <button
             type="button"
-            onClick={() => scrollToSection("testimonials")}
+            onClick={() =>
+              scrollToSection("how-it-works")
+            }
           >
-            Туршлага
+            {content.howItWorks}
+          </button>
+
+          <button
+            type="button"
+            onClick={() => scrollToSection("guarantee")}
+          >
+            {content.guarantee}
           </button>
         </nav>
 
-        {/* RIGHT - ACTIONS */}
         <div className="navbar-actions">
           <button
             type="button"
             className="language-button"
+            onClick={toggleLanguage}
+            aria-label={
+              language === "mn"
+                ? "Switch to English"
+                : "Монгол хэл рүү солих"
+            }
           >
-            🇲🇳 MH
+            {language === "mn" ? "🇲🇳 MN" : "🇬🇧 EN"}
           </button>
 
           <button
@@ -69,7 +106,7 @@ function Navbar() {
             className="login-action"
             onClick={() => navigate("/login")}
           >
-            Нэвтрэх
+            {content.login}
           </button>
 
           <button
@@ -77,10 +114,9 @@ function Navbar() {
             className="contact-button"
             onClick={() => scrollToSection("contact")}
           >
-            Холбогдох
+            {content.contact}
           </button>
         </div>
-
       </div>
     </header>
   );

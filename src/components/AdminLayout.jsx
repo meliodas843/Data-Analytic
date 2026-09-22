@@ -7,7 +7,6 @@ import {
 
 import {
   LayoutDashboard,
-  House,
   Building2,
   Users,
   ClipboardList,
@@ -65,12 +64,6 @@ function AdminLayout() {
       to: "/admin/dashboard",
       label: "Хяналтын самбар",
       icon: LayoutDashboard,
-      end: true,
-    },
-    {
-      to: "/admin/home",
-      label: "Нүүр хуудас",
-      icon: House,
       end: true,
     },
     {
@@ -213,7 +206,9 @@ function AdminLayout() {
           <button
             type="button"
             className="admin-logout"
-            onClick={handleLogout}
+            onClick={
+              handleLogout
+            }
             aria-label="Гарах"
           >
             <span className="admin-bottom-icon">
@@ -238,8 +233,8 @@ function AdminLayout() {
             </h1>
 
             <p>
-              Вэбсайтын агуулга болон
-              хэрэглэгчдийг удирдах
+              Харилцагч, хэрэглэгч болон
+              хүсэлтүүдийг удирдах
             </p>
           </div>
         </header>

@@ -3,482 +3,67 @@ import {
   useState,
 } from "react";
 
-
 const defaultHomeContent = {
-
-  /* =========================================
-     HERO
-  ========================================= */
-
   hero: {
-    eyebrow: "DATAVIEW MONGOLIA — ХАРЬЦУУЛАЛТ",
-    title: "Мэдээлэлд суурилсан шийдвэр — нэг харцаар.",
-    description:
-      "Excel-ийн хаосыг орхиж — бодит цагийн санхүүгийн мэдээлэлд шилж.",
-    beforeLabel: "ӨМНӨ · EXCEL",
-    afterLabel: "ДАРАА · DATAVIEW",
-    compareHint: "↔ Чирж харьцуулах ↔",
-    primaryButton: "Холбогдох",
-    secondaryButton: "Загварууд үзэх",
+    eyebrow: "",
+    title: "",
+    description: "",
+    beforeLabel: "",
+    afterLabel: "",
+    compareHint: "",
+    primaryButton: "",
+    secondaryButton: "",
     note: "",
     leftImage: "",
     rightImage: "",
   },
-
-
-  /* =========================================
-     PROBLEM
-  ========================================= */
-
   problem: {
-    kicker:
-      "АСУУДАЛ",
-
-    title:
-      "Та одоо хэрхэн шийдвэр гаргаж байна вэ?",
-
-    items: [
-      {
-        icon: "◷",
-        title:
-          "Нягтлангийн Excel-ийг хүлээнэ",
-
-        description:
-          "Сар бүрийн тайлан 2 долоо хоног хоцорч ирнэ",
-      },
-
-      {
-        icon: "✎",
-        title:
-          "Гар ажил, алдаатай",
-
-        description:
-          "Pivot table, copy-paste, зөрүү тоо",
-      },
-
-      {
-        icon: "⚡",
-        title:
-          "Бодит цагийн мэдээлэл байхгүй",
-
-        description:
-          "Өнөөдрийн борлуулалт, мөнгөн үлдэгдэл хэд вэ? — Хэн ч хариулж чадахгүй",
-      },
-    ],
+    kicker: "",
+    title: "",
+    items: [],
   },
-
-
-  /* =========================================
-     TEMPLATES
-  ========================================= */
-
   templates: {
-    kicker:
-      "ШИЙДЭЛ",
-
-    title:
-      "Туршигдсан 5 загвар — тэг-ээс эхлэх шаардлагагүй",
-
-    note:
-      "Загвар бүр бүрэн монгол хэлээр, утас компьютер хоёуланд нь",
-
-    items: [
-      {
-        icon: "🏢",
-        title:
-          "Захирлын тойм (CEO)",
-
-        description:
-          "Компанийн гол үзүүлэлт, орлого, ашиг, зардал нэг хараанд",
-
-        className:
-          "template-cyan",
-      },
-
-      {
-        icon: "💰",
-        title:
-          "Санхүү (Financial)",
-
-        description:
-          "Ашиг орлогын тайлан, мөнгөн урсгал, зардлын задаргаа",
-
-        className:
-          "template-blue",
-      },
-
-      {
-        icon: "📈",
-        title:
-          "Борлуулалт (Sales)",
-
-        description:
-          "Борлуулалтын дүн, бүтээгдэхүүн, менежерийн ажлын үр дүн",
-
-        className:
-          "template-orange",
-      },
-
-      {
-        icon: "🧾",
-        title:
-          "Авлага, Өглөг (AR/AP)",
-
-        description:
-          "Авлагын хууль, үлдэгдэл, харилцагчийн тооцооны байдал",
-
-        className:
-          "template-purple",
-      },
-
-      {
-        icon: "📦",
-        title:
-          "Бараа материал (Inventory)",
-
-        description:
-          "Нөөцийн үлдэгдэл, эргэлт, дутагдал, илүүдэл дохиолол",
-
-        className:
-          "template-green",
-      },
-    ],
+    kicker: "",
+    title: "",
+    note: "",
+    items: [],
   },
-
-
-  /* =========================================
-     BENEFITS
-  ========================================= */
-
   benefits: {
-    kicker:
-      "ЯАГААД DATAVIEW?",
-
-    title:
-      "Бусдаас юугаараа ялгаатай вэ",
-
-    items: [
-      {
-        icon: "🌐",
-        title:
-          "Бүрэн монгол хэлээр",
-
-        description:
-          "Тайлан, дашбоард, дэмжлэг — бүгд монголоор",
-      },
-
-      {
-        icon: "▱",
-        title:
-          "Бэлэн 5 загвар",
-
-        description:
-          "Тэг-ээс эхлэх биш, туршигдсан загвараас сонгоно",
-      },
-
-      {
-        icon: "♙",
-        title:
-          "Бид өөрсдөө холбож өгнө",
-
-        description:
-          "IT мэдлэг, аналитикч шаардлагагүй",
-      },
-
-      {
-        icon: "⚡",
-        title:
-          "2–3 долоо хоногт бэлэн",
-
-        description:
-          "Олон сарын төсөл биш",
-      },
-
-      {
-        icon: "▤",
-        title:
-          "Ямар ч эх үүсвэрээс",
-
-        description:
-          "Oracle, Excel, 1C — ямар системтэй ч ажиллана",
-      },
-
-      {
-        icon: "$",
-        title:
-          "ЖДБ-ийн төсөвт багтана",
-
-        description:
-          "BI лиценз, аналитикч авахгүйгээр",
-      },
-    ],
+    kicker: "",
+    title: "",
+    items: [],
   },
-
-
-  /* =========================================
-     STEPS
-  ========================================= */
-
   steps: {
-    kicker:
-      "ХЭРХЭН АЖИЛЛАДАГ",
-
-    title:
-      "3 энгийн алхам",
-
-    note:
-      "Танай талаас зөвхөн эрх өгөх л хангалттай",
-
-    items: [
-      {
-        number: "①",
-
-        title:
-          "Холбогдоно",
-
-        description:
-          "Маягт бөглөх эсвэл утасдах — 1 минут",
-      },
-
-      {
-        number: "②",
-
-        title:
-          "Бид датаг тань холбоно",
-
-        description:
-          "Манай баг танай системд холбогдож, дата цэвэрлэнэ — 2–3 долоо хоног",
-      },
-
-      {
-        number: "③",
-
-        title:
-          "Дашбоардаa үзнэ",
-
-        description:
-          "Өөрийн хаягаас нэвтэрч, бүх тоогоо харна",
-      },
-    ],
+    kicker: "",
+    title: "",
+    note: "",
+    items: [],
   },
-
-
-  /* =========================================
-     PRICING
-  ========================================= */
-
   pricing: {
-    kicker:
-      "ҮНЭ",
-
-    title:
-      "Энгийн, ил тод үнэ",
-
-    note:
-      "Суурилуулалтын нэг удаагийн хөлс тусдаа — эх үүсвэрийн төрлөөс хамаарна",
-
-    plans: [
-      {
-        name:
-          "Эхлэл",
-
-        price:
-          "₮200,000",
-
-        period:
-          "/сар",
-
-        recommended:
-          false,
-
-        features: [
-          "2 хяналтын самбар (Захирлын тойм + Санхүү)",
-          "1 эх үүсвэр",
-          "3 хэрэглэгч хүртэл",
-          "Өдөрт 1 удаа шинэчлэлт",
-          "И-мэйл дэмжлэг",
-        ],
-      },
-
-      {
-        name:
-          "Мэргэжлийн",
-
-        price:
-          "₮400,000",
-
-        period:
-          "/сар",
-
-        recommended:
-          true,
-
-        features: [
-          "Бүх 5 хяналтын самбар",
-          "Олон эх үүсвэр",
-          "10 хэрэглэгч хүртэл",
-          "4 цаг тутам шинэчлэлт",
-          "И-мэйл + чат дэмжлэг",
-        ],
-      },
-
-      {
-        name:
-          "Байгууллага",
-
-        price:
-          "₮800,000+",
-
-        period:
-          "/сар",
-
-        recommended:
-          false,
-
-        features: [
-          "Хязгааргүй хяналтын самбар + захиалгат тохиргоо",
-          "Бүх эх үүсвэр + API",
-          "Хязгааргүй хэрэглэгч",
-          "Бодит цагийн шинэчлэлт",
-          "Тусгай менежер",
-        ],
-      },
-    ],
+    kicker: "",
+    title: "",
+    note: "",
+    plans: [],
   },
-
-
-  /* =========================================
-     TESTIMONIALS
-  ========================================= */
-
   testimonials: {
-    kicker:
-      "ТУРШЛАГА",
-
-    title:
-      "Харилцагчдын сэтгэгдэл",
-
-    items: [
-      {
-        text:
-          "Сар бүр Excel тайлан хийхэд 3 хоног зарцуулдаг байсан. Одоо захирал утаснаасаа шууд харна. Бидний санхүүгийн хяналт бодитоор сайжирсан.",
-
-        initials:
-          "БЭ",
-
-        name:
-          "Б. Энхтуяа",
-
-        position:
-          "ГТЗ, Алтан Говь ХХК",
-      },
-
-      {
-        text:
-          "Манай борлуулалт, авлага, нөөцийг нэг дэлгэцнээс харах боломжтой болсноор шийдвэр гаргах хурд маш эрс нэмэгдсэн. DataView-г бүх ЖДБ-д зөвлөе.",
-
-        initials:
-          "ГС",
-
-        name:
-          "Г. Солонго",
-
-        position:
-          "Гүйцэтгэх захирал, Эрдэнэт Фуд",
-      },
-    ],
+    kicker: "",
+    title: "",
+    items: [],
   },
-
-
-  /* =========================================
-     FAQ
-  ========================================= */
-
   faq: {
-    kicker:
-      "ТҮГЭЭМЭЛ АСУУЛТ",
-
-    title:
-      "Асуулт хариулт",
-
-    items: [
-      {
-        question:
-          "Ямар системтэй ажилладаг вэ?",
-
-        answer:
-          "Oracle, Excel, 1C болон бусад PostgreSQL, MS SQL суурьтай системүүдтэй.",
-      },
-
-      {
-        question:
-          "Хэр хурдан бэлэн болох вэ?",
-
-        answer:
-          "Ихэвчлэн 2–3 долоо хоногийн дотор эхний хувилбарыг бэлэн болгоно.",
-      },
-
-      {
-        question:
-          "Манай IT баг юу хийх хэрэгтэй вэ?",
-
-        answer:
-          "Зөвхөн шаардлагатай өгөгдлийн эх үүсвэрийн хандалт өгөхөд хангалттай.",
-      },
-
-      {
-        question:
-          "Дата аюулгүй байдал хэрхэн хангагддаг вэ?",
-
-        answer:
-          "Хандалтын эрх, хамгаалалттай холболт болон байгууллагын шаардлагад нийцүүлэн тохируулна.",
-      },
-
-      {
-        question:
-          "Загвараа өөрчилж болох уу?",
-
-        answer:
-          "Тийм. KPI, өнгө, хүснэгт, график болон бүтэц бүрийг өөрчилж болно.",
-      },
-
-      {
-        question:
-          "Гэрээгээ цуцалж болох уу?",
-
-        answer:
-          "Тийм. Гэрээний нөхцөлийн дагуу үйлчилгээг цуцлах боломжтой.",
-      },
-    ],
+    kicker: "",
+    title: "",
+    items: [],
   },
-
-
-  /* =========================================
-     CONTACT
-  ========================================= */
-
   contact: {
-    kicker:
-      "ХОЛБОО БАРИХ",
-
-    title:
-      "Бидэнтэй холбогдох",
-
-    description:
-      "Маягт бөглөөд илгээнэ үү, бид 1 ажлын өдрийн дотор хариу өгнө",
-
-    phone:
-      "+976 7700 0000",
-
-    email:
-      "hello@dataview.mn",
-
-    address:
-      "Улаанбаатар, Хан-Уул дүүрэг",
+    kicker: "",
+    title: "",
+    description: "",
+    phone: "",
+    email: "",
+    address: "",
   },
 };
-
-
 
 function AdminHome() {
 
@@ -489,28 +74,20 @@ function AdminHome() {
     defaultHomeContent
   );
 
-
   const [
     loading,
     setLoading,
   ] = useState(true);
-
 
   const [
     saving,
     setSaving,
   ] = useState(false);
 
-
   const [
     message,
     setMessage,
   ] = useState("");
-
-
-  /* =========================================
-     LOAD CONTENT
-  ========================================= */
 
   useEffect(() => {
 
@@ -524,10 +101,8 @@ function AdminHome() {
               "http://localhost:5000/api/home"
             );
 
-
           const result =
             await response.json();
-
 
           if (
             response.ok &&
@@ -560,15 +135,9 @@ function AdminHome() {
 
       };
 
-
     loadContent();
 
   }, []);
-
-
-  /* =========================================
-     BASIC SECTION CHANGE
-  ========================================= */
 
   const updateSection = (
     section,
@@ -595,11 +164,6 @@ function AdminHome() {
 
   };
 
-
-  /* =========================================
-     ARRAY ITEM CHANGE
-  ========================================= */
-
   const updateArrayItem = (
     section,
     arrayName,
@@ -615,7 +179,6 @@ function AdminHome() {
           ...current[section][arrayName],
         ];
 
-
         items[index] = {
 
           ...items[index],
@@ -624,7 +187,6 @@ function AdminHome() {
             value,
 
         };
-
 
         return {
 
@@ -645,9 +207,6 @@ function AdminHome() {
     );
 
   };
-  /* =========================================
-     FEATURE CHANGE
-  ========================================= */
 
   const updatePlanFeature = (
     planIndex,
@@ -662,16 +221,13 @@ function AdminHome() {
           ...current.pricing.plans,
         ];
 
-
         const features = [
           ...plans[planIndex].features,
         ];
 
-
         features[
           featureIndex
         ] = value;
-
 
         plans[
           planIndex
@@ -684,7 +240,6 @@ function AdminHome() {
           features,
 
         };
-
 
         return {
 
@@ -705,11 +260,6 @@ function AdminHome() {
 
   };
 
-
-  /* =========================================
-     SAVE
-  ========================================= */
-
   const saveHome =
     async () => {
 
@@ -718,7 +268,6 @@ function AdminHome() {
         setSaving(true);
 
         setMessage("");
-
 
         const response =
           await fetch(
@@ -743,10 +292,8 @@ function AdminHome() {
             }
           );
 
-
         const result =
           await response.json();
-
 
         if (!response.ok) {
 
@@ -757,7 +304,6 @@ function AdminHome() {
 
         }
 
-
         setMessage(
           "Нүүр хуудас амжилттай хадгалагдлаа."
         );
@@ -767,7 +313,6 @@ function AdminHome() {
         console.error(
           error
         );
-
 
         setMessage(
           error.message
@@ -781,7 +326,6 @@ function AdminHome() {
 
     };
 
-
   if (loading) {
 
     return (
@@ -792,15 +336,9 @@ function AdminHome() {
 
   }
 
-
   return (
 
     <div className="admin-home-page">
-
-
-      {/* =========================================
-          TOP
-      ========================================= */}
 
       <div className="admin-page-heading">
 
@@ -815,7 +353,6 @@ function AdminHome() {
           </p>
 
         </div>
-
 
         <button
           type="button"
@@ -838,7 +375,6 @@ function AdminHome() {
 
       </div>
 
-
       {
         message && (
 
@@ -848,11 +384,6 @@ function AdminHome() {
 
         )
       }
-
-
-      {/* =========================================
-          HERO
-      ========================================= */}
 
       <EditorSection
         title="Нүүр хэсэг / Excel vs DataView"
@@ -959,11 +490,6 @@ function AdminHome() {
         />
       </EditorSection>
 
-
-      {/* =========================================
-          PROBLEMS
-      ========================================= */}
-
       <EditorSection
         title="Асуудлын хэсэг"
       >
@@ -983,7 +509,6 @@ function AdminHome() {
           }
         />
 
-
         <Field
           label="Гарчиг"
           value={
@@ -998,7 +523,6 @@ function AdminHome() {
               )
           }
         />
-
 
         {
           content.problem.items.map(
@@ -1031,7 +555,6 @@ function AdminHome() {
                   }
                 />
 
-
                 <Field
                   label="Гарчиг"
                   value={
@@ -1048,7 +571,6 @@ function AdminHome() {
                       )
                   }
                 />
-
 
                 <Field
                   label="Тайлбар"
@@ -1076,11 +598,6 @@ function AdminHome() {
 
       </EditorSection>
 
-
-      {/* =========================================
-          TEMPLATES
-      ========================================= */}
-
       <EditorSection
         title="Хяналтын самбарын загварууд"
       >
@@ -1100,7 +617,6 @@ function AdminHome() {
           }
         />
 
-
         <Field
           label="Гарчиг"
           value={
@@ -1115,7 +631,6 @@ function AdminHome() {
               )
           }
         />
-
 
         {
           content.templates.items.map(
@@ -1150,7 +665,6 @@ function AdminHome() {
                     }
                   />
 
-
                   <Field
                     label="Гарчиг"
                     value={
@@ -1169,7 +683,6 @@ function AdminHome() {
                   />
 
                 </div>
-
 
                 <Field
                   label="Тайлбар"
@@ -1195,7 +708,6 @@ function AdminHome() {
           )
         }
 
-
         <Field
           label="Доод тэмдэглэл"
           value={
@@ -1212,11 +724,6 @@ function AdminHome() {
         />
 
       </EditorSection>
-
-
-      {/* =========================================
-          BENEFITS
-      ========================================= */}
 
       <EditorSection
         title="Яагаад DataView?"
@@ -1237,7 +744,6 @@ function AdminHome() {
           }
         />
 
-
         <Field
           label="Гарчиг"
           value={
@@ -1252,7 +758,6 @@ function AdminHome() {
               )
           }
         />
-
 
         {
           content.benefits.items.map(
@@ -1287,7 +792,6 @@ function AdminHome() {
                     }
                   />
 
-
                   <Field
                     label="Гарчиг"
                     value={
@@ -1306,7 +810,6 @@ function AdminHome() {
                   />
 
                 </div>
-
 
                 <Field
                   label="Тайлбар"
@@ -1333,11 +836,6 @@ function AdminHome() {
 
       </EditorSection>
 
-
-      {/* =========================================
-          STEPS
-      ========================================= */}
-
       <EditorSection
         title="Хэрхэн ажилладаг вэ?"
       >
@@ -1357,7 +855,6 @@ function AdminHome() {
           }
         />
 
-
         <Field
           label="Гарчиг"
           value={
@@ -1372,7 +869,6 @@ function AdminHome() {
               )
           }
         />
-
 
         {
           content.steps.items.map(
@@ -1405,7 +901,6 @@ function AdminHome() {
                   }
                 />
 
-
                 <Field
                   label="Тайлбар"
                   textarea
@@ -1430,7 +925,6 @@ function AdminHome() {
           )
         }
 
-
         <Field
           label="Доод тэмдэглэл"
           value={
@@ -1447,11 +941,6 @@ function AdminHome() {
         />
 
       </EditorSection>
-
-
-      {/* =========================================
-          PRICING
-      ========================================= */}
 
       <EditorSection
         title="Үнийн мэдээлэл"
@@ -1472,7 +961,6 @@ function AdminHome() {
           }
         />
 
-
         <Field
           label="Гарчиг"
           value={
@@ -1487,7 +975,6 @@ function AdminHome() {
               )
           }
         />
-
 
         {
           content.pricing.plans.map(
@@ -1522,7 +1009,6 @@ function AdminHome() {
                     }
                   />
 
-
                   <Field
                     label="Үнэ"
                     value={
@@ -1541,7 +1027,6 @@ function AdminHome() {
                   />
 
                 </div>
-
 
                 {
                   plan.features.map(
@@ -1580,7 +1065,6 @@ function AdminHome() {
           )
         }
 
-
         <Field
           label="Доод тэмдэглэл"
           value={
@@ -1597,11 +1081,6 @@ function AdminHome() {
         />
 
       </EditorSection>
-
-
-      {/* =========================================
-          TESTIMONIALS
-      ========================================= */}
 
       <EditorSection
         title="Харилцагчдын сэтгэгдэл"
@@ -1622,7 +1101,6 @@ function AdminHome() {
           }
         />
 
-
         <Field
           label="Гарчиг"
           value={
@@ -1637,7 +1115,6 @@ function AdminHome() {
               )
           }
         />
-
 
         {
           content.testimonials.items.map(
@@ -1671,7 +1148,6 @@ function AdminHome() {
                   }
                 />
 
-
                 <div className="admin-form-row">
 
                   <Field
@@ -1690,7 +1166,6 @@ function AdminHome() {
                         )
                     }
                   />
-
 
                   <Field
                     label="Албан тушаал"
@@ -1719,11 +1194,6 @@ function AdminHome() {
 
       </EditorSection>
 
-
-      {/* =========================================
-          FAQ
-      ========================================= */}
-
       <EditorSection
         title="Түгээмэл асуулт"
       >
@@ -1743,7 +1213,6 @@ function AdminHome() {
           }
         />
 
-
         <Field
           label="Гарчиг"
           value={
@@ -1758,7 +1227,6 @@ function AdminHome() {
               )
           }
         />
-
 
         {
           content.faq.items.map(
@@ -1791,7 +1259,6 @@ function AdminHome() {
                   }
                 />
 
-
                 <Field
                   label="Хариулт"
                   textarea
@@ -1818,11 +1285,6 @@ function AdminHome() {
 
       </EditorSection>
 
-
-      {/* =========================================
-          CONTACT
-      ========================================= */}
-
       <EditorSection
         title="Холбоо барих"
       >
@@ -1842,7 +1304,6 @@ function AdminHome() {
           }
         />
 
-
         <Field
           label="Гарчиг"
           value={
@@ -1857,7 +1318,6 @@ function AdminHome() {
               )
           }
         />
-
 
         <Field
           label="Тайлбар"
@@ -1874,7 +1334,6 @@ function AdminHome() {
           }
         />
 
-
         <Field
           label="Утас"
           value={
@@ -1890,7 +1349,6 @@ function AdminHome() {
           }
         />
 
-
         <Field
           label="И-мэйл"
           value={
@@ -1905,7 +1363,6 @@ function AdminHome() {
               )
           }
         />
-
 
         <Field
           label="Хаяг"
@@ -1923,9 +1380,6 @@ function AdminHome() {
         />
 
       </EditorSection>
-
-
-      {/* SAVE BOTTOM */}
 
       <div className="admin-bottom-save">
 
@@ -1956,11 +1410,6 @@ function AdminHome() {
 
 }
 
-
-/* =========================================
-   EDITOR COMPONENT
-========================================= */
-
 function EditorSection({
   title,
   subtitle,
@@ -1977,7 +1426,6 @@ function EditorSection({
           {title}
         </h3>
 
-
         {
           subtitle && (
 
@@ -1990,7 +1438,6 @@ function EditorSection({
 
       </div>
 
-
       {children}
 
     </section>
@@ -1998,11 +1445,6 @@ function EditorSection({
   );
 
 }
-
-
-/* =========================================
-   ARRAY CARD
-========================================= */
 
 function ArrayCard({
   title,
@@ -2017,7 +1459,6 @@ function ArrayCard({
         {title}
       </div>
 
-
       {children}
 
     </div>
@@ -2025,11 +1466,6 @@ function ArrayCard({
   );
 
 }
-
-
-/* =========================================
-   FIELD
-========================================= */
 
 function ImageField({
   label,
@@ -2153,7 +1589,6 @@ function ImageField({
   );
 }
 
-
 function Field({
   label,
   value,
@@ -2168,7 +1603,6 @@ function Field({
       <label>
         {label}
       </label>
-
 
       {
         textarea ? (
@@ -2209,6 +1643,5 @@ function Field({
   );
 
 }
-
 
 export default AdminHome;

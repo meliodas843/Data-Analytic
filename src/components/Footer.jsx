@@ -1,7 +1,30 @@
 import "../styles/Footer.css";
 import logo from "../assets/logo-default white.svg";
+import { useLanguage } from "../context/LanguageContext";
+
+const footerContent = {
+  mn: {
+    templates: "Загварууд",
+    howItWorks: "Хэрхэн ажилладаг",
+    contact: "Холбоо барих",
+    copyright:
+      "© 2026 DataView Mongolia. Бүх эрх хуулиар хамгаалагдсан.",
+  },
+
+  en: {
+    templates: "Templates",
+    howItWorks: "How it works",
+    contact: "Contact Us",
+    copyright:
+      "© 2026 DataView Mongolia. All rights reserved.",
+  },
+};
 
 function Footer() {
+  const { language } = useLanguage();
+
+  const content = footerContent[language];
+
   return (
     <footer className="footer">
       <div className="footer-inner">
@@ -16,15 +39,15 @@ function Footer() {
 
           <div className="footer-links">
             <a href="#templates">
-              Загварууд
+              {content.templates}
             </a>
 
-            <a href="#pricing">
-              Үнэ
+            <a href="#how-it-works">
+              {content.howItWorks}
             </a>
 
             <a href="#contact">
-              Холбоо барих
+              {content.contact}
             </a>
           </div>
 
@@ -37,13 +60,11 @@ function Footer() {
         <div className="footer-divider" />
 
         <div className="footer-bottom">
-          <p>
-            © 2026 DataView Mongolia. Бүх эрх хуулиар хамгаалагдсан.
-          </p>
+          <p>{content.copyright}</p>
 
           <div className="footer-socials">
-            <button>in</button>
-            <button>f</button>
+            <button type="button">in</button>
+            <button type="button">f</button>
           </div>
         </div>
       </div>

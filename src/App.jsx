@@ -43,7 +43,6 @@ import BillingSettings from "./pages/settings/BillingSettings";
 
 import AdminLogin from "./Admin/AdminLogin";
 import AdminDashboard from "./Admin/AdminDashboard";
-import AdminHome from "./Admin/AdminHome";
 import AdminCompany from "./Admin/AdminCompany";
 import AdminRequests from "./Admin/AdminRequests";
 import AdminUsers from "./Admin/AdminUsers";
@@ -631,13 +630,6 @@ function AppRoutes() {
               path="dashboard"
               element={
                 <AdminDashboard />
-              }
-            />
-
-            <Route
-              path="home"
-              element={
-                <AdminHome />
               }
             />
 
