@@ -2,8 +2,9 @@ const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const db = require("../config/db");
 
-const DEMO_EMAIL = "demo@gmail.com";
-const FULL_ACCESS_EMAIL = "u@gmail.com";
+const DEMO_USER_ID = 10;
+const DEMO_EMAIL = "demo@company.mn";
+const FULL_ACCESS_EMAIL = "it@gmail.com";
 
 function normalizeEmail(email) {
   return String(email || "").trim().toLowerCase();
@@ -119,7 +120,10 @@ async function getUserSubscription(user) {
     return fullAccessSubscription();
   }
 
-  if (email === DEMO_EMAIL) {
+  if (
+    Number(user.id) === DEMO_USER_ID ||
+    email === DEMO_EMAIL
+  ) {
     return lockedSubscription();
   }
 
@@ -382,10 +386,10 @@ exports.demoLogin = async (req, res) => {
         status,
         email_verified
       FROM users
-      WHERE LOWER(email) = ?
+      WHERE id = ?
       LIMIT 1
       `,
-      [DEMO_EMAIL]
+      [DEMO_USER_ID]
     );
 
     if (users.length === 0) {
