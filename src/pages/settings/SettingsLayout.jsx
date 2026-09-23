@@ -319,13 +319,6 @@ export default function SettingsLayout() {
               </span>
             </NavLink>
           </nav>
-
-          <button
-            type="button"
-            className="settings-status-button"
-          >
-            ◉ Төлөв
-          </button>
         </aside>
 
         <main className="settings-content">

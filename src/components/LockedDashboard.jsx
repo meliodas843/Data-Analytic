@@ -23,11 +23,7 @@ function LockedDashboard({
   } = useSubscription();
 
   if (loading) {
-    return (
-      <div className="locked-dashboard-loading">
-        Багцын мэдээллийг шалгаж байна...
-      </div>
-    );
+    return children;
   }
 
   if (active) {
@@ -45,7 +41,6 @@ function LockedDashboard({
           <div className="locked-icon">
             <LockKeyhole
               size={27}
-              strokeWidth={2}
             />
           </div>
 
@@ -67,7 +62,8 @@ function LockedDashboard({
 
             <li>
               Мөнгөн урсгал болон
-              AR / AP мэдээлэл харах
+              Авлага / Өглөг
+              мэдээлэл харах
             </li>
           </ul>
 
@@ -75,22 +71,15 @@ function LockedDashboard({
             type="button"
             className="locked-connect-button"
             onClick={() =>
-              navigate(
-                "/setup",
-                {
-                  state: {
-                    step: 2,
-                  },
-                }
-              )
+              navigate("/setup")
             }
           >
             Дата холбох
           </button>
 
           <div className="locked-connect-time">
-            Дата холболт хэдхэн минут
-            үргэлжилнэ
+            Дата холболт хэдхэн
+            минут үргэлжилнэ
           </div>
 
           <div className="locked-connect-support">
@@ -105,7 +94,8 @@ function LockedDashboard({
               <ShieldCheck
                 size={14}
               />
-              Нууцлал хамгаалагдсан
+              Нууцлал
+              хамгаалагдсан
             </span>
 
             <span>

@@ -1,38 +1,358 @@
-import { useState } from "react";
+import {
+  useEffect,
+  useState,
+} from "react";
+
 import {
   ArrowLeft,
-  Check,
   Eye,
   EyeOff,
 } from "lucide-react";
-import { useNavigate } from "react-router-dom";
+
+import {
+  useNavigate,
+} from "react-router-dom";
+
+const API_URL = "/api";
 
 export default function Profile() {
-  const navigate = useNavigate();
+  const navigate =
+    useNavigate();
 
-  const [language, setLanguage] =
-    useState("mn");
+  const [
+    loading,
+    setLoading,
+  ] = useState(true);
 
-  const [showCurrentPassword, setShowCurrentPassword] =
-    useState(false);
+  const [
+    saving,
+    setSaving,
+  ] = useState(false);
 
-  const [showNewPassword, setShowNewPassword] =
-    useState(false);
+  const [
+    message,
+    setMessage,
+  ] = useState("");
 
-  const [notifications, setNotifications] =
-    useState({
-      sync: true,
-      weekly: true,
-      user: true,
-      trial: true,
-    });
+  const [
+    error,
+    setError,
+  ] = useState("");
 
-  const toggleNotification = (key) => {
-    setNotifications((prev) => ({
-      ...prev,
-      [key]: !prev[key],
-    }));
-  };
+  const [
+    showCurrentPassword,
+    setShowCurrentPassword,
+  ] = useState(false);
+
+  const [
+    showNewPassword,
+    setShowNewPassword,
+  ] = useState(false);
+
+  const [
+    user,
+    setUser,
+  ] = useState({
+    id: null,
+    full_name: "",
+    email: "",
+    phone: "",
+    company_name: "",
+    role: "",
+  });
+
+  const [
+    currentPassword,
+    setCurrentPassword,
+  ] = useState("");
+
+  const [
+    newPassword,
+    setNewPassword,
+  ] = useState("");
+
+  useEffect(() => {
+    const loadProfile =
+      async () => {
+        try {
+          setLoading(true);
+
+          const token =
+            localStorage.getItem(
+              "token"
+            );
+
+          if (!token) {
+            navigate(
+              "/login",
+              {
+                replace: true,
+              }
+            );
+
+            return;
+          }
+
+          const response =
+            await fetch(
+              `${API_URL}/auth/me`,
+              {
+                headers: {
+                  Authorization:
+                    `Bearer ${token}`,
+                },
+              }
+            );
+
+          const data =
+            await response.json();
+
+          if (
+            !response.ok ||
+            !data.success
+          ) {
+            throw new Error(
+              data.message ||
+                "Профайл авахад алдаа гарлаа."
+            );
+          }
+
+          setUser({
+            id:
+              data.user.id,
+            full_name:
+              data.user
+                .full_name ||
+              "",
+            email:
+              data.user.email ||
+              "",
+            phone:
+              data.user.phone ||
+              "",
+            company_name:
+              data.user
+                .company_name ||
+              "",
+            role:
+              data.user.role ||
+              "",
+          });
+
+          localStorage.setItem(
+            "currentUser",
+            JSON.stringify(
+              data.user
+            )
+          );
+        } catch (err) {
+          setError(
+            err.message
+          );
+        } finally {
+          setLoading(false);
+        }
+      };
+
+    loadProfile();
+  }, [navigate]);
+
+  const handleSave =
+    async () => {
+      try {
+        setSaving(true);
+        setError("");
+        setMessage("");
+
+        const token =
+          localStorage.getItem(
+            "token"
+          );
+
+        const response =
+          await fetch(
+            `${API_URL}/auth/profile`,
+            {
+              method: "PUT",
+
+              headers: {
+                "Content-Type":
+                  "application/json",
+
+                Authorization:
+                  `Bearer ${token}`,
+              },
+
+              body:
+                JSON.stringify({
+                  full_name:
+                    user.full_name,
+                  phone:
+                    user.phone,
+                }),
+            }
+          );
+
+        const data =
+          await response.json();
+
+        if (
+          !response.ok ||
+          !data.success
+        ) {
+          throw new Error(
+            data.message ||
+              "Хадгалахад алдаа гарлаа."
+          );
+        }
+
+        setUser(
+          data.user
+        );
+
+        localStorage.setItem(
+          "currentUser",
+          JSON.stringify(
+            data.user
+          )
+        );
+
+        window.dispatchEvent(
+          new Event(
+            "userUpdated"
+          )
+        );
+
+        setMessage(
+          "Мэдээлэл амжилттай хадгалагдлаа."
+        );
+      } catch (err) {
+        setError(
+          err.message
+        );
+      } finally {
+        setSaving(false);
+      }
+    };
+
+  const handlePassword =
+    async () => {
+      if (
+        !currentPassword ||
+        !newPassword
+      ) {
+        setError(
+          "Одоогийн болон шинэ нууц үгээ оруулна уу."
+        );
+
+        return;
+      }
+
+      try {
+        setSaving(true);
+        setError("");
+        setMessage("");
+
+        const token =
+          localStorage.getItem(
+            "token"
+          );
+
+        const response =
+          await fetch(
+            `${API_URL}/auth/password`,
+            {
+              method: "PUT",
+
+              headers: {
+                "Content-Type":
+                  "application/json",
+
+                Authorization:
+                  `Bearer ${token}`,
+              },
+
+              body:
+                JSON.stringify({
+                  currentPassword,
+                  newPassword,
+                }),
+            }
+          );
+
+        const data =
+          await response.json();
+
+        if (
+          !response.ok ||
+          !data.success
+        ) {
+          throw new Error(
+            data.message ||
+              "Нууц үг солиход алдаа гарлаа."
+          );
+        }
+
+        setCurrentPassword(
+          ""
+        );
+
+        setNewPassword("");
+
+        setMessage(
+          "Нууц үг амжилттай солигдлоо."
+        );
+      } catch (err) {
+        setError(
+          err.message
+        );
+      } finally {
+        setSaving(false);
+      }
+    };
+
+  const avatar =
+    user.full_name
+      ?.trim()
+      .charAt(0)
+      .toUpperCase() ||
+    "Х";
+
+  if (loading) {
+    return (
+      <div className="profile-page">
+        <header className="profile-page-header">
+          <button
+            type="button"
+            className="profile-back"
+            onClick={() =>
+              navigate(
+                "/dashboard"
+              )
+            }
+          >
+            <ArrowLeft
+              size={17}
+            />
+            Буцах
+          </button>
+
+          <div className="profile-header-divider" />
+
+          <strong>
+            Миний профайл
+          </strong>
+        </header>
+
+        <main className="profile-page-content">
+          <section className="profile-card">
+            Профайл ачаалж
+            байна...
+          </section>
+        </main>
+      </div>
+    );
+  }
 
   return (
     <div className="profile-page">
@@ -40,161 +360,174 @@ export default function Profile() {
         <button
           type="button"
           className="profile-back"
-          onClick={() => navigate("/dashboard")}
+          onClick={() =>
+            navigate(
+              "/dashboard"
+            )
+          }
         >
-          <ArrowLeft size={17} />
+          <ArrowLeft
+            size={17}
+          />
           Буцах
         </button>
 
         <div className="profile-header-divider" />
 
-        <strong>Миний профайл</strong>
+        <strong>
+          Миний профайл
+        </strong>
       </header>
 
       <main className="profile-page-content">
+        {error && (
+          <div className="profile-card">
+            <div className="signup-error">
+              {error}
+            </div>
+          </div>
+        )}
+
+        {message && (
+          <div className="profile-card">
+            {message}
+          </div>
+        )}
+
         <section className="profile-card profile-user-card">
           <div className="profile-large-avatar">
-            Б
+            {avatar}
           </div>
 
           <div>
-            <h2>Бат-Эрдэнэ</h2>
+            <h2>
+              {user.full_name}
+            </h2>
 
-            <p>demo@company.mn</p>
+            <p>
+              {user.email}
+            </p>
 
             <span>
-              Admin · Монголын Компани ХХК
+              {user.role ||
+                "Admin"}
+              {" · "}
+              {user.company_name ||
+                "-"}
             </span>
           </div>
         </section>
 
         <section className="profile-card">
-          <h3>Хувийн мэдээлэл</h3>
+          <h3>
+            Хувийн мэдээлэл
+          </h3>
 
           <div className="profile-form-group">
-            <label>Нэр</label>
+            <label>
+              Нэр
+            </label>
 
             <input
               type="text"
-              defaultValue="Бат-Эрдэнэ"
+              value={
+                user.full_name
+              }
+              onChange={(e) =>
+                setUser(
+                  (prev) => ({
+                    ...prev,
+                    full_name:
+                      e.target
+                        .value,
+                  })
+                )
+              }
             />
           </div>
 
           <div className="profile-form-group">
-            <label>И-мэйл</label>
+            <label>
+              И-мэйл
+            </label>
 
             <input
               type="email"
-              defaultValue="demo@company.mn"
+              value={
+                user.email
+              }
               disabled
             />
           </div>
 
           <div className="profile-form-group">
-            <label>Утас</label>
+            <label>
+              Утас
+            </label>
 
             <input
               type="text"
-              defaultValue="+976 9911 2233"
+              value={
+                user.phone || ""
+              }
+              onChange={(e) =>
+                setUser(
+                  (prev) => ({
+                    ...prev,
+                    phone:
+                      e.target
+                        .value,
+                  })
+                )
+              }
             />
-          </div>
-
-          <div className="profile-form-group">
-            <label>Хэл</label>
-
-            <div className="profile-language-buttons">
-              <button
-                type="button"
-                className={
-                  language === "mn"
-                    ? "active"
-                    : ""
-                }
-                onClick={() =>
-                  setLanguage("mn")
-                }
-              >
-                {language === "mn" && (
-                  <Check size={15} />
-                )}
-
-                Монгол
-              </button>
-
-              <button
-                type="button"
-                className={
-                  language === "en"
-                    ? "active"
-                    : ""
-                }
-                onClick={() =>
-                  setLanguage("en")
-                }
-              >
-                {language === "en" && (
-                  <Check size={15} />
-                )}
-
-                English
-              </button>
-            </div>
           </div>
 
           <button
             type="button"
             className="profile-save-button"
+            onClick={
+              handleSave
+            }
+            disabled={
+              saving
+            }
           >
-            Хадгалах
+            {saving
+              ? "Хадгалж байна..."
+              : "Хадгалах"}
           </button>
         </section>
 
         <section className="profile-card">
-          <h3>И-мэйл мэдэгдэл</h3>
+          <h3>
+            И-мэйл мэдэгдэл
+          </h3>
 
-          <NotificationRow
-            title="Sync амжилтгүй болох"
-            description="Дата шинэчлэгдээгүй үед шууд мэдэгдэнэ"
-            checked={notifications.sync}
-            onChange={() =>
-              toggleNotification("sync")
-            }
-          />
+          <div className="profile-notification-row last">
+            <div>
+              <strong>
+                Удахгүй нэмэгдэнэ
+              </strong>
 
-          <NotificationRow
-            title="Долоо хоногийн тайлан"
-            description="Даваа гараг бүр 09:00-д гол үзүүлэлтүүд"
-            checked={notifications.weekly}
-            onChange={() =>
-              toggleNotification("weekly")
-            }
-          />
-
-          <NotificationRow
-            title="Хэрэглэгч нэмэгдэх"
-            description="Урьсан хүн урилгаа хүлээн авах үед"
-            checked={notifications.user}
-            onChange={() =>
-              toggleNotification("user")
-            }
-          />
-
-          <NotificationRow
-            title="Туршилт, төлбөрийн сануулга"
-            description="Дуусахаас 3 хоногийн өмнө"
-            checked={notifications.trial}
-            onChange={() =>
-              toggleNotification("trial")
-            }
-            last
-          />
+              <p>
+                И-мэйл мэдэгдлийн
+                тохиргоо дараагийн
+                хувилбарт нэмэгдэнэ.
+              </p>
+            </div>
+          </div>
         </section>
 
         <section className="profile-card">
-          <h3>Нууц үг солих</h3>
+          <h3>
+            Нууц үг солих
+          </h3>
 
           <div className="profile-form-group">
-            <label>Одоогийн нууц үг</label>
+            <label>
+              Одоогийн нууц үг
+            </label>
 
             <div className="profile-password-input">
               <input
@@ -203,28 +536,42 @@ export default function Profile() {
                     ? "text"
                     : "password"
                 }
-                defaultValue="12345678"
+                value={
+                  currentPassword
+                }
+                onChange={(e) =>
+                  setCurrentPassword(
+                    e.target.value
+                  )
+                }
               />
 
               <button
                 type="button"
                 onClick={() =>
                   setShowCurrentPassword(
-                    (prev) => !prev
+                    (prev) =>
+                      !prev
                   )
                 }
               >
                 {showCurrentPassword ? (
-                  <EyeOff size={17} />
+                  <EyeOff
+                    size={17}
+                  />
                 ) : (
-                  <Eye size={17} />
+                  <Eye
+                    size={17}
+                  />
                 )}
               </button>
             </div>
           </div>
 
           <div className="profile-form-group">
-            <label>Шинэ нууц үг</label>
+            <label>
+              Шинэ нууц үг
+            </label>
 
             <div className="profile-password-input">
               <input
@@ -233,21 +580,33 @@ export default function Profile() {
                     ? "text"
                     : "password"
                 }
-                defaultValue="12345678"
+                value={
+                  newPassword
+                }
+                onChange={(e) =>
+                  setNewPassword(
+                    e.target.value
+                  )
+                }
               />
 
               <button
                 type="button"
                 onClick={() =>
                   setShowNewPassword(
-                    (prev) => !prev
+                    (prev) =>
+                      !prev
                   )
                 }
               >
                 {showNewPassword ? (
-                  <EyeOff size={17} />
+                  <EyeOff
+                    size={17}
+                  />
                 ) : (
-                  <Eye size={17} />
+                  <Eye
+                    size={17}
+                  />
                 )}
               </button>
             </div>
@@ -256,43 +615,17 @@ export default function Profile() {
           <button
             type="button"
             className="profile-password-button"
+            onClick={
+              handlePassword
+            }
+            disabled={
+              saving
+            }
           >
             Нууц үг солих
           </button>
         </section>
       </main>
-    </div>
-  );
-}
-
-function NotificationRow({
-  title,
-  description,
-  checked,
-  onChange,
-  last,
-}) {
-  return (
-    <div
-      className={`profile-notification-row ${
-        last ? "last" : ""
-      }`}
-    >
-      <div>
-        <strong>{title}</strong>
-        <p>{description}</p>
-      </div>
-
-      <button
-        type="button"
-        className={`profile-switch ${
-          checked ? "active" : ""
-        }`}
-        onClick={onChange}
-        aria-pressed={checked}
-      >
-        <span />
-      </button>
     </div>
   );
 }

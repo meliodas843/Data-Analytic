@@ -202,20 +202,19 @@ function Setup() {
     setStep(2);
   };
 
-  const handleSkip = () => {
-  localStorage.setItem(
-    "dataConnected",
-    "false"
-  );
+const handleBack = () => {
+  if (step > 1) {
+    setStep(
+      (current) =>
+        current - 1
+    );
 
-  localStorage.setItem(
-    "usingDemoData",
-    "true"
-  );
+    return;
+  }
 
-  navigate("/dashboard", {
-    replace: true,
-  });
+  navigate(
+    "/dashboard"
+  );
 };
 
   return (
@@ -535,21 +534,15 @@ function Setup() {
               <div className="setup-footer">
                 <button
                   type="button"
-                  className="setup-skip"
-                  onClick={
-                    handleSkip
-                  }
+                  className="setup-back-button"
+                  onClick={handleBack}
                 >
-                  <strong>
-                    Алгасах
-                  </strong>
+                  <ArrowLeft
+                    size={17}
+                  />
 
                   <span>
-                    Жишээ датагаар
-                    dashboard-ыг үзнэ.
-                    Дараа нь
-                    Тохиргооноос
-                    бөглөж болно.
+                    Буцах
                   </span>
                 </button>
 

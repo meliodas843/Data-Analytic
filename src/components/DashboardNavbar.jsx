@@ -1,6 +1,5 @@
 import {
   NavLink,
-  useNavigate,
 } from "react-router-dom";
 
 import {
@@ -13,6 +12,10 @@ import {
   LockKeyhole,
   PanelLeftClose,
   PanelLeftOpen,
+  Building2,
+  Database,
+  Users,
+  CreditCard,
 } from "lucide-react";
 
 import logo from "../assets/logo-default.svg";
@@ -23,16 +26,14 @@ function DashboardNavbar({
   collapsed,
   onToggle,
 }) {
-  const navigate =
-    useNavigate();
-
   const {
     active,
     loading,
   } = useSubscription();
 
   const locked =
-    loading || !active;
+    !loading &&
+    !active;
 
   const menuItems = [
     {
@@ -61,11 +62,41 @@ function DashboardNavbar({
     },
     {
       to: "/ar-ap",
-      label: "AR / AP",
+      label: "Авлага / Өглөг",
       icon: BookOpen,
       paid: true,
     },
   ];
+
+  const settingsItems = [
+    {
+      to: "/settings",
+      label: "Байгууллага",
+      icon: Building2,
+      end: true,
+    },
+    {
+      to: "/settings/data",
+      label: "Дата холболт",
+      icon: Database,
+    },
+    {
+      to: "/settings/users",
+      label:
+        "Хэрэглэгчид & эрх",
+      icon: Users,
+    },
+    {
+      to: "/settings/billing",
+      label: "Багц & Төлбөр",
+      icon: CreditCard,
+    },
+  ];
+
+  const isSettings =
+    window.location.pathname.startsWith(
+      "/settings"
+    );
 
   return (
     <aside
@@ -121,12 +152,8 @@ function DashboardNavbar({
 
               return (
                 <NavLink
-                  key={
-                    item.to
-                  }
-                  to={
-                    item.to
-                  }
+                  key={item.to}
+                  to={item.to}
                   end={
                     item.to ===
                     "/dashboard"
@@ -156,9 +183,7 @@ function DashboardNavbar({
 
                   {!collapsed && (
                     <span className="sidebar-item-text">
-                      {
-                        item.label
-                      }
+                      {item.label}
                     </span>
                   )}
 
@@ -167,9 +192,6 @@ function DashboardNavbar({
                       <LockKeyhole
                         className="sidebar-lock"
                         size={14}
-                        strokeWidth={
-                          2
-                        }
                       />
                     )}
                 </NavLink>
@@ -179,21 +201,19 @@ function DashboardNavbar({
 
           <div className="sidebar-divider" />
 
-          <button
-            type="button"
-            className="sidebar-item"
-            onClick={() =>
-              navigate(
-                "/settings"
-              )
+          <NavLink
+            to="/settings"
+            className={() =>
+              `sidebar-item ${
+                isSettings
+                  ? "active"
+                  : ""
+              }`
             }
           >
             <span className="sidebar-item-icon">
               <Settings
                 size={19}
-                strokeWidth={
-                  1.8
-                }
               />
             </span>
 
@@ -202,7 +222,52 @@ function DashboardNavbar({
                 Тохиргоо
               </span>
             )}
-          </button>
+          </NavLink>
+
+          {isSettings &&
+            !collapsed && (
+              <div className="sidebar-settings-submenu">
+                {settingsItems.map(
+                  (item) => {
+                    const Icon =
+                      item.icon;
+
+                    return (
+                      <NavLink
+                        key={
+                          item.to
+                        }
+                        to={
+                          item.to
+                        }
+                        end={
+                          item.end
+                        }
+                        className={({
+                          isActive,
+                        }) =>
+                          `sidebar-settings-item ${
+                            isActive
+                              ? "active"
+                              : ""
+                          }`
+                        }
+                      >
+                        <Icon
+                          size={16}
+                        />
+
+                        <span>
+                          {
+                            item.label
+                          }
+                        </span>
+                      </NavLink>
+                    );
+                  }
+                )}
+              </div>
+            )}
         </nav>
       </div>
     </aside>

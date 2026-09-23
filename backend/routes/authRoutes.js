@@ -4,7 +4,10 @@ const express =
 const {
   signup,
   login,
+  demoLogin,
   me,
+  updateProfile,
+  changePassword,
 } = require(
   "../controllers/authController"
 );
@@ -27,10 +30,27 @@ router.post(
   login
 );
 
+router.post(
+  "/demo-login",
+  demoLogin
+);
+
 router.get(
   "/me",
   authMiddleware,
   me
+);
+
+router.put(
+  "/profile",
+  authMiddleware,
+  updateProfile
+);
+
+router.put(
+  "/password",
+  authMiddleware,
+  changePassword
 );
 
 module.exports =

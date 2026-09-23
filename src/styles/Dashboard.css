@@ -95,8 +95,7 @@ textarea {
   background: var(--white);
   border-right: 1px solid var(--border-light);
   z-index: 1000;
-  overflow-x: hidden;
-  overflow-y: auto;
+  overflow: hidden;
   transition: width 0.22s ease;
 }
 
@@ -106,21 +105,26 @@ textarea {
 
 .sidebar-main {
   width: 100%;
+  height: 100%;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
 }
 
 .sidebar-logo {
   width: 100%;
   height: 68px;
-  padding: 0 12px 0 18px;
+  min-height: 68px;
+  padding: 0 10px 0 18px;
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  gap: 10px;
   border-bottom: 1px solid #e7edf3;
+  position: relative;
 }
 
 .sidebar-logo-image {
-  width: 150px;
+  width: 135px;
+  max-width: calc(100% - 46px);
   height: auto;
   display: block;
   object-fit: contain;
@@ -131,15 +135,23 @@ textarea {
   height: 34px;
   min-width: 34px;
   padding: 0;
+  margin-left: auto;
+  flex: 0 0 34px;
+
   display: flex;
   align-items: center;
   justify-content: center;
+
   border: 1px solid #d9e3ed;
   border-radius: 8px;
   background: var(--white);
   color: #647b99;
+
   cursor: pointer;
-  transition: background 0.18s ease, color 0.18s ease,
+
+  transition:
+    background 0.18s ease,
+    color 0.18s ease,
     border-color 0.18s ease;
 }
 
@@ -158,6 +170,10 @@ textarea {
   display: none;
 }
 
+.dashboard-sidebar.collapsed .sidebar-toggle {
+  margin-left: 0;
+}
+
 .sidebar-section {
   padding: 12px 10px 0;
 }
@@ -172,7 +188,44 @@ textarea {
 
 .sidebar-navigation {
   width: 100%;
+  flex: 1;
+  min-height: 0;
   padding: 12px 10px;
+  overflow: hidden;
+}
+
+.sidebar-settings-submenu {
+  margin: 4px 0 0 31px;
+  padding-left: 9px;
+  border-left: 1px solid #e1e8ef;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.sidebar-settings-item {
+  min-height: 36px;
+  padding: 0 8px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+
+  border-radius: 7px;
+
+  color: #71839a;
+  font-size: 12px;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.sidebar-settings-item:hover {
+  background: #f5f8fa;
+  color: #1d3556;
+}
+
+.sidebar-settings-item.active {
+  background: #ebfaf1;
+  color: #168a49;
 }
 
 .sidebar-item {
@@ -1371,13 +1424,16 @@ textarea {
 .locked-dashboard {
   position: relative;
   width: 100%;
-  min-height: calc(100vh - 150px);
+  height: calc(100vh - 140px);
+  min-height: 0;
   overflow: hidden;
 }
 
 .locked-dashboard-preview {
   width: 100%;
-  min-height: calc(100vh - 150px);
+  height: 100%;
+  min-height: 0;
+  overflow: hidden;
   filter: blur(8px);
   opacity: 0.2;
   pointer-events: none;
@@ -1390,8 +1446,9 @@ textarea {
   z-index: 50;
   display: flex;
   justify-content: center;
-  align-items: flex-start;
-  padding: 170px 24px 60px;
+  align-items: center;
+  padding: 24px;
+  overflow: hidden;
   background: rgba(247, 249, 252, 0.5);
 }
 

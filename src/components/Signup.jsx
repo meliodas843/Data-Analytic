@@ -1,20 +1,148 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import {
-  Eye,
-  EyeOff,
-} from "lucide-react";
+import { Eye, EyeOff } from "lucide-react";
 
 import Navbar from "./Navbar";
-
+import { useLanguage } from "../context/LanguageContext";
 import "../styles/Signup.css";
 
-const API_URL =
-  "http://localhost:5000/api";
+const API_URL = "/api";
 
 function Signup() {
-  const navigate =
-    useNavigate();
+  const navigate = useNavigate();
+  const languageContext = useLanguage();
+
+  const language =
+    languageContext?.language ||
+    languageContext?.lang ||
+    "en";
+
+  const isMongolian =
+    language === "mn";
+
+  const translations = {
+    en: {
+      title: "Sign Up",
+      companyName: "Company Name",
+      companyPlaceholder:
+        "Mongolian Company LLC",
+      fullName: "Your Name",
+      fullNamePlaceholder: "John Doe",
+      email: "Email",
+      phone: "Phone Number",
+      password: "Password",
+      passwordHelp:
+        "8+ characters, letters and numbers",
+      hidePassword: "Hide password",
+      showPassword: "Show password",
+      terms: "Terms of Service",
+      and: "and",
+      privacy: "Privacy Policy",
+      accept: "I agree to the",
+      signingUp:
+        "Creating account...",
+      signup: "Sign Up",
+      skip: "Skip",
+      skipping:
+        "Opening demo...",
+      alreadyRegistered:
+        "Already have an account?",
+      login: "Log In",
+      companyRequired:
+        "Please enter your company name.",
+      nameRequired:
+        "Please enter your name.",
+      emailRequired:
+        "Please enter your email address.",
+      phoneRequired:
+        "Please enter your phone number.",
+      phoneInvalid:
+        "Phone number must contain 8 digits.",
+      passwordLength:
+        "Password must contain at least 8 characters.",
+      passwordLetter:
+        "Password must contain at least one letter.",
+      passwordNumber:
+        "Password must contain at least one number.",
+      termsRequired:
+        "Please agree to the Terms of Service and Privacy Policy.",
+      invalidBackend:
+        "The server returned an invalid response.",
+      signupError:
+        "An error occurred while creating your account.",
+      demoError:
+        "Could not open the demo account.",
+      serverError:
+        "Could not connect to the server.",
+    },
+
+    mn: {
+      title: "Бүртгүүлэх",
+      companyName:
+        "Байгууллагын нэр",
+      companyPlaceholder:
+        "Монголын Компани ХХК",
+      fullName: "Таны нэр",
+      fullNamePlaceholder:
+        "Бат-Эрдэнэ",
+      email: "И-мэйл",
+      phone: "Утасны дугаар",
+      password: "Нууц үг",
+      passwordHelp:
+        "8+ тэмдэгт, үсэг ба тоо",
+      hidePassword:
+        "Нууц үг нуух",
+      showPassword:
+        "Нууц үг харах",
+      terms:
+        "Үйлчилгээний нөхцөл",
+      and: "болон",
+      privacy:
+        "Нууцлалын бодлого",
+      accept:
+        "-ыг зөвшөөрч байна",
+      signingUp:
+        "Бүртгэж байна...",
+      signup: "Бүртгүүлэх",
+      skip: "Алгасах",
+      skipping:
+        "Демо нээж байна...",
+      alreadyRegistered:
+        "Бүртгэлтэй юу?",
+      login: "Нэвтрэх",
+      companyRequired:
+        "Байгууллагын нэрээ оруулна уу.",
+      nameRequired:
+        "Нэрээ оруулна уу.",
+      emailRequired:
+        "И-мэйл хаягаа оруулна уу.",
+      phoneRequired:
+        "Утасны дугаараа оруулна уу.",
+      phoneInvalid:
+        "Утасны дугаар 8 оронтой байна.",
+      passwordLength:
+        "Нууц үг хамгийн багадаа 8 тэмдэгт байна.",
+      passwordLetter:
+        "Нууц үг дор хаяж нэг үсэг агуулсан байна.",
+      passwordNumber:
+        "Нууц үг дор хаяж нэг тоо агуулсан байна.",
+      termsRequired:
+        "Үйлчилгээний нөхцөл болон нууцлалын бодлогыг зөвшөөрнө үү.",
+      invalidBackend:
+        "Backend буруу хариу буцаалаа.",
+      signupError:
+        "Бүртгэл үүсгэхэд алдаа гарлаа.",
+      demoError:
+        "Демо хэрэглэгчээр нэвтэрч чадсангүй.",
+      serverError:
+        "Backend сервертэй холбогдож чадсангүй.",
+    },
+  };
+
+  const t =
+    isMongolian
+      ? translations.mn
+      : translations.en;
 
   const [
     showPassword,
@@ -27,25 +155,26 @@ function Signup() {
   ] = useState(false);
 
   const [
+    skipLoading,
+    setSkipLoading,
+  ] = useState(false);
+
+  const [
     error,
     setError,
   ] = useState("");
 
-  const [
-    form,
-    setForm,
-  ] = useState({
-    companyName: "",
-    fullName: "",
-    email: "",
-    phone: "",
-    password: "",
-    terms: false,
-  });
+  const [form, setForm] =
+    useState({
+      companyName: "",
+      fullName: "",
+      email: "",
+      phone: "",
+      password: "",
+      terms: false,
+    });
 
-  const handleChange = (
-    e
-  ) => {
+  const handleChange = (e) => {
     const {
       name,
       value,
@@ -53,219 +182,287 @@ function Signup() {
       checked,
     } = e.target;
 
-    setForm(
-      (prev) => ({
-        ...prev,
-        [name]:
-          type === "checkbox"
-            ? checked
-            : value,
-      })
-    );
+    setForm((prev) => ({
+      ...prev,
+      [name]:
+        type === "checkbox"
+          ? checked
+          : value,
+    }));
 
     setError("");
   };
 
-  const handleSubmit = async (
-    e
+  const saveLoginData = (
+    data
   ) => {
-    e.preventDefault();
-
-    setError("");
-
-    const companyName =
-      form.companyName.trim();
-
-    const fullName =
-      form.fullName.trim();
-
-    const email =
-      form.email
-        .trim()
-        .toLowerCase();
-
-    const phone =
-      form.phone
-        .replace(/\s+/g, "")
-        .replace("+976", "")
-        .trim();
-
-    const password =
-      form.password;
-
-    if (!companyName) {
-      setError(
-        "Байгууллагын нэрээ оруулна уу."
-      );
-
-      return;
-    }
-
-    if (!fullName) {
-      setError(
-        "Нэрээ оруулна уу."
-      );
-
-      return;
-    }
-
-    if (!email) {
-      setError(
-        "И-мэйл хаягаа оруулна уу."
-      );
-
-      return;
-    }
-
-    if (!phone) {
-      setError(
-        "Утасны дугаараа оруулна уу."
-      );
-
-      return;
-    }
-
-    if (
-      !/^\d{8}$/.test(phone)
-    ) {
-      setError(
-        "Утасны дугаар 8 оронтой байна."
-      );
-
-      return;
-    }
-
-    if (
-      password.length < 8
-    ) {
-      setError(
-        "Нууц үг хамгийн багадаа 8 тэмдэгт байна."
-      );
-
-      return;
-    }
-
-    if (
-      !/[A-Za-zА-Яа-яӨөҮүЁё]/.test(
-        password
-      )
-    ) {
-      setError(
-        "Нууц үг дор хаяж нэг үсэг агуулсан байна."
-      );
-
-      return;
-    }
-
-    if (
-      !/\d/.test(password)
-    ) {
-      setError(
-        "Нууц үг дор хаяж нэг тоо агуулсан байна."
-      );
-
-      return;
-    }
-
-    if (!form.terms) {
-      setError(
-        "Үйлчилгээний нөхцөл болон нууцлалын бодлогыг зөвшөөрнө үү."
-      );
-
-      return;
-    }
-
-    try {
-      setLoading(true);
-
-      const response =
-        await fetch(
-          `${API_URL}/auth/signup`,
-          {
-            method: "POST",
-
-            headers: {
-              "Content-Type":
-                "application/json",
-            },
-
-            body:
-              JSON.stringify({
-                companyName,
-                fullName,
-                email,
-                phone:
-                  `+976${phone}`,
-                password,
-              }),
-          }
-        );
-
-      let data;
-
-      try {
-        data =
-          await response.json();
-      } catch {
-        throw new Error(
-          "Backend буруу хариу буцаалаа."
-        );
-      }
-
-      if (
-        !response.ok ||
-        !data.success
-      ) {
-        throw new Error(
-          data.message ||
-            "Бүртгэл үүсгэхэд алдаа гарлаа."
-        );
-      }
-
+    if (data?.token) {
       localStorage.setItem(
-        "pendingVerificationEmail",
-        email
+        "token",
+        data.token
       );
+    }
 
+    if (data?.user) {
       localStorage.setItem(
-        "pendingSignupUser",
+        "currentUser",
         JSON.stringify(
           data.user
         )
       );
+    }
 
-      navigate(
-        "/verify-email",
-        {
-          state: {
-            email,
-          },
+    localStorage.setItem(
+      "isLoggedIn",
+      "true"
+    );
+
+    localStorage.setItem(
+      "subscription",
+      JSON.stringify(
+        data?.subscription || {
+          subscribed: false,
+          status: "none",
+          plan: null,
         }
-      );
-    } catch (err) {
-      console.error(
-        "SIGNUP ERROR:",
-        err
-      );
+      )
+    );
 
-      if (
-        err instanceof TypeError
-      ) {
-        setError(
-          "Backend сервертэй холбогдож чадсангүй. Сервер ажиллаж байгаа эсэхийг шалгана уу."
+    window.dispatchEvent(
+      new Event(
+        "subscriptionChanged"
+      )
+    );
+  };
+
+  const handleSkip =
+    async () => {
+      try {
+        setSkipLoading(true);
+        setError("");
+
+        const response =
+          await fetch(
+            `${API_URL}/auth/demo-login`,
+            {
+              method: "POST",
+              headers: {
+                "Content-Type":
+                  "application/json",
+              },
+            }
+          );
+
+        const data =
+          await response.json();
+
+        if (
+          !response.ok ||
+          !data.success
+        ) {
+          throw new Error(
+            data.message ||
+              t.demoError
+          );
+        }
+
+        saveLoginData(data);
+
+        localStorage.setItem(
+          "usingDemoData",
+          "true"
         );
 
+        localStorage.setItem(
+          "dataConnected",
+          "false"
+        );
+
+        navigate(
+          "/dashboard",
+          {
+            replace: true,
+          }
+        );
+      } catch (err) {
+        console.error(
+          "DEMO LOGIN ERROR:",
+          err
+        );
+
+        setError(
+          err?.message ||
+            t.demoError
+        );
+      } finally {
+        setSkipLoading(false);
+      }
+    };
+
+  const handleSubmit =
+    async (e) => {
+      e.preventDefault();
+
+      setError("");
+
+      const companyName =
+        form.companyName.trim();
+
+      const fullName =
+        form.fullName.trim();
+
+      const email =
+        form.email
+          .trim()
+          .toLowerCase();
+
+      const phone =
+        form.phone
+          .replace(/\s+/g, "")
+          .replace("+976", "")
+          .trim();
+
+      const password =
+        form.password;
+
+      if (!companyName) {
+        setError(
+          t.companyRequired
+        );
         return;
       }
 
-      setError(
-        err?.message ||
-          "Бүртгэл үүсгэхэд алдаа гарлаа."
-      );
-    } finally {
-      setLoading(false);
-    }
-  };
+      if (!fullName) {
+        setError(
+          t.nameRequired
+        );
+        return;
+      }
+
+      if (!email) {
+        setError(
+          t.emailRequired
+        );
+        return;
+      }
+
+      if (!phone) {
+        setError(
+          t.phoneRequired
+        );
+        return;
+      }
+
+      if (
+        !/^\d{8}$/.test(
+          phone
+        )
+      ) {
+        setError(
+          t.phoneInvalid
+        );
+        return;
+      }
+
+      if (
+        password.length < 8
+      ) {
+        setError(
+          t.passwordLength
+        );
+        return;
+      }
+
+      if (
+        !/[A-Za-zА-Яа-яӨөҮүЁё]/.test(
+          password
+        )
+      ) {
+        setError(
+          t.passwordLetter
+        );
+        return;
+      }
+
+      if (
+        !/\d/.test(password)
+      ) {
+        setError(
+          t.passwordNumber
+        );
+        return;
+      }
+
+      if (!form.terms) {
+        setError(
+          t.termsRequired
+        );
+        return;
+      }
+
+      try {
+        setLoading(true);
+
+        const response =
+          await fetch(
+            `${API_URL}/auth/signup`,
+            {
+              method: "POST",
+              headers: {
+                "Content-Type":
+                  "application/json",
+              },
+              body:
+                JSON.stringify({
+                  companyName,
+                  fullName,
+                  email,
+                  phone:
+                    `+976${phone}`,
+                  password,
+                }),
+            }
+          );
+
+        const data =
+          await response.json();
+
+        if (
+          !response.ok ||
+          !data.success
+        ) {
+          throw new Error(
+            data.message ||
+              t.signupError
+          );
+        }
+
+        saveLoginData(data);
+
+        localStorage.removeItem(
+          "usingDemoData"
+        );
+
+        navigate(
+          "/dashboard",
+          {
+            replace: true,
+          }
+        );
+      } catch (err) {
+        console.error(
+          "SIGNUP ERROR:",
+          err
+        );
+
+        setError(
+          err?.message ||
+            t.signupError
+        );
+      } finally {
+        setLoading(false);
+      }
+    };
 
   return (
     <>
@@ -276,13 +473,8 @@ function Signup() {
           <section className="signup-card">
             <div className="signup-heading">
               <h1>
-                Бүртгүүлэх
+                {t.title}
               </h1>
-
-              <p>
-                14 хоног үнэгүй туршилт ·
-                Карт шаардахгүй
-              </p>
             </div>
 
             <form
@@ -293,7 +485,7 @@ function Signup() {
             >
               <div className="signup-field">
                 <label htmlFor="companyName">
-                  Байгууллагын нэр
+                  {t.companyName}
                   <b>*</b>
                 </label>
 
@@ -301,16 +493,18 @@ function Signup() {
                   id="companyName"
                   type="text"
                   name="companyName"
-                  placeholder="Монголын Компани ХХК"
+                  placeholder={
+                    t.companyPlaceholder
+                  }
                   value={
                     form.companyName
                   }
                   onChange={
                     handleChange
                   }
-                  autoComplete="organization"
                   disabled={
-                    loading
+                    loading ||
+                    skipLoading
                   }
                   required
                 />
@@ -318,7 +512,7 @@ function Signup() {
 
               <div className="signup-field">
                 <label htmlFor="fullName">
-                  Таны нэр
+                  {t.fullName}
                   <b>*</b>
                 </label>
 
@@ -326,16 +520,18 @@ function Signup() {
                   id="fullName"
                   type="text"
                   name="fullName"
-                  placeholder="Бат-Эрдэнэ"
+                  placeholder={
+                    t.fullNamePlaceholder
+                  }
                   value={
                     form.fullName
                   }
                   onChange={
                     handleChange
                   }
-                  autoComplete="name"
                   disabled={
-                    loading
+                    loading ||
+                    skipLoading
                   }
                   required
                 />
@@ -343,7 +539,7 @@ function Signup() {
 
               <div className="signup-field">
                 <label htmlFor="signupEmail">
-                  И-мэйл
+                  {t.email}
                   <b>*</b>
                 </label>
 
@@ -358,9 +554,9 @@ function Signup() {
                   onChange={
                     handleChange
                   }
-                  autoComplete="email"
                   disabled={
-                    loading
+                    loading ||
+                    skipLoading
                   }
                   required
                 />
@@ -368,7 +564,7 @@ function Signup() {
 
               <div className="signup-field">
                 <label htmlFor="phone">
-                  Утасны дугаар
+                  {t.phone}
                   <b>*</b>
                 </label>
 
@@ -389,9 +585,9 @@ function Signup() {
                     onChange={
                       handleChange
                     }
-                    autoComplete="tel"
                     disabled={
-                      loading
+                      loading ||
+                      skipLoading
                     }
                     required
                   />
@@ -400,7 +596,7 @@ function Signup() {
 
               <div className="signup-field">
                 <label htmlFor="signupPassword">
-                  Нууц үг
+                  {t.password}
                   <b>*</b>
                 </label>
 
@@ -420,9 +616,9 @@ function Signup() {
                     onChange={
                       handleChange
                     }
-                    autoComplete="new-password"
                     disabled={
-                      loading
+                      loading ||
+                      skipLoading
                     }
                     required
                   />
@@ -435,14 +631,6 @@ function Signup() {
                         (prev) =>
                           !prev
                       )
-                    }
-                    aria-label={
-                      showPassword
-                        ? "Нууц үг нуух"
-                        : "Нууц үг харах"
-                    }
-                    disabled={
-                      loading
                     }
                   >
                     {showPassword ? (
@@ -458,7 +646,7 @@ function Signup() {
                 </div>
 
                 <span className="password-help">
-                  8+ тэмдэгт, үсэг ба тоо
+                  {t.passwordHelp}
                 </span>
               </div>
 
@@ -472,33 +660,58 @@ function Signup() {
                   onChange={
                     handleChange
                   }
-                  disabled={
-                    loading
-                  }
                 />
 
                 <span className="custom-checkbox" />
 
                 <span>
-                  <button
-                    type="button"
-                    className="terms-link"
-                  >
-                    Үйлчилгээний нөхцөл
-                  </button>
+                  {isMongolian ? (
+                    <>
+                      <button
+                        type="button"
+                        className="terms-link"
+                      >
+                        {t.terms}
+                      </button>
 
-                  {" "}
-                  болон
-                  {" "}
+                      {" "}
+                      {t.and}
+                      {" "}
 
-                  <button
-                    type="button"
-                    className="terms-link"
-                  >
-                    Нууцлалын бодлого
-                  </button>
+                      <button
+                        type="button"
+                        className="terms-link"
+                      >
+                        {t.privacy}
+                      </button>
 
-                  -ыг зөвшөөрч байна
+                      {" "}
+                      {t.accept}
+                    </>
+                  ) : (
+                    <>
+                      {t.accept}
+                      {" "}
+
+                      <button
+                        type="button"
+                        className="terms-link"
+                      >
+                        {t.terms}
+                      </button>
+
+                      {" "}
+                      {t.and}
+                      {" "}
+
+                      <button
+                        type="button"
+                        className="terms-link"
+                      >
+                        {t.privacy}
+                      </button>
+                    </>
+                  )}
                 </span>
               </label>
 
@@ -515,18 +728,37 @@ function Signup() {
                 type="submit"
                 className="signup-submit"
                 disabled={
-                  loading
+                  loading ||
+                  skipLoading
                 }
               >
                 {loading
-                  ? "Бүртгэж байна..."
-                  : "Бүртгүүлэх"}
+                  ? t.signingUp
+                  : t.signup}
+              </button>
+
+              <button
+                type="button"
+                className="signup-skip"
+                onClick={
+                  handleSkip
+                }
+                disabled={
+                  loading ||
+                  skipLoading
+                }
+              >
+                {skipLoading
+                  ? t.skipping
+                  : t.skip}
               </button>
             </form>
 
             <div className="signup-login-row">
               <span>
-                Бүртгэлтэй юу?
+                {
+                  t.alreadyRegistered
+                }
               </span>
 
               <button
@@ -537,7 +769,7 @@ function Signup() {
                   )
                 }
               >
-                Нэвтрэх
+                {t.login}
               </button>
             </div>
           </section>
