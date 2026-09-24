@@ -63,7 +63,13 @@ const ADMIN_LAST_ACTIVITY_KEY =
   "adminLastActivity";
 
 const ADMIN_TIMEOUT =
-  10 * 60 * 1000;
+  20 * 60 * 1000;
+
+const USER_SESSION_STARTED_KEY =
+  "userSessionStartedAt";
+
+const USER_TIMEOUT =
+  20 * 60 * 1000;
 
 function clearAdminSession() {
   sessionStorage.removeItem(
@@ -184,28 +190,39 @@ function DashboardLayout({
 }
 
 function ProtectedUserRoute() {
-  const token =
-    localStorage.getItem(
-      "token"
-    );
+  const navigate = useNavigate();
+  const token = localStorage.getItem("token");
+  const isLoggedIn = localStorage.getItem("isLoggedIn") === "true";
 
-  const isLoggedIn =
-    localStorage.getItem(
-      "isLoggedIn"
-    ) === "true";
+  useEffect(() => {
+    if (!token || !isLoggedIn) return;
 
-  if (
-    !token ||
-    !isLoggedIn
-  ) {
-    return (
-      <Navigate
-        to="/login"
-        replace
-      />
-    );
-  }
+    const logout = () => {
+      localStorage.removeItem("token");
+      localStorage.removeItem("currentUser");
+      localStorage.removeItem("isLoggedIn");
+      localStorage.removeItem("subscription");
+      localStorage.removeItem(USER_SESSION_STARTED_KEY);
+      navigate("/login", { replace: true });
+    };
 
+    let startedAt = Number(localStorage.getItem(USER_SESSION_STARTED_KEY));
+    if (!startedAt) {
+      startedAt = Date.now();
+      localStorage.setItem(USER_SESSION_STARTED_KEY, String(startedAt));
+    }
+
+    const remaining = USER_TIMEOUT - (Date.now() - startedAt);
+    if (remaining <= 0) {
+      logout();
+      return;
+    }
+
+    const timer = setTimeout(logout, remaining);
+    return () => clearTimeout(timer);
+  }, [token, isLoggedIn, navigate]);
+
+  if (!token || !isLoggedIn) return <Navigate to="/login" replace />;
   return <Outlet />;
 }
 

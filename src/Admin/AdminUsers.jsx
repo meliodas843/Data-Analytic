@@ -782,6 +782,7 @@ function AdminUsers() {
                   }
                   required={!editingUser}
                 />
+                <small>Хамгийн багадаа 10 тэмдэгт, том жижиг үсэг, тэмдэг, тооноос бүрдсэн байна</small>
               </label>
 
               <div className="user-modal-footer">

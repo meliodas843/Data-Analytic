@@ -1,6 +1,30 @@
 const db = require("../config/db");
 const bcrypt = require("bcryptjs");
 
+function validatePassword(password) {
+  if (String(password || "").length < 10) {
+    return "Нууц үг хамгийн багадаа 10 тэмдэгт байна.";
+  }
+
+  if (!/[A-ZА-ЯӨҮЁ]/.test(password)) {
+    return "Нууц үг дор хаяж нэг том үсэг агуулсан байна.";
+  }
+
+  if (!/[a-zа-яөүё]/.test(password)) {
+    return "Нууц үг дор хаяж нэг жижиг үсэг агуулсан байна.";
+  }
+
+  if (!/\d/.test(password)) {
+    return "Нууц үг дор хаяж нэг тоо агуулсан байна.";
+  }
+
+  if (!/[^A-Za-zА-Яа-яӨөҮүЁё0-9\s]/.test(password)) {
+    return "Нууц үг дор хаяж нэг тусгай тэмдэг агуулсан байна.";
+  }
+
+  return null;
+}
+
 exports.getUsers = async (req, res) => {
   try {
     const [rows] = await db.query(`
@@ -37,15 +61,11 @@ exports.getUsers = async (req, res) => {
       users,
     });
   } catch (error) {
-    console.error(
-      "GET USERS ERROR:",
-      error
-    );
+    console.error("GET USERS ERROR:", error);
 
     res.status(500).json({
       success: false,
-      message:
-        "Хэрэглэгчдийг авахад алдаа гарлаа.",
+      message: "Хэрэглэгчдийг авахад алдаа гарлаа.",
       error: error.message,
     });
   }
@@ -62,42 +82,40 @@ exports.createUser = async (req, res) => {
       company_name,
     } = req.body;
 
-    const finalName =
-      full_name || name;
+    const finalName = full_name || name;
 
-    if (
-      !finalName ||
-      !email ||
-      !password
-    ) {
+    if (!finalName || !email || !password) {
       return res.status(400).json({
         success: false,
-        message:
-          "Нэр, имэйл, нууц үг шаардлагатай.",
+        message: "Нэр, имэйл, нууц үг шаардлагатай.",
       });
     }
 
-    const normalizedEmail =
-      email
-        .trim()
-        .toLowerCase();
+    const passwordError = validatePassword(password);
 
-    const [existing] =
-      await db.query(
-        `
+    if (passwordError) {
+      return res.status(400).json({
+        success: false,
+        message: passwordError,
+      });
+    }
+
+    const normalizedEmail = email.trim().toLowerCase();
+
+    const [existing] = await db.query(
+      `
         SELECT id
         FROM users
         WHERE email = ?
         LIMIT 1
-        `,
-        [normalizedEmail]
-      );
+      `,
+      [normalizedEmail]
+    );
 
     if (existing.length > 0) {
       return res.status(409).json({
         success: false,
-        message:
-          "Энэ имэйл бүртгэлтэй байна.",
+        message: "Энэ имэйл бүртгэлтэй байна.",
       });
     }
 
@@ -106,20 +124,17 @@ exports.createUser = async (req, res) => {
       "admin",
     ];
 
-    const finalRole =
-      allowedRoles.includes(role)
-        ? role
-        : "admin";
+    const finalRole = allowedRoles.includes(role)
+      ? role
+      : "admin";
 
-    const hashedPassword =
-      await bcrypt.hash(
-        password,
-        10
-      );
+    const hashedPassword = await bcrypt.hash(
+      password,
+      10
+    );
 
-    const [result] =
-      await db.query(
-        `
+    const [result] = await db.query(
+      `
         INSERT INTO users (
           company_name,
           full_name,
@@ -136,53 +151,39 @@ exports.createUser = async (req, res) => {
           ?,
           ?
         )
-        `,
-        [
-          company_name || null,
-          finalName.trim(),
-          normalizedEmail,
-          hashedPassword,
-          finalRole,
-          "active",
-        ]
-      );
+      `,
+      [
+        company_name || null,
+        finalName.trim(),
+        normalizedEmail,
+        hashedPassword,
+        finalRole,
+        "active",
+      ]
+    );
 
     res.status(201).json({
       success: true,
-      message:
-        "Хэрэглэгч амжилттай үүсгэгдлээ.",
+      message: "Хэрэглэгч амжилттай үүсгэгдлээ.",
       user: {
         id: result.insertId,
-        full_name:
-          finalName.trim(),
-        name:
-          finalName.trim(),
-        email:
-          normalizedEmail,
-        company_name:
-          company_name || null,
-        role:
-          finalRole,
-        status:
-          "active",
-        company_id:
-          null,
-        last_login:
-          null,
-        is_locked:
-          false,
+        full_name: finalName.trim(),
+        name: finalName.trim(),
+        email: normalizedEmail,
+        company_name: company_name || null,
+        role: finalRole,
+        status: "active",
+        company_id: null,
+        last_login: null,
+        is_locked: false,
       },
     });
   } catch (error) {
-    console.error(
-      "CREATE USER ERROR:",
-      error
-    );
+    console.error("CREATE USER ERROR:", error);
 
     res.status(500).json({
       success: false,
-      message:
-        "Хэрэглэгч үүсгэхэд алдаа гарлаа.",
+      message: "Хэрэглэгч үүсгэхэд алдаа гарлаа.",
       error: error.message,
     });
   }
@@ -190,8 +191,7 @@ exports.createUser = async (req, res) => {
 
 exports.updateUser = async (req, res) => {
   try {
-    const { id } =
-      req.params;
+    const { id } = req.params;
 
     const {
       name,
@@ -203,46 +203,39 @@ exports.updateUser = async (req, res) => {
       status,
     } = req.body;
 
-    const [rows] =
-      await db.query(
-        `
+    const [rows] = await db.query(
+      `
         SELECT *
         FROM users
         WHERE id = ?
         LIMIT 1
-        `,
-        [id]
-      );
+      `,
+      [id]
+    );
 
-    if (
-      rows.length === 0
-    ) {
+    if (rows.length === 0) {
       return res.status(404).json({
         success: false,
-        message:
-          "Хэрэглэгч олдсонгүй.",
+        message: "Хэрэглэгч олдсонгүй.",
       });
     }
 
-    const current =
-      rows[0];
+    const current = rows[0];
 
     const finalName =
       full_name ||
       name ||
       current.full_name;
 
-    const finalEmail =
-      (
-        email ||
-        current.email
-      )
-        .trim()
-        .toLowerCase();
+    const finalEmail = (
+      email ||
+      current.email
+    )
+      .trim()
+      .toLowerCase();
 
     const finalCompany =
-      company_name ??
-      current.company_name;
+      company_name ?? current.company_name;
 
     const allowedRoles = [
       "super_admin",
@@ -250,8 +243,7 @@ exports.updateUser = async (req, res) => {
     ];
 
     const finalRole =
-      role &&
-      allowedRoles.includes(role)
+      role && allowedRoles.includes(role)
         ? role
         : current.role;
 
@@ -262,30 +254,25 @@ exports.updateUser = async (req, res) => {
     ];
 
     const finalStatus =
-      status &&
-      allowedStatuses.includes(status)
+      status && allowedStatuses.includes(status)
         ? status
         : current.status;
 
-    const [duplicateEmail] =
-      await db.query(
-        `
+    const [duplicateEmail] = await db.query(
+      `
         SELECT id
         FROM users
         WHERE email = ?
           AND id <> ?
         LIMIT 1
-        `,
-        [
-          finalEmail,
-          id,
-        ]
-      );
+      `,
+      [
+        finalEmail,
+        id,
+      ]
+    );
 
-    if (
-      duplicateEmail.length >
-      0
-    ) {
+    if (duplicateEmail.length > 0) {
       return res.status(409).json({
         success: false,
         message:
@@ -293,31 +280,36 @@ exports.updateUser = async (req, res) => {
       });
     }
 
-    let finalPassword =
-      current.password;
+    let finalPassword = current.password;
 
-    if (
-      password &&
-      password.trim()
-    ) {
-      finalPassword =
-        await bcrypt.hash(
-          password,
-          10
-        );
+    if (password && password.trim()) {
+      const passwordError =
+        validatePassword(password);
+
+      if (passwordError) {
+        return res.status(400).json({
+          success: false,
+          message: passwordError,
+        });
+      }
+
+      finalPassword = await bcrypt.hash(
+        password,
+        12
+      );
     }
 
     await db.query(
       `
-      UPDATE users
-      SET
-        company_name = ?,
-        full_name = ?,
-        email = ?,
-        password = ?,
-        role = ?,
-        status = ?
-      WHERE id = ?
+        UPDATE users
+        SET
+          company_name = ?,
+          full_name = ?,
+          email = ?,
+          password = ?,
+          role = ?,
+          status = ?
+        WHERE id = ?
       `,
       [
         finalCompany,
@@ -332,49 +324,33 @@ exports.updateUser = async (req, res) => {
 
     res.json({
       success: true,
-      message:
-        "Хэрэглэгч шинэчлэгдлээ.",
+      message: "Хэрэглэгч шинэчлэгдлээ.",
       user: {
         id: Number(id),
-        company_name:
-          finalCompany,
-        full_name:
-          finalName.trim(),
-        name:
-          finalName.trim(),
-        email:
-          finalEmail,
-        role:
-          finalRole,
-        status:
-          finalStatus,
+        company_name: finalCompany,
+        full_name: finalName.trim(),
+        name: finalName.trim(),
+        email: finalEmail,
+        role: finalRole,
+        status: finalStatus,
         is_locked:
-          finalStatus ===
-          "inactive",
+          finalStatus === "inactive",
       },
     });
   } catch (error) {
-    console.error(
-      "UPDATE USER ERROR:",
-      error
-    );
+    console.error("UPDATE USER ERROR:", error);
 
     res.status(500).json({
       success: false,
-      message:
-        "Хэрэглэгч шинэчлэхэд алдаа гарлаа.",
+      message: "Хэрэглэгч шинэчлэхэд алдаа гарлаа.",
       error: error.message,
     });
   }
 };
 
-exports.toggleUserLock = async (
-  req,
-  res
-) => {
+exports.toggleUserLock = async (req, res) => {
   try {
-    const { id } =
-      req.params;
+    const { id } = req.params;
 
     const {
       is_locked,
@@ -385,26 +361,22 @@ exports.toggleUserLock = async (
         ? "inactive"
         : "active";
 
-    const [result] =
-      await db.query(
-        `
+    const [result] = await db.query(
+      `
         UPDATE users
         SET status = ?
         WHERE id = ?
-        `,
-        [
-          newStatus,
-          id,
-        ]
-      );
+      `,
+      [
+        newStatus,
+        id,
+      ]
+    );
 
-    if (
-      result.affectedRows === 0
-    ) {
+    if (result.affectedRows === 0) {
       return res.status(404).json({
         success: false,
-        message:
-          "Хэрэглэгч олдсонгүй.",
+        message: "Хэрэглэгч олдсонгүй.",
       });
     }
 
@@ -415,14 +387,10 @@ exports.toggleUserLock = async (
           ? "Хэрэглэгч түгжигдлээ."
           : "Хэрэглэгчийн түгжээ тайлагдлаа.",
       is_locked,
-      status:
-        newStatus,
+      status: newStatus,
     });
   } catch (error) {
-    console.error(
-      "LOCK USER ERROR:",
-      error
-    );
+    console.error("LOCK USER ERROR:", error);
 
     res.status(500).json({
       success: false,
@@ -435,36 +403,28 @@ exports.toggleUserLock = async (
 
 exports.deleteUser = async (req, res) => {
   try {
-    const { id } =
-      req.params;
+    const { id } = req.params;
 
-    const [rows] =
-      await db.query(
-        `
+    const [rows] = await db.query(
+      `
         SELECT
           id,
           role
         FROM users
         WHERE id = ?
         LIMIT 1
-        `,
-        [id]
-      );
+      `,
+      [id]
+    );
 
-    if (
-      rows.length === 0
-    ) {
+    if (rows.length === 0) {
       return res.status(404).json({
         success: false,
-        message:
-          "Хэрэглэгч олдсонгүй.",
+        message: "Хэрэглэгч олдсонгүй.",
       });
     }
 
-    if (
-      rows[0].role ===
-      "super_admin"
-    ) {
+    if (rows[0].role === "super_admin") {
       return res.status(403).json({
         success: false,
         message:
@@ -474,27 +434,22 @@ exports.deleteUser = async (req, res) => {
 
     await db.query(
       `
-      DELETE FROM users
-      WHERE id = ?
+        DELETE FROM users
+        WHERE id = ?
       `,
       [id]
     );
 
     res.json({
       success: true,
-      message:
-        "Хэрэглэгч устгагдлаа.",
+      message: "Хэрэглэгч устгагдлаа.",
     });
   } catch (error) {
-    console.error(
-      "DELETE USER ERROR:",
-      error
-    );
+    console.error("DELETE USER ERROR:", error);
 
     res.status(500).json({
       success: false,
-      message:
-        "Хэрэглэгч устгахад алдаа гарлаа.",
+      message: "Хэрэглэгч устгахад алдаа гарлаа.",
       error: error.message,
     });
   }

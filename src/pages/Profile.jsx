@@ -71,6 +71,9 @@ export default function Profile() {
     setNewPassword,
   ] = useState("");
 
+  const [passwordCode, setPasswordCode] = useState("");
+  const [passwordCodeSent, setPasswordCodeSent] = useState(false);
+
   useEffect(() => {
     const loadProfile =
       async () => {
@@ -235,81 +238,47 @@ export default function Profile() {
       }
     };
 
-  const handlePassword =
-    async () => {
-      if (
-        !currentPassword ||
-        !newPassword
-      ) {
-        setError(
-          "Одоогийн болон шинэ нууц үгээ оруулна уу."
-        );
+  const handlePassword = async () => {
+    if (!currentPassword || !newPassword) {
+      setError("Одоогийн болон шинэ нууц үгээ оруулна уу.");
+      return;
+    }
 
+    const passwordRule = /^(?=.*[A-ZА-ЯӨҮЁ])(?=.*[a-zа-яөүё])(?=.*\d)(?=.*[^A-Za-zА-Яа-яӨөҮүЁё0-9\s]).{10,}$/;
+    if (!passwordRule.test(newPassword)) {
+      setError("Нууц үг хамгийн багадаа 10 тэмдэгт, том жижиг үсэг, тэмдэг, тооноос бүрдсэн байна.");
+      return;
+    }
+
+    try {
+      setSaving(true);
+      setError("");
+      setMessage("");
+      const token = localStorage.getItem("token");
+      const endpoint = passwordCodeSent ? `${API_URL}/auth/password` : `${API_URL}/auth/password/request-code`;
+      const response = await fetch(endpoint, {
+        method: passwordCodeSent ? "PUT" : "POST",
+        headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
+        body: JSON.stringify({ currentPassword, newPassword, code: passwordCode }),
+      });
+      const data = await response.json();
+      if (!response.ok || !data.success) throw new Error(data.message || "Нууц үг солиход алдаа гарлаа.");
+      if (!passwordCodeSent) {
+        setPasswordCodeSent(true);
+        setMessage(data.message);
         return;
       }
-
-      try {
-        setSaving(true);
-        setError("");
-        setMessage("");
-
-        const token =
-          localStorage.getItem(
-            "token"
-          );
-
-        const response =
-          await fetch(
-            `${API_URL}/auth/password`,
-            {
-              method: "PUT",
-
-              headers: {
-                "Content-Type":
-                  "application/json",
-
-                Authorization:
-                  `Bearer ${token}`,
-              },
-
-              body:
-                JSON.stringify({
-                  currentPassword,
-                  newPassword,
-                }),
-            }
-          );
-
-        const data =
-          await response.json();
-
-        if (
-          !response.ok ||
-          !data.success
-        ) {
-          throw new Error(
-            data.message ||
-              "Нууц үг солиход алдаа гарлаа."
-          );
-        }
-
-        setCurrentPassword(
-          ""
-        );
-
-        setNewPassword("");
-
-        setMessage(
-          "Нууц үг амжилттай солигдлоо."
-        );
-      } catch (err) {
-        setError(
-          err.message
-        );
-      } finally {
-        setSaving(false);
-      }
-    };
+      setCurrentPassword("");
+      setNewPassword("");
+      setPasswordCode("");
+      setPasswordCodeSent(false);
+      setMessage(data.message || "Нууц үг амжилттай солигдлоо.");
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setSaving(false);
+    }
+  };
 
   const avatar =
     user.full_name
@@ -612,6 +581,25 @@ export default function Profile() {
             </div>
           </div>
 
+          <p style={{ marginTop: 8, marginBottom: 14, color: "#64748b", fontSize: 13 }}>
+            Нууц үг хамгийн багадаа 10 тэмдэгт, том жижиг үсэг, тэмдэг, тооноос бүрдсэн байна.
+          </p>
+
+          {passwordCodeSent && (
+            <div className="profile-form-group">
+              <label>И-мэйлээр ирсэн 6 оронтой код</label>
+              <div className="profile-password-input">
+                <input
+                  type="text"
+                  inputMode="numeric"
+                  maxLength={6}
+                  value={passwordCode}
+                  onChange={(e) => setPasswordCode(e.target.value.replace(/\D/g, "").slice(0, 6))}
+                />
+              </div>
+            </div>
+          )}
+
           <button
             type="button"
             className="profile-password-button"
@@ -622,7 +610,7 @@ export default function Profile() {
               saving
             }
           >
-            Нууц үг солих
+            {passwordCodeSent ? "Баталгаажуулж солих" : "Баталгаажуулах код авах"}
           </button>
         </section>
       </main>

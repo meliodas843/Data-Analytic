@@ -1,57 +1,37 @@
-const express =
-  require("express");
+const express = require("express");
+const authController = require("../controllers/authController");
+const authMiddleware = require("../middleware/authMiddleware");
 
-const {
-  signup,
-  login,
-  demoLogin,
-  me,
-  updateProfile,
-  changePassword,
-} = require(
-  "../controllers/authController"
-);
+const router = express.Router();
 
-const authMiddleware =
-  require(
-    "../middleware/authMiddleware"
-  );
+router.post("/signup", authController.signup);
+router.post("/verify-email", authController.verifyEmail);
+router.post("/resend-verification", authController.resendVerification);
+router.post("/login", authController.login);
 
-const router =
-  express.Router();
+router.post("/forgot-password", authController.forgotPassword);
+router.post("/verify-reset-code", authController.verifyResetCode);
+router.post("/reset-password", authController.resetPassword);
 
 router.post(
-  "/signup",
-  signup
+  "/request-password-change",
+  authMiddleware,
+  authController.requestPasswordChange
 );
 
 router.post(
-  "/login",
-  login
+  "/verify-password-change",
+  authMiddleware,
+  authController.verifyPasswordChange
 );
 
 router.post(
-  "/demo-login",
-  demoLogin
-);
-
-router.get(
-  "/me",
+  "/change-password",
   authMiddleware,
-  me
+  authController.changePassword
 );
 
-router.put(
-  "/profile",
-  authMiddleware,
-  updateProfile
-);
+router.get("/me", authMiddleware, authController.me);
+router.post("/logout", authMiddleware, authController.logout);
 
-router.put(
-  "/password",
-  authMiddleware,
-  changePassword
-);
-
-module.exports =
-  router;
+module.exports = router;

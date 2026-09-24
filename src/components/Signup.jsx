@@ -32,7 +32,7 @@ function Signup() {
       phone: "Phone Number",
       password: "Password",
       passwordHelp:
-        "8+ characters, letters and numbers",
+        "At least 10 characters with uppercase, lowercase, number and special character",
       hidePassword: "Hide password",
       showPassword: "Show password",
       terms: "Terms of Service",
@@ -59,11 +59,13 @@ function Signup() {
       phoneInvalid:
         "Phone number must contain 8 digits.",
       passwordLength:
-        "Password must contain at least 8 characters.",
+        "Password must contain at least 10 characters.",
       passwordLetter:
-        "Password must contain at least one letter.",
+        "Password must contain uppercase and lowercase letters.",
       passwordNumber:
         "Password must contain at least one number.",
+      passwordSpecial:
+        "Password must contain at least one special character.",
       termsRequired:
         "Please agree to the Terms of Service and Privacy Policy.",
       invalidBackend:
@@ -89,7 +91,7 @@ function Signup() {
       phone: "Утасны дугаар",
       password: "Нууц үг",
       passwordHelp:
-        "8+ тэмдэгт, үсэг ба тоо",
+        "Хамгийн багадаа 10 тэмдэгт, том жижиг үсэг, тэмдэг, тооноос бүрдсэн байна",
       hidePassword:
         "Нууц үг нуух",
       showPassword:
@@ -121,11 +123,13 @@ function Signup() {
       phoneInvalid:
         "Утасны дугаар 8 оронтой байна.",
       passwordLength:
-        "Нууц үг хамгийн багадаа 8 тэмдэгт байна.",
+        "Нууц үг хамгийн багадаа 10 тэмдэгт байна.",
       passwordLetter:
-        "Нууц үг дор хаяж нэг үсэг агуулсан байна.",
+        "Нууц үг том болон жижиг үсэг агуулсан байна.",
       passwordNumber:
         "Нууц үг дор хаяж нэг тоо агуулсан байна.",
+      passwordSpecial:
+        "Нууц үг дор хаяж нэг тусгай тэмдэг агуулсан байна.",
       termsRequired:
         "Үйлчилгээний нөхцөл болон нууцлалын бодлогыг зөвшөөрнө үү.",
       invalidBackend:
@@ -216,6 +220,8 @@ function Signup() {
       "isLoggedIn",
       "true"
     );
+
+    localStorage.setItem("userSessionStartedAt", String(Date.now()));
 
     localStorage.setItem(
       "subscription",
@@ -365,7 +371,7 @@ function Signup() {
       }
 
       if (
-        password.length < 8
+        password.length < 10
       ) {
         setError(
           t.passwordLength
@@ -374,13 +380,10 @@ function Signup() {
       }
 
       if (
-        !/[A-Za-zА-Яа-яӨөҮүЁё]/.test(
-          password
-        )
+        !/[A-ZА-ЯӨҮЁ]/.test(password) ||
+        !/[a-zа-яөүё]/.test(password)
       ) {
-        setError(
-          t.passwordLetter
-        );
+        setError(t.passwordLetter);
         return;
       }
 
@@ -390,6 +393,11 @@ function Signup() {
         setError(
           t.passwordNumber
         );
+        return;
+      }
+
+      if (!/[^A-Za-zА-Яа-яӨөҮүЁё0-9\s]/.test(password)) {
+        setError(t.passwordSpecial);
         return;
       }
 
@@ -437,18 +445,9 @@ function Signup() {
           );
         }
 
-        saveLoginData(data);
-
-        localStorage.removeItem(
-          "usingDemoData"
-        );
-
-        navigate(
-          "/dashboard",
-          {
-            replace: true,
-          }
-        );
+        sessionStorage.setItem("verificationEmail", email);
+        localStorage.removeItem("usingDemoData");
+        navigate("/verify-email", { state: { email }, replace: true });
       } catch (err) {
         console.error(
           "SIGNUP ERROR:",
@@ -737,7 +736,7 @@ function Signup() {
                   : t.signup}
               </button>
 
-              <button
+              {/* <button
                 type="button"
                 className="signup-skip"
                 onClick={
@@ -751,7 +750,7 @@ function Signup() {
                 {skipLoading
                   ? t.skipping
                   : t.skip}
-              </button>
+              </button> */}
             </form>
 
             <div className="signup-login-row">
