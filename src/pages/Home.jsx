@@ -1,10 +1,19 @@
 import { useEffect } from "react";
+import { useLanguage } from "../context/LanguageContext";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import logoWhite from "../assets/Logo-default.svg";
 import "../styles/Home.css";
 
 export default function Home() {
+  const { language } = useLanguage();
+  const isMn = language === "mn";
+  const t = (mn, en) => (isMn ? mn : en);
+
+  useEffect(() => {
+    document.documentElement.lang = language === "en" ? "en" : "mn";
+  }, [language]);
+
   useEffect(() => {
     (function () {
       "use strict";
@@ -92,7 +101,16 @@ export default function Home() {
         function setMenu(open) {
           nav.classList.toggle("is-open", open);
           btn.setAttribute("aria-expanded", open ? "true" : "false");
-          btn.setAttribute("aria-label", open ? "Цэс хаах" : "Цэс нээх");
+          btn.setAttribute(
+              "aria-label",
+              document.documentElement.lang === "en"
+                ? open
+                  ? "Close menu"
+                  : "Open menu"
+                : open
+                  ? "Цэс хаах"
+                  : "Цэс нээх",
+            );
           document.body.classList.toggle("menu-open", open);
         }
 
@@ -179,7 +197,7 @@ export default function Home() {
             resetAllProgress();
             toggle.setAttribute(
               "aria-label",
-              "Автомат солигдолтыг үргэлжлүүлэх",
+              (document.documentElement.lang === "en" ? "Resume automatic rotation" : "Автомат солигдолтыг үргэлжлүүлэх"),
             );
             return;
           }
@@ -209,7 +227,7 @@ export default function Home() {
           card.classList.remove("is-manual");
           toggle.setAttribute(
             "aria-label",
-            "Автомат солигдолтыг зогсоох",
+            (document.documentElement.lang === "en" ? "Pause automatic rotation" : "Автомат солигдолтыг зогсоох"),
           );
           startSelectedProgress();
           scheduleNext();
@@ -222,7 +240,7 @@ export default function Home() {
           card.classList.add("is-manual");
           toggle.setAttribute(
             "aria-label",
-            "Автомат солигдолтыг үргэлжлүүлэх",
+            (document.documentElement.lang === "en" ? "Resume automatic rotation" : "Автомат солигдолтыг үргэлжлүүлэх"),
           );
         }
 
@@ -373,7 +391,7 @@ export default function Home() {
           });
 
           if (!name.value.trim()) {
-            setError(name, "Нэрээ оруулна уу.");
+            setError(name, (document.documentElement.lang === "en" ? "Please enter your name." : "Нэрээ оруулна уу."));
             ok = false;
             first = first || name;
           }
@@ -383,17 +401,17 @@ export default function Home() {
           var phoneDigits = phoneVal.replace(/\D/g, "");
 
           if (!phoneVal && !emailVal) {
-            setError(phone, "Утас эсвэл имэйлийн аль нэгийг оруулна уу.");
+            setError(phone, (document.documentElement.lang === "en" ? "Please enter a phone number or email." : "Утас эсвэл имэйлийн аль нэгийг оруулна уу."));
             ok = false;
             first = first || phone;
           }
           if (phoneVal && phoneDigits.length < 8) {
-            setError(phone, "Утасны дугаар дор хаяж 8 оронтой байна.");
+            setError(phone, (document.documentElement.lang === "en" ? "Phone number must contain at least 8 digits." : "Утасны дугаар дор хаяж 8 оронтой байна."));
             ok = false;
             first = first || phone;
           }
           if (emailVal && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailVal)) {
-            setError(email, "Имэйл хаягаа шалгана уу. Жишээ: email@company.mn");
+            setError(email, (document.documentElement.lang === "en" ? "Please check your email address. Example: email@company.mn" : "Имэйл хаягаа шалгана уу. Жишээ: email@company.mn"));
             ok = false;
             first = first || email;
           }
@@ -446,7 +464,7 @@ export default function Home() {
           };
 
           submit.disabled = true;
-          submitLabel.textContent = "Илгээж байна…";
+          submitLabel.textContent = (document.documentElement.lang === "en" ? "Sending…" : "Илгээж байна…");
 
           var request = CONTACT_ENDPOINT
             ? fetch(CONTACT_ENDPOINT, {
@@ -464,7 +482,7 @@ export default function Home() {
             .then(function () {
               showStatus(
                 "success",
-                "Хүсэлт илгээгдлээ. Бид 1–3 ажлын өдөрт холбогдоно.",
+                (document.documentElement.lang === "en" ? "Request sent. We will contact you within 1–3 business days." : "Хүсэлт илгээгдлээ. Бид 1–3 ажлын өдөрт холбогдоно."),
               );
               form.reset();
               choices.forEach(function (b) {
@@ -475,12 +493,12 @@ export default function Home() {
             .catch(function () {
               showStatus(
                 "error",
-                "Илгээж чадсангүй. Дахин оролдох эсвэл +976 7700 0000 руу залгана уу.",
+                (document.documentElement.lang === "en" ? "Could not send the request. Please try again or call +976 7700 0000." : "Илгээж чадсангүй. Дахин оролдох эсвэл +976 7700 0000 руу залгана уу."),
               );
             })
             .then(function () {
               submit.disabled = false;
-              submitLabel.textContent = "Илгээх";
+              submitLabel.textContent = (document.documentElement.lang === "en" ? "Send" : "Илгээх");
             });
         });
       }
@@ -496,7 +514,7 @@ export default function Home() {
   return (
     <>
       <a className="skip-link" href="#main">
-        Үндсэн агуулга руу шилжих
+        {t("Үндсэн агуулга руу шилжих", "Skip to main content")}
       </a>
       
       <svg
@@ -646,18 +664,17 @@ export default function Home() {
         <section className="hero" id="top">
           <div className="container">
             <div className="hero__intro">
-              <h1 className="hero__title">Мэдээллээс шийдвэр хүртэл</h1>
+              <h1 className="hero__title">{t("Мэдээллээс шийдвэр хүртэл", "From data to decisions")}</h1>
               <div className="hero__lead">
                 <p>
-                  Өнөөдөр Excel тайлангаар эхэлж, маргааш өгөгдлийн агуулах руу
-                  өсөөрэй.
+                  {t("Өнөөдөр Excel тайлангаар эхэлж, маргааш өгөгдлийн агуулах руу өсөөрэй.", "Start with Excel reports today and grow into a data warehouse tomorrow.")}
                 </p>
                 <div className="hero__actions">
                   <a className="btn btn--primary btn--lg" href="#contact">
-                    Үнэгүй турших
+                    {t("Үнэгүй турших", "Try for free")}
                   </a>
                   <a className="link-arrow" href="#solutions">
-                    Шийдлүүдийг үзэх
+                    {t("Шийдлүүдийг үзэх", "Explore solutions")}
                     <svg className="icon">
                       <use href="#i-arrow"></use>
                     </svg>
@@ -668,19 +685,19 @@ export default function Home() {
                     <svg className="icon">
                       <use href="#i-check"></use>
                     </svg>
-                    IT мэдлэг шаардлагагүй
+                    {t("IT мэдлэг шаардлагагүй", "No IT expertise required")}
                   </li>
                   <li>
                     <svg className="icon">
                       <use href="#i-check"></use>
                     </svg>
-                    Монгол хэлээр
+                    {t("Монгол хэлээр", "Available in Mongolian")}
                   </li>
                   <li>
                     <svg className="icon">
                       <use href="#i-check"></use>
                     </svg>
-                    Үнэгүй туршилт
+                    {t("Үнэгүй туршилт", "Free trial")}
                   </li>
                 </ul>
               </div>
@@ -689,7 +706,7 @@ export default function Home() {
             <div className="module-card" data-hero="">
               <div className="module-card__top">
                 <div
-                  aria-label="Модулиуд"
+                  aria-label={t("Модулиуд", "Modules")}
                   className="module-tabs"
                   role="tablist"
                 >
@@ -704,9 +721,9 @@ export default function Home() {
                   >
                     <span className="module-tab__meta">
                       <span className="kind-swatch kind-swatch--product"></span>
-                      <span className="module-tab__kind">Бүтээгдэхүүн</span>
+                      <span className="module-tab__kind">{t("Бүтээгдэхүүн", "Product")}</span>
                     </span>
-                    <span className="module-tab__name">Сарын KPI тайлан</span>
+                    <span className="module-tab__name">{t("Сарын KPI тайлан", "Monthly KPI Report")}</span>
                     <span
                       aria-hidden="true"
                       className="module-tab__progress"
@@ -724,11 +741,11 @@ export default function Home() {
                   >
                     <span className="module-tab__meta">
                       <span className="kind-swatch kind-swatch--product"></span>
-                      <span className="module-tab__kind">Бүтээгдэхүүн</span>
-                      <span className="badge badge--soon">Удахгүй</span>
+                      <span className="module-tab__kind">{t("Бүтээгдэхүүн", "Product")}</span>
+                      <span className="badge badge--soon">{t("Удахгүй", "Coming soon")}</span>
                     </span>
                     <span className="module-tab__name">
-                      Өгөгдлийн автоматжуулалт
+                      {t("Өгөгдлийн автоматжуулалт", "Data Automation")}
                     </span>
                     <span
                       aria-hidden="true"
@@ -747,9 +764,9 @@ export default function Home() {
                   >
                     <span className="module-tab__meta">
                       <span className="kind-swatch kind-swatch--service"></span>
-                      <span className="module-tab__kind">Үйлчилгээ</span>
+                      <span className="module-tab__kind">{t("Үйлчилгээ", "Service")}</span>
                     </span>
-                    <span className="module-tab__name">Захиалгат дашбоард</span>
+                    <span className="module-tab__name">{t("Захиалгат дашбоард", "Custom Dashboard")}</span>
                     <span
                       aria-hidden="true"
                       className="module-tab__progress"
@@ -767,10 +784,10 @@ export default function Home() {
                   >
                     <span className="module-tab__meta">
                       <span className="kind-swatch kind-swatch--service"></span>
-                      <span className="module-tab__kind">Үйлчилгээ</span>
+                      <span className="module-tab__kind">{t("Үйлчилгээ", "Service")}</span>
                     </span>
                     <span className="module-tab__name">
-                      Өгөгдлийн агуулахын зөвлөх
+                      {t("Өгөгдлийн агуулахын зөвлөх", "Data Warehouse Consulting")}
                     </span>
                     <span
                       aria-hidden="true"
@@ -789,10 +806,10 @@ export default function Home() {
                   >
                     <span className="module-tab__meta">
                       <span className="kind-swatch kind-swatch--service"></span>
-                      <span className="module-tab__kind">Үйлчилгээ</span>
+                      <span className="module-tab__kind">{t("Үйлчилгээ", "Service")}</span>
                     </span>
                     <span className="module-tab__name">
-                      Өгөгдлийн стратеги зөвлөх
+                      {t("Өгөгдлийн стратеги зөвлөх", "Data Strategy Consulting")}
                     </span>
                     <span
                       aria-hidden="true"
@@ -801,7 +818,7 @@ export default function Home() {
                   </button>
                 </div>
                 <button
-                  aria-label="Автомат солигдолтыг зогсоох"
+                  aria-label={t("Автомат солигдолтыг зогсоох", "Pause automatic rotation")}
                   className="autoplay-btn"
                   data-autoplay-toggle=""
                   type="button"
@@ -816,13 +833,13 @@ export default function Home() {
               </div>
               <div aria-hidden="true" className="flow-head">
                 <span className="stage-label">
-                  <span className="stage-num">1</span>Эх үүсвэр
+                  <span className="stage-num">1</span>{t("Эх үүсвэр", "Source")}
                 </span>
                 <span className="stage-label">
-                  <span className="stage-num">2</span>Боловсруулалт
+                  <span className="stage-num">2</span>{t("Боловсруулалт", "Processing")}
                 </span>
                 <span className="stage-label">
-                  <span className="stage-num">3</span>Үр дүн
+                  <span className="stage-num">3</span>{t("Үр дүн", "Result")}
                 </span>
               </div>
 
@@ -835,7 +852,7 @@ export default function Home() {
                 <div className="flow">
                   <div className="flow__col flow__col--source">
                     <span className="stage-label">
-                      <span className="stage-num">1</span>Эх үүсвэр
+                      <span className="stage-num">1</span>{t("Эх үүсвэр", "Source")}
                     </span>
                     <div className="node node--source">
                       <span className="node__icon node__icon--green">
@@ -844,8 +861,8 @@ export default function Home() {
                         </svg>
                       </span>
                       <span className="node__text">
-                        <strong>Excel файл</strong>
-                        <span>Сар бүр оруулна</span>
+                        <strong>{t("Excel файл", "Excel file")}</strong>
+                        <span>{t("Сар бүр оруулна", "Upload monthly")}</span>
                       </span>
                     </div>
                     <div className="node node--source">
@@ -856,7 +873,7 @@ export default function Home() {
                       </span>
                       <span className="node__text">
                         <strong>SharePoint</strong>
-                        <span>Автоматаар татна</span>
+                        <span>{t("Автоматаар татна", "Automatically imported")}</span>
                       </span>
                     </div>
                   </div>
@@ -871,7 +888,7 @@ export default function Home() {
                   </div>
                   <div className="flow__col flow__col--process">
                     <span className="stage-label">
-                      <span className="stage-num">2</span>Боловсруулалт
+                      <span className="stage-num">2</span>{t("Боловсруулалт", "Processing")}
                     </span>
                     <div className="node node--engine">
                       <div className="node__head">
@@ -882,19 +899,19 @@ export default function Home() {
                           <svg className="icon">
                             <use href="#i-check"></use>
                           </svg>
-                          Файлыг шалгана
+                          {t("Файлыг шалгана", "Validate the file")}
                         </li>
                         <li>
                           <svg className="icon">
                             <use href="#i-check"></use>
                           </svg>
-                          KPI-г тооцоолно
+                          {t("KPI-г тооцоолно", "Calculate KPIs")}
                         </li>
                         <li>
                           <svg className="icon">
                             <use href="#i-check"></use>
                           </svg>
-                          5 загварт тайлан бэлдэнэ
+                          {t("5 загварт тайлан бэлдэнэ", "Prepare reports in 5 templates")}
                         </li>
                       </ul>
                     </div>
@@ -910,13 +927,16 @@ export default function Home() {
                   </div>
                   <div className="flow__col flow__col--output">
                     <span className="stage-label">
-                      <span className="stage-num">3</span>Үр дүн
+                      <span className="stage-num">3</span>{t("Үр дүн", "Result")}
                     </span>
                     <div className="node node--product">
                       <div className="node__text">
-                        <span className="node__title">Сарын KPI тайлан</span>
+                        <span className="node__title">{t("Сарын KPI тайлан", "Monthly KPI Report")}</span>
                         <span className="node__sub">
-                          6 KPI · и-мэйлээр ирнэ
+                          {t(
+                            "6 KPI · и-мэйлээр ирнэ",
+                            "6 KPIs · delivered by email"
+                          )}
                         </span>
                       </div>
                       <div aria-hidden="true" className="bars">
@@ -931,7 +951,7 @@ export default function Home() {
                         ></span>
                       </div>
                       <div className="node__row">
-                        <span className="node__sub">Орлого</span>
+                        <span className="node__sub">{t("Орлого", "Revenue")}</span>
                         <strong>₮2.19bn ▲ 22.2%</strong>
                       </div>
                     </div>
@@ -939,11 +959,11 @@ export default function Home() {
                 </div>
                 <div className="flow-caption">
                   <p>
-                    <strong>Сарын KPI тайлан.</strong> Excel-ээ оруулаад сар бүр
+                    <strong>{t("Сарын KPI тайлан.", "Monthly KPI Report.")}</strong> Excel-ээ оруулаад сар бүр
                     бэлэн тайлан, мэдэгдэл аваарай.
                   </p>
                   <a className="link-arrow" data-solution="0" href="#solutions">
-                    Дэлгэрэнгүй
+                    {t("Дэлгэрэнгүй", "Learn more")}
                     <svg className="icon">
                       <use href="#i-arrow"></use>
                     </svg>
@@ -961,11 +981,11 @@ export default function Home() {
                 <div className="flow">
                   <div className="flow__col flow__col--source">
                     <span className="stage-label">
-                      <span className="stage-num">1</span>Эх үүсвэр
+                      <span className="stage-num">1</span>{t("Эх үүсвэр", "Source")}
                     </span>
                     <div className="source-group">
                       <span className="source-group__label">
-                        Бүртгэлийн систем
+                        {t("Бүртгэлийн систем", "Accounting system")}
                       </span>
                       <span className="chip">
                         <svg className="icon">
@@ -984,14 +1004,14 @@ export default function Home() {
                           <use href="#i-db"></use>
                         </svg>
                         <span className="chip__label">Oracle</span>
-                        <span className="badge badge--soon">Удахгүй</span>
+                        <span className="badge badge--soon">{t("Удахгүй", "Coming soon")}</span>
                       </span>
                       <span className="chip chip--soon">
                         <svg className="icon">
                           <use href="#i-db"></use>
                         </svg>
                         <span className="chip__label">SQL Server</span>
-                        <span className="badge badge--soon">Удахгүй</span>
+                        <span className="badge badge--soon">{t("Удахгүй", "Coming soon")}</span>
                       </span>
                     </div>
                   </div>
@@ -1006,28 +1026,28 @@ export default function Home() {
                   </div>
                   <div className="flow__col flow__col--process">
                     <span className="stage-label">
-                      <span className="stage-num">2</span>Боловсруулалт
+                      <span className="stage-num">2</span>{t("Боловсруулалт", "Processing")}
                     </span>
                     <div className="node node--product">
-                      <span className="badge badge--soon">Удахгүй</span>
+                      <span className="badge badge--soon">{t("Удахгүй", "Coming soon")}</span>
                       <span className="node__title">
-                        Өгөгдлийн автоматжуулалт
+                        {t("Өгөгдлийн автоматжуулалт", "Data Automation")}
                       </span>
                       <div className="step-rows stagger">
                         <div className="step-row">
-                          <span>Татах query</span>
+                          <span>{t("Татах query", "Extract query")}</span>
                           <span className="badge badge--outline-white">
-                            Та бичнэ
+                            {t("Та бичнэ", "You write it")}
                           </span>
                         </div>
                         <div className="step-row">
-                          <span>Хуваарь, давтан оролдлого</span>
-                          <span className="badge badge--white">Автомат</span>
+                          <span>{t("Хуваарь, давтан оролдлого", "Scheduling and retries")}</span>
+                          <span className="badge badge--white">{t("Автомат", "Automatic")}</span>
                         </div>
                         <div className="step-row">
-                          <span>Ачаалах query</span>
+                          <span>{t("Ачаалах query", "Load query")}</span>
                           <span className="badge badge--outline-white">
-                            Та бичнэ
+                            {t("Та бичнэ", "You write it")}
                           </span>
                         </div>
                       </div>
@@ -1044,7 +1064,7 @@ export default function Home() {
                   </div>
                   <div className="flow__col flow__col--output">
                     <span className="stage-label">
-                      <span className="stage-num">3</span>Үр дүн
+                      <span className="stage-num">3</span>{t("Үр дүн", "Result")}
                     </span>
                     <div className="node">
                       <div className="node__head">
@@ -1053,25 +1073,24 @@ export default function Home() {
                             <use href="#i-db"></use>
                           </svg>
                         </span>
-                        <span className="node__title">Өгөгдлийн агуулах</span>
+                        <span className="node__title">{t("Өгөгдлийн агуулах", "Data warehouse")}</span>
                       </div>
                       <span className="node__sub">
-                        Бүх систем нэг дор · Түүхэн дата хадгална
+                        {t("Бүх систем нэг дор · Түүхэн дата хадгална", "All systems in one place · Historical data retained")}
                       </span>
                       <span className="status">
-                        <span className="status__dot"></span>Өдөр бүр 02:00 ·
-                        Амжилттай
+                        <span className="status__dot"></span>{t("Өдөр бүр 02:00 · Амжилттай", "Daily at 02:00 · Successful")}
                       </span>
                     </div>
                   </div>
                 </div>
                 <div className="flow-caption">
                   <p>
-                    <strong>Өгөгдлийн автоматжуулалт.</strong> Хоёр талын
+                    <strong>{t("Өгөгдлийн автоматжуулалт.", "Data Automation.")}</strong> Хоёр талын
                     query-г бичээд, үлдсэнийг платформ хийнэ.
                   </p>
                   <a className="link-arrow" data-solution="1" href="#solutions">
-                    Дэлгэрэнгүй
+                    {t("Дэлгэрэнгүй", "Learn more")}
                     <svg className="icon">
                       <use href="#i-arrow"></use>
                     </svg>
@@ -1089,10 +1108,10 @@ export default function Home() {
                 <div className="flow flow--navy">
                   <div className="flow__col flow__col--source">
                     <span className="stage-label">
-                      <span className="stage-num">1</span>Эх үүсвэр
+                      <span className="stage-num">1</span>{t("Эх үүсвэр", "Source")}
                     </span>
                     <div className="source-group">
-                      <span className="source-group__label">Танай систем</span>
+                      <span className="source-group__label">{t("Танай систем", "Your system")}</span>
                       <span className="chip">
                         <svg className="icon">
                           <use href="#i-db"></use>
@@ -1109,7 +1128,7 @@ export default function Home() {
                         <svg className="icon">
                           <use href="#i-db"></use>
                         </svg>
-                        Мэдээллийн сан
+                        {t("Мэдээллийн сан", "Database")}
                       </span>
                       <span className="chip">
                         <svg className="icon">
@@ -1130,7 +1149,7 @@ export default function Home() {
                   </div>
                   <div className="flow__col flow__col--process">
                     <span className="stage-label">
-                      <span className="stage-num">2</span>Боловсруулалт
+                      <span className="stage-num">2</span>{t("Боловсруулалт", "Processing")}
                     </span>
                     <div className="node">
                       <div className="node__head">
@@ -1139,26 +1158,26 @@ export default function Home() {
                             <use href="#i-users"></use>
                           </svg>
                         </span>
-                        <span className="node__title">Манай баг</span>
+                        <span className="node__title">{t("Манай баг", "Our team")}</span>
                       </div>
                       <ul className="ticks ticks--navy stagger">
                         <li>
                           <svg className="icon">
                             <use href="#i-check"></use>
                           </svg>
-                          Зөвхөн унших эрхээр холбоно
+                          {t("Зөвхөн унших эрхээр холбоно", "Connect with read-only access")}
                         </li>
                         <li>
                           <svg className="icon">
                             <use href="#i-check"></use>
                           </svg>
-                          Тоог нягтлангийн тоотой тулгана
+                          {t("Тоог нягтлангийн тоотой тулгана", "Reconcile with accounting figures")}
                         </li>
                         <li>
                           <svg className="icon">
                             <use href="#i-check"></use>
                           </svg>
-                          Дашбоардыг угсарна
+                          {t("Дашбоардыг угсарна", "Build the dashboard")}
                         </li>
                       </ul>
                     </div>
@@ -1174,13 +1193,13 @@ export default function Home() {
                   </div>
                   <div className="flow__col flow__col--output">
                     <span className="stage-label">
-                      <span className="stage-num">3</span>Үр дүн
+                      <span className="stage-num">3</span>{t("Үр дүн", "Result")}
                     </span>
                     <div className="node node--service">
                       <div className="node__text">
-                        <span className="node__title">Захиалгат дашбоард</span>
+                        <span className="node__title">{t("Захиалгат дашбоард", "Custom Dashboard")}</span>
                         <span className="node__sub">
-                          Танай хэрэгцээнд тохирсон
+                          {t("Танай хэрэгцээнд тохирсон", "Tailored to your needs")}
                         </span>
                       </div>
                       <svg
@@ -1196,7 +1215,7 @@ export default function Home() {
                         ></path>
                       </svg>
                       <div className="node__row">
-                        <span className="node__sub">Цэвэр ашиг</span>
+                        <span className="node__sub">{t("Цэвэр ашиг", "Net profit")}</span>
                         <strong>
                           ₮549M <span className="up">▲ 66.4%</span>
                         </strong>
@@ -1206,7 +1225,7 @@ export default function Home() {
                 </div>
                 <div className="flow-caption">
                   <p>
-                    <strong>Захиалгат дашбоард.</strong> Танай системд
+                    <strong>{t("Захиалгат дашбоард.", "Custom Dashboard.")}</strong> Танай системд
                     холбогдсон, хэрэгцээнд тань тохирсон тайлан.
                   </p>
                   <a
@@ -1214,7 +1233,7 @@ export default function Home() {
                     data-solution="2"
                     href="#solutions"
                   >
-                    Дэлгэрэнгүй
+                    {t("Дэлгэрэнгүй", "Learn more")}
                     <svg className="icon">
                       <use href="#i-arrow"></use>
                     </svg>
@@ -1232,29 +1251,29 @@ export default function Home() {
                 <div className="flow flow--navy">
                   <div className="flow__col flow__col--source">
                     <span className="stage-label">
-                      <span className="stage-num">1</span>Эх үүсвэр
+                      <span className="stage-num">1</span>{t("Эх үүсвэр", "Source")}
                     </span>
                     <div className="source-group">
                       <span className="source-group__label">
-                        ББСБ-ийн системүүд
+                        {t("ББСБ-ийн системүүд", "NBFI systems")}
                       </span>
                       <span className="chip">
                         <svg className="icon">
                           <use href="#i-db"></use>
                         </svg>
-                        Зээлийн систем
+                        {t("Зээлийн систем", "Loan system")}
                       </span>
                       <span className="chip">
                         <svg className="icon">
                           <use href="#i-db"></use>
                         </svg>
-                        Эргэн төлөлт
+                        {t("Эргэн төлөлт", "Repayment")}
                       </span>
                       <span className="chip">
                         <svg className="icon">
                           <use href="#i-db"></use>
                         </svg>
-                        Харилцагчийн бүртгэл
+                        {t("Харилцагчийн бүртгэл", "Customer records")}
                       </span>
                     </div>
                   </div>
@@ -1269,20 +1288,20 @@ export default function Home() {
                   </div>
                   <div className="flow__col flow__col--process">
                     <span className="stage-label">
-                      <span className="stage-num">2</span>Боловсруулалт
+                      <span className="stage-num">2</span>{t("Боловсруулалт", "Processing")}
                     </span>
                     <div className="node node--service">
                       <span className="badge badge--navy">
-                        ББСБ-д data mart
+                        {t("ББСБ-д data mart", "Data mart for NBFIs")}
                       </span>
-                      <span className="node__title">Өгөгдлийн агуулах</span>
+                      <span className="node__title">{t("Өгөгдлийн агуулах", "Data warehouse")}</span>
                       <div className="model stagger">
-                        <span className="model__fact">Зээлийн гүйлгээ</span>
+                        <span className="model__fact">{t("Зээлийн гүйлгээ", "Loan transactions")}</span>
                         <span className="model__dims">
-                          <span>Харилцагч</span>
-                          <span>Салбар</span>
-                          <span>Бүтээгдэхүүн</span>
-                          <span>Огноо</span>
+                          <span>{t("Харилцагч", "Customer")}</span>
+                          <span>{t("Салбар", "Branch")}</span>
+                          <span>{t("Бүтээгдэхүүн", "Product")}</span>
+                          <span>{t("Огноо", "Date")}</span>
                         </span>
                       </div>
                     </div>
@@ -1298,7 +1317,7 @@ export default function Home() {
                   </div>
                   <div className="flow__col flow__col--output">
                     <span className="stage-label">
-                      <span className="stage-num">3</span>Үр дүн
+                      <span className="stage-num">3</span>{t("Үр дүн", "Result")}
                     </span>
                     <div className="node">
                       <div className="node__head">
@@ -1307,26 +1326,26 @@ export default function Home() {
                             <use href="#i-doc"></use>
                           </svg>
                         </span>
-                        <span className="node__title">Тайлан</span>
+                        <span className="node__title">{t("Тайлан", "Report")}</span>
                       </div>
                       <ul className="ticks ticks--navy stagger">
                         <li>
                           <svg className="icon">
                             <use href="#i-check"></use>
                           </svg>
-                          PAR тайлан
+                          {t("PAR тайлан", "PAR report")}
                         </li>
                         <li>
                           <svg className="icon">
                             <use href="#i-check"></use>
                           </svg>
-                          Эрсдэлийн сан
+                          {t("Эрсдэлийн сан", "Risk reserve")}
                         </li>
                         <li>
                           <svg className="icon">
                             <use href="#i-check"></use>
                           </svg>
-                          СЗХ-ны тайлан
+                          {t("СЗХ-ны тайлан", "FRC report")}
                         </li>
                       </ul>
                     </div>
@@ -1334,7 +1353,7 @@ export default function Home() {
                 </div>
                 <div className="flow-caption">
                   <p>
-                    <strong>Өгөгдлийн агуулахын зөвлөх.</strong> Зээл, эргэн
+                    <strong>{t("Өгөгдлийн агуулахын зөвлөх.", "Data Warehouse Consulting.")}</strong> Зээл, эргэн
                     төлөлт, тайлангийн мэдээллийг нэг загварт нэгтгэнэ.
                   </p>
                   <a
@@ -1342,7 +1361,7 @@ export default function Home() {
                     data-solution="3"
                     href="#solutions"
                   >
-                    Дэлгэрэнгүй
+                    {t("Дэлгэрэнгүй", "Learn more")}
                     <svg className="icon">
                       <use href="#i-arrow"></use>
                     </svg>
@@ -1360,29 +1379,29 @@ export default function Home() {
                 <div className="flow flow--navy">
                   <div className="flow__col flow__col--source">
                     <span className="stage-label">
-                      <span className="stage-num">1</span>Эх үүсвэр
+                      <span className="stage-num">1</span>{t("Эх үүсвэр", "Source")}
                     </span>
                     <div className="source-group">
                       <span className="source-group__label">
-                        Одоогийн байдал
+                        {t("Одоогийн байдал", "Current state")}
                       </span>
                       <span className="chip">
                         <svg className="icon">
                           <use href="#i-db"></use>
                         </svg>
-                        Системүүд
+                        {t("Системүүд", "Systems")}
                       </span>
                       <span className="chip">
                         <svg className="icon">
                           <use href="#i-shield-check"></use>
                         </svg>
-                        Өгөгдлийн чанар
+                        {t("Өгөгдлийн чанар", "Data quality")}
                       </span>
                       <span className="chip">
                         <svg className="icon">
                           <use href="#i-doc"></use>
                         </svg>
-                        Тайлангийн хэрэгцээ
+                        {t("Тайлангийн хэрэгцээ", "Reporting needs")}
                       </span>
                     </div>
                   </div>
@@ -1397,7 +1416,7 @@ export default function Home() {
                   </div>
                   <div className="flow__col flow__col--process">
                     <span className="stage-label">
-                      <span className="stage-num">2</span>Боловсруулалт
+                      <span className="stage-num">2</span>{t("Боловсруулалт", "Processing")}
                     </span>
                     <div className="node node--service">
                       <div className="node__head">
@@ -1407,7 +1426,7 @@ export default function Home() {
                           </svg>
                         </span>
                         <span className="node__title">
-                          Өгөгдлийн стратеги зөвлөх
+                          {t("Өгөгдлийн стратеги зөвлөх", "Data Strategy Consulting")}
                         </span>
                       </div>
                       <ul className="ticks ticks--navy stagger">
@@ -1440,7 +1459,7 @@ export default function Home() {
                   </div>
                   <div className="flow__col flow__col--output">
                     <span className="stage-label">
-                      <span className="stage-num">3</span>Үр дүн
+                      <span className="stage-num">3</span>{t("Үр дүн", "Result")}
                     </span>
                     <div className="node">
                       <div className="node__head node__head--between">
@@ -1463,7 +1482,7 @@ export default function Home() {
                             <span className="roadmap__line"></span>
                           </span>
                           <span className="roadmap__label">
-                            Өгөгдлийн автоматжуулалт
+                            {t("Өгөгдлийн автоматжуулалт", "Data Automation")}
                           </span>
                         </li>
                         <li>
@@ -1490,7 +1509,7 @@ export default function Home() {
                     data-solution="4"
                     href="#solutions"
                   >
-                    Дэлгэрэнгүй
+                    {t("Дэлгэрэнгүй", "Learn more")}
                     <svg className="icon">
                       <use href="#i-arrow"></use>
                     </svg>
@@ -1550,7 +1569,7 @@ export default function Home() {
                   <svg className="icon">
                     <use href="#i-arrow"></use>
                   </svg>
-                  Өгөгдлийн автоматжуулалт
+                  {t("Өгөгдлийн автоматжуулалт", "Data Automation")}
                 </a>
               </li>
               <li className="problem">
@@ -1588,7 +1607,7 @@ export default function Home() {
                   <svg className="icon">
                     <use href="#i-arrow"></use>
                   </svg>
-                  Өгөгдлийн агуулахын зөвлөх
+                  {t("Өгөгдлийн агуулахын зөвлөх", "Data Warehouse Consulting")}
                 </a>
               </li>
               <li className="problem">
@@ -1608,7 +1627,7 @@ export default function Home() {
                   <svg className="icon">
                     <use href="#i-arrow"></use>
                   </svg>
-                  Өгөгдлийн стратеги зөвлөх
+                  {t("Өгөгдлийн стратеги зөвлөх", "Data Strategy Consulting")}
                 </a>
               </li>
             </ol>
@@ -1638,9 +1657,9 @@ export default function Home() {
                 type="button"
               >
                 <span className="solution-tab__meta">
-                  <span className="solution-tab__kind">Бүтээгдэхүүн</span>
+                  <span className="solution-tab__kind">{t("Бүтээгдэхүүн", "Product")}</span>
                 </span>
-                <span className="solution-tab__name">Сарын KPI тайлан</span>
+                <span className="solution-tab__name">{t("Сарын KPI тайлан", "Monthly KPI Report")}</span>
               </button>
               <button
                 aria-controls="sol-panel-1"
@@ -1653,11 +1672,11 @@ export default function Home() {
                 type="button"
               >
                 <span className="solution-tab__meta">
-                  <span className="solution-tab__kind">Бүтээгдэхүүн</span>
-                  <span className="badge badge--soon">Удахгүй</span>
+                  <span className="solution-tab__kind">{t("Бүтээгдэхүүн", "Product")}</span>
+                  <span className="badge badge--soon">{t("Удахгүй", "Coming soon")}</span>
                 </span>
                 <span className="solution-tab__name">
-                  Өгөгдлийн автоматжуулалт
+                  {t("Өгөгдлийн автоматжуулалт", "Data Automation")}
                 </span>
               </button>
               <button
@@ -1671,9 +1690,9 @@ export default function Home() {
                 type="button"
               >
                 <span className="solution-tab__meta">
-                  <span className="solution-tab__kind">Үйлчилгээ</span>
+                  <span className="solution-tab__kind">{t("Үйлчилгээ", "Service")}</span>
                 </span>
-                <span className="solution-tab__name">Захиалгат дашбоард</span>
+                <span className="solution-tab__name">{t("Захиалгат дашбоард", "Custom Dashboard")}</span>
               </button>
               <button
                 aria-controls="sol-panel-3"
@@ -1686,10 +1705,10 @@ export default function Home() {
                 type="button"
               >
                 <span className="solution-tab__meta">
-                  <span className="solution-tab__kind">Үйлчилгээ</span>
+                  <span className="solution-tab__kind">{t("Үйлчилгээ", "Service")}</span>
                 </span>
                 <span className="solution-tab__name">
-                  Өгөгдлийн агуулахын зөвлөх
+                  {t("Өгөгдлийн агуулахын зөвлөх", "Data Warehouse Consulting")}
                 </span>
               </button>
               <button
@@ -1703,10 +1722,10 @@ export default function Home() {
                 type="button"
               >
                 <span className="solution-tab__meta">
-                  <span className="solution-tab__kind">Үйлчилгээ</span>
+                  <span className="solution-tab__kind">{t("Үйлчилгээ", "Service")}</span>
                 </span>
                 <span className="solution-tab__name">
-                  Өгөгдлийн стратеги зөвлөх
+                  {t("Өгөгдлийн стратеги зөвлөх", "Data Strategy Consulting")}
                 </span>
               </button>
             </div>
@@ -1720,7 +1739,7 @@ export default function Home() {
               <div className="solution-panel__body">
                 <div className="solution-panel__intro">
                   <span className="pill pill--green">Туршилтын шат</span>
-                  <h3>Сарын KPI тайлан</h3>
+                  <h3>{t("Сарын KPI тайлан", "Monthly KPI Report")}</h3>
                   <p className="solution-panel__lead">
                     Excel-ээ сар бүр оруулаад, бэлэн тайлан, мэдэгдэл аваарай.
                   </p>
@@ -1779,7 +1798,7 @@ export default function Home() {
                 </div>
                 <div className="kpis">
                   <div className="kpi">
-                    <span className="kpi__label">Орлого</span>
+                    <span className="kpi__label">{t("Орлого", "Revenue")}</span>
                     <span className="kpi__value">₮2.19bn</span>
                     <span className="kpi__delta kpi__delta--good">▲ 22.2%</span>
                   </div>
@@ -1789,7 +1808,7 @@ export default function Home() {
                     <span className="kpi__delta kpi__delta--bad">▲ 12.3%</span>
                   </div>
                   <div className="kpi">
-                    <span className="kpi__label">Цэвэр ашиг</span>
+                    <span className="kpi__label">{t("Цэвэр ашиг", "Net profit")}</span>
                     <span className="kpi__value">₮549M</span>
                     <span className="kpi__delta kpi__delta--good">▲ 66.4%</span>
                   </div>
@@ -1836,8 +1855,8 @@ export default function Home() {
             >
               <div className="solution-panel__body">
                 <div className="solution-panel__intro">
-                  <span className="pill pill--soon">Удахгүй</span>
-                  <h3>Өгөгдлийн автоматжуулалт</h3>
+                  <span className="pill pill--soon">{t("Удахгүй", "Coming soon")}</span>
+                  <h3>{t("Өгөгдлийн автоматжуулалт", "Data Automation")}</h3>
                   <p className="solution-panel__lead">
                     Хоёр талын query-г бичээд, үлдсэнийг платформ хийнэ.
                   </p>
@@ -1894,23 +1913,23 @@ export default function Home() {
                   </li>
                   <li className="pipeline__step">
                     <span className="pipeline__num">2</span>
-                    <span className="pipeline__name">Татах query</span>
-                    <span className="badge badge--outline-navy">Та бичнэ</span>
+                    <span className="pipeline__name">{t("Татах query", "Extract query")}</span>
+                    <span className="badge badge--outline-navy">{t("Та бичнэ", "You write it")}</span>
                   </li>
                   <li className="pipeline__step">
                     <span className="pipeline__num">3</span>
                     <span className="pipeline__name">Staging</span>
-                    <span className="badge badge--solid-green">Автомат</span>
+                    <span className="badge badge--solid-green">{t("Автомат", "Automatic")}</span>
                   </li>
                   <li className="pipeline__step">
                     <span className="pipeline__num">4</span>
-                    <span className="pipeline__name">Ачаалах query</span>
-                    <span className="badge badge--outline-navy">Та бичнэ</span>
+                    <span className="pipeline__name">{t("Ачаалах query", "Load query")}</span>
+                    <span className="badge badge--outline-navy">{t("Та бичнэ", "You write it")}</span>
                   </li>
                   <li className="pipeline__step">
                     <span className="pipeline__num">5</span>
-                    <span className="pipeline__name">Өгөгдлийн агуулах</span>
-                    <span className="badge badge--solid-green">Автомат</span>
+                    <span className="pipeline__name">{t("Өгөгдлийн агуулах", "Data warehouse")}</span>
+                    <span className="badge badge--solid-green">{t("Автомат", "Automatic")}</span>
                   </li>
                 </ol>
                 <div className="mock__foot">
@@ -1931,8 +1950,8 @@ export default function Home() {
             >
               <div className="solution-panel__body">
                 <div className="solution-panel__intro">
-                  <span className="pill pill--navy">Үйлчилгээ</span>
-                  <h3>Захиалгат дашбоард</h3>
+                  <span className="pill pill--navy">{t("Үйлчилгээ", "Service")}</span>
+                  <h3>{t("Захиалгат дашбоард", "Custom Dashboard")}</h3>
                   <p className="solution-panel__lead">
                     Танай системд холбогдсон, хэрэгцээнд тань тохирсон тайлан.
                   </p>
@@ -2060,8 +2079,8 @@ export default function Home() {
             >
               <div className="solution-panel__body">
                 <div className="solution-panel__intro">
-                  <span className="pill pill--navy">Үйлчилгээ</span>
-                  <h3>Өгөгдлийн агуулахын зөвлөх</h3>
+                  <span className="pill pill--navy">{t("Үйлчилгээ", "Service")}</span>
+                  <h3>{t("Өгөгдлийн агуулахын зөвлөх", "Data Warehouse Consulting")}</h3>
                   <p className="solution-panel__lead">
                     Зээл, эргэн төлөлт, тайлангийн мэдээллийг нэг загварт
                     нэгтгэнэ.
@@ -2108,24 +2127,24 @@ export default function Home() {
                   Өгөгдлийн загвар, жишээ
                 </div>
                 <div className="star">
-                  <span className="star__dim">Харилцагч</span>
+                  <span className="star__dim">{t("Харилцагч", "Customer")}</span>
                   <span className="star__v"></span>
                   <div className="star__row">
-                    <span className="star__dim">Салбар</span>
+                    <span className="star__dim">{t("Салбар", "Branch")}</span>
                     <span className="star__h"></span>
-                    <span className="star__fact">Зээлийн гүйлгээ</span>
+                    <span className="star__fact">{t("Зээлийн гүйлгээ", "Loan transactions")}</span>
                     <span className="star__h"></span>
-                    <span className="star__dim">Бүтээгдэхүүн</span>
+                    <span className="star__dim">{t("Бүтээгдэхүүн", "Product")}</span>
                   </div>
                   <span className="star__v"></span>
-                  <span className="star__dim">Огноо</span>
+                  <span className="star__dim">{t("Огноо", "Date")}</span>
                 </div>
                 <div className="outputs">
                   <span className="outputs__label">Гаралт</span>
                   <div className="tags">
-                    <span className="tag">PAR тайлан</span>
-                    <span className="tag">Эрсдэлийн сан</span>
-                    <span className="tag">СЗХ-ны тайлан</span>
+                    <span className="tag">{t("PAR тайлан", "PAR report")}</span>
+                    <span className="tag">{t("Эрсдэлийн сан", "Risk reserve")}</span>
+                    <span className="tag">{t("СЗХ-ны тайлан", "FRC report")}</span>
                   </div>
                 </div>
               </div>
@@ -2140,8 +2159,8 @@ export default function Home() {
             >
               <div className="solution-panel__body">
                 <div className="solution-panel__intro">
-                  <span className="pill pill--navy">Үйлчилгээ</span>
-                  <h3>Өгөгдлийн стратеги зөвлөх</h3>
+                  <span className="pill pill--navy">{t("Үйлчилгээ", "Service")}</span>
+                  <h3>{t("Өгөгдлийн стратеги зөвлөх", "Data Strategy Consulting")}</h3>
                   <p className="solution-panel__lead">
                     Одоогийн байдлаа үнэлүүлж, дараагийн алхмын замын зурагтай
                     болно. Хэрэгжүүлэлт биш, зөвлөгөө.
@@ -2239,7 +2258,7 @@ export default function Home() {
         <section className="section section--white" id="why">
           <div className="container">
             <div className="section-head">
-              <span className="eyebrow">Яагаад DataView?</span>
+              <span className="eyebrow">{t("Яагаад DataView?", "Why DataView?")}</span>
               <h2 className="h2">Бусдаас юугаараа ялгаатай вэ?</h2>
             </div>
             <div className="why-grid">
@@ -2262,7 +2281,7 @@ export default function Home() {
                       <span className="growth__dot growth__dot--filled"></span>
                       <span className="growth__line"></span>
                     </span>
-                    <span className="growth__label">Сарын KPI тайлан</span>
+                    <span className="growth__label">{t("Сарын KPI тайлан", "Monthly KPI Report")}</span>
                   </li>
                   <li>
                     <span className="growth__rail">
@@ -2270,14 +2289,14 @@ export default function Home() {
                       <span className="growth__line"></span>
                     </span>
                     <span className="growth__label">
-                      Өгөгдлийн автоматжуулалт
+                      {t("Өгөгдлийн автоматжуулалт", "Data Automation")}
                     </span>
                   </li>
                   <li>
                     <span className="growth__rail">
                       <span className="growth__dot"></span>
                     </span>
-                    <span className="growth__label">Өгөгдлийн агуулах</span>
+                    <span className="growth__label">{t("Өгөгдлийн агуулах", "Data warehouse")}</span>
                   </li>
                 </ol>
               </article>
@@ -2336,7 +2355,7 @@ export default function Home() {
           <div className="container">
             <div className="how-head">
               <div className="section-head">
-                <span className="eyebrow">Хэрхэн ажилладаг</span>
+                <span className="eyebrow">{t("Хэрхэн ажилладаг", "How it works")}</span>
                 <h2 className="h2">Хэрхэн ажилладаг вэ?</h2>
               </div>
               <div
@@ -2364,7 +2383,7 @@ export default function Home() {
                   tabIndex="-1"
                   type="button"
                 >
-                  Өгөгдлийн автоматжуулалт
+                  {t("Өгөгдлийн автоматжуулалт", "Data Automation")}
                 </button>
                 <button
                   aria-controls="how-panel-2"
@@ -2407,7 +2426,7 @@ export default function Home() {
                     <span className="step__num">3</span>
                     <span className="step__line"></span>
                   </span>
-                  <h3>Сар бүр оруулна</h3>
+                  <h3>{t("Сар бүр оруулна", "Upload monthly")}</h3>
                   <p>Файлаа оруулна эсвэл SharePoint-оос автоматаар.</p>
                 </li>
                 <li className="step">
@@ -2510,8 +2529,8 @@ export default function Home() {
         <section className="section section--navy" id="trust">
           <div className="container">
             <div className="section-head">
-              <span className="eyebrow">Бидний баталгаа</span>
-              <h2 className="h2">Бидэнд итгэж болох шалтгаан</h2>
+              <span className="eyebrow">{t("Бидний баталгаа", "Our guarantee")}</span>
+              <h2 className="h2">{t("Бидэнд итгэж болох шалтгаан", "Why you can trust us")}</h2>
             </div>
             <div className="trust-grid">
               <article className="card card--dark">
@@ -2520,7 +2539,7 @@ export default function Home() {
                     <use href="#i-shield-check"></use>
                   </svg>
                 </span>
-                <h3>Зөвхөн унших эрх</h3>
+                <h3>{t("Зөвхөн унших эрх", "Read-only access")}</h3>
                 <p>
                   Танай системд зөвхөн унших эрхээр холбогдож, мэдээллийг
                   өөрчлөхгүй. Дамжуулах, хадгалахдаа шифрлэнэ.
@@ -2532,7 +2551,7 @@ export default function Home() {
                     <use href="#i-clipboard-check"></use>
                   </svg>
                 </span>
-                <h3>Тоо тулгасан тайлан</h3>
+                <h3>{t("Тоо тулгасан тайлан", "Reconciled reports")}</h3>
                 <p>
                   Тайланг танай нягтлангийн тоотой тулгаж шалгасны дараа
                   хүлээлгэн өгнө.
@@ -2544,7 +2563,7 @@ export default function Home() {
                     <use href="#i-award"></use>
                   </svg>
                 </span>
-                <h3>Санхүүгийн өгөгдлийн туршлага</h3>
+                <h3>{t("Санхүүгийн өгөгдлийн туршлага", "Financial data experience")}</h3>
                 <p>
                   Банкны ETL, Power BI, санхүүгийн тайлангийн систем дээр 5+ жил
                   ажилласан инженерүүд.
@@ -2556,8 +2575,8 @@ export default function Home() {
                     <use href="#i-gift"></use>
                   </svg>
                 </span>
-                <h3>Эхний харилцагчдад</h3>
-                <p>Эхний 5 байгууллагад сунгасан дэмжлэг.</p>
+                <h3>{t("Эхний харилцагчдад", "For our first customers")}</h3>
+                <p>{t("Эхний 5 байгууллагад сунгасан дэмжлэг.", "Extended support for the first 5 organizations.")}</p>
               </article>
             </div>
           </div>
@@ -2669,8 +2688,8 @@ export default function Home() {
           <div className="container contact-grid">
             <div>
               <div className="section-head">
-                <span className="eyebrow">Холбоо барих</span>
-                <h2 className="h2">Бидэнтэй холбогдох</h2>
+                <span className="eyebrow">{t("Холбоо барих", "Contact")}</span>
+                <h2 className="h2">{t("Бидэнтэй холбогдох", "Contact us")}</h2>
                 <p>
                   Маягт бөглөөд илгээнэ үү, бид 1–3 ажлын өдрийн дотор хариу
                   өгнө.
@@ -2684,7 +2703,7 @@ export default function Home() {
                     </svg>
                   </span>
                   <span>
-                    <span className="contact-item__label">Утас</span>
+                    <span className="contact-item__label">{t("Утас", "Phone")}</span>
                     <a className="contact-item__value" href="tel:+97677000000">
                       +976 7700 0000
                     </a>
@@ -2697,7 +2716,7 @@ export default function Home() {
                     </svg>
                   </span>
                   <span>
-                    <span className="contact-item__label">Имэйл</span>
+                    <span className="contact-item__label">{t("Имэйл", "Email")}</span>
                     <a
                       className="contact-item__value"
                       href="mailto:hello@dataview.mn"
@@ -2726,7 +2745,7 @@ export default function Home() {
               <div className="field-grid">
                 <div className="field">
                   <label className="label" htmlFor="c-name">
-                    Нэр
+                    {t("Нэр", "Name")}
                   </label>
                   <input
                     aria-describedby="c-name-error"
@@ -2746,7 +2765,7 @@ export default function Home() {
                 </div>
                 <div className="field">
                   <label className="label" htmlFor="c-company">
-                    Компани
+                    {t("Компани", "Company")}
                   </label>
                   <input
                     autoComplete="organization"
@@ -2759,7 +2778,7 @@ export default function Home() {
                 </div>
                 <div className="field">
                   <label className="label" htmlFor="c-phone">
-                    Утас
+                    {t("Утас", "Phone")}
                   </label>
                   <input
                     aria-describedby="c-phone-error"
@@ -2779,7 +2798,7 @@ export default function Home() {
                 </div>
                 <div className="field">
                   <label className="label" htmlFor="c-email">
-                    Имэйл
+                    {t("Имэйл", "Email")}
                   </label>
                   <input
                     aria-describedby="c-email-error"
@@ -2806,7 +2825,7 @@ export default function Home() {
                   <button
                     aria-pressed="false"
                     className="choice"
-                    data-choice="Сарын KPI тайлан"
+                    data-choice={t("Сарын KPI тайлан", "Monthly KPI Report")}
                     type="button"
                   >
                     Сарын KPI тайлан
@@ -2814,15 +2833,15 @@ export default function Home() {
                   <button
                     aria-pressed="false"
                     className="choice"
-                    data-choice="Өгөгдлийн автоматжуулалт"
+                    data-choice={t("Өгөгдлийн автоматжуулалт", "Data Automation")}
                     type="button"
                   >
-                    Өгөгдлийн автоматжуулалт
+                    {t("Өгөгдлийн автоматжуулалт", "Data Automation")}
                   </button>
                   <button
                     aria-pressed="false"
                     className="choice"
-                    data-choice="Захиалгат дашбоард"
+                    data-choice={t("Захиалгат дашбоард", "Custom Dashboard")}
                     type="button"
                   >
                     Захиалгат дашбоард
@@ -2830,25 +2849,25 @@ export default function Home() {
                   <button
                     aria-pressed="false"
                     className="choice"
-                    data-choice="Өгөгдлийн агуулахын зөвлөх"
+                    data-choice={t("Өгөгдлийн агуулахын зөвлөх", "Data Warehouse Consulting")}
                     type="button"
                   >
-                    Өгөгдлийн агуулахын зөвлөх
+                    {t("Өгөгдлийн агуулахын зөвлөх", "Data Warehouse Consulting")}
                   </button>
                   <button
                     aria-pressed="false"
                     className="choice"
-                    data-choice="Өгөгдлийн стратеги зөвлөх"
+                    data-choice={t("Өгөгдлийн стратеги зөвлөх", "Data Strategy Consulting")}
                     type="button"
                   >
-                    Өгөгдлийн стратеги зөвлөх
+                    {t("Өгөгдлийн стратеги зөвлөх", "Data Strategy Consulting")}
                   </button>
                 </div>
                 <input name="solutions" type="hidden" value="" />
               </fieldset>
               <div className="field">
                 <label className="label" htmlFor="c-note">
-                  Дэлгэрэнгүй <span className="optional">(заавал биш)</span>
+                  {t("Дэлгэрэнгүй", "Learn more")} <span className="optional">(заавал биш)</span>
                 </label>
                 <textarea
                   className="input"
@@ -2863,7 +2882,7 @@ export default function Home() {
                 data-submit=""
                 type="submit"
               >
-                <span data-submit-label="">Илгээх</span>
+                <span data-submit-label="">{t("Илгээх", "Send")}</span>
                 <svg className="icon">
                   <use href="#i-arrow"></use>
                 </svg>
