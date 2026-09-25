@@ -7,9 +7,6 @@ import "../styles/Home.css";
 
 export default function Home() {
   const { language } = useLanguage();
-  const isMn = language === "mn";
-  const t = (mn, en) => (isMn ? mn : en);
-
   useEffect(() => {
     document.documentElement.lang = language === "en" ? "en" : "mn";
   }, [language]);
@@ -514,7 +511,7 @@ export default function Home() {
   return (
     <>
       <a className="skip-link" href="#main">
-        {t("Үндсэн агуулга руу шилжих", "Skip to main content")}
+        {(language === "mn" ? "Үндсэн агуулга руу шилжих" : "Skip to main content")}
       </a>
       
       <svg
@@ -664,17 +661,17 @@ export default function Home() {
         <section className="hero" id="top">
           <div className="container">
             <div className="hero__intro">
-              <h1 className="hero__title">{t("Мэдээллээс шийдвэр хүртэл", "From data to decisions")}</h1>
+              <h1 className="hero__title">{(language === "mn" ? "Мэдээллээс шийдвэр хүртэл" : "From data to decisions")}</h1>
               <div className="hero__lead">
                 <p>
-                  {t("Өнөөдөр Excel тайлангаар эхэлж, маргааш өгөгдлийн агуулах руу өсөөрэй.", "Start with Excel reports today and grow into a data warehouse tomorrow.")}
+                  {(language === "mn" ? "Өнөөдөр Excel тайлангаар эхэлж, маргааш өгөгдлийн агуулах руу өсөөрэй." : "Start with Excel reports today and grow into a data warehouse tomorrow.")}
                 </p>
                 <div className="hero__actions">
                   <a className="btn btn--primary btn--lg" href="#contact">
-                    {t("Үнэгүй турших", "Try for free")}
+                    {(language === "mn" ? "Үнэгүй турших" : "Try for free")}
                   </a>
                   <a className="link-arrow" href="#solutions">
-                    {t("Шийдлүүдийг үзэх", "Explore solutions")}
+                    {(language === "mn" ? "Шийдлүүдийг үзэх" : "Explore solutions")}
                     <svg className="icon">
                       <use href="#i-arrow"></use>
                     </svg>
@@ -685,19 +682,19 @@ export default function Home() {
                     <svg className="icon">
                       <use href="#i-check"></use>
                     </svg>
-                    {t("IT мэдлэг шаардлагагүй", "No IT expertise required")}
+                    {(language === "mn" ? "IT мэдлэг шаардлагагүй" : "No IT expertise required")}
                   </li>
                   <li>
                     <svg className="icon">
                       <use href="#i-check"></use>
                     </svg>
-                    {t("Монгол хэлээр", "Available in Mongolian")}
+                    {(language === "mn" ? "Монгол хэлээр" : "Available in Mongolian")}
                   </li>
                   <li>
                     <svg className="icon">
                       <use href="#i-check"></use>
                     </svg>
-                    {t("Үнэгүй туршилт", "Free trial")}
+                    {(language === "mn" ? "Үнэгүй туршилт" : "Free trial")}
                   </li>
                 </ul>
               </div>
@@ -706,7 +703,7 @@ export default function Home() {
             <div className="module-card" data-hero="">
               <div className="module-card__top">
                 <div
-                  aria-label={t("Модулиуд", "Modules")}
+                  aria-label={(language === "mn" ? "Модулиуд" : "Modules")}
                   className="module-tabs"
                   role="tablist"
                 >
@@ -721,9 +718,9 @@ export default function Home() {
                   >
                     <span className="module-tab__meta">
                       <span className="kind-swatch kind-swatch--product"></span>
-                      <span className="module-tab__kind">{t("Бүтээгдэхүүн", "Product")}</span>
+                      <span className="module-tab__kind">{(language === "mn" ? "Бүтээгдэхүүн" : "Product")}</span>
                     </span>
-                    <span className="module-tab__name">{t("Сарын KPI тайлан", "Monthly KPI Report")}</span>
+                    <span className="module-tab__name">{(language === "mn" ? "Сарын KPI тайлан" : "Monthly KPI Report")}</span>
                     <span
                       aria-hidden="true"
                       className="module-tab__progress"
@@ -741,11 +738,11 @@ export default function Home() {
                   >
                     <span className="module-tab__meta">
                       <span className="kind-swatch kind-swatch--product"></span>
-                      <span className="module-tab__kind">{t("Бүтээгдэхүүн", "Product")}</span>
-                      <span className="badge badge--soon">{t("Удахгүй", "Coming soon")}</span>
+                      <span className="module-tab__kind">{(language === "mn" ? "Бүтээгдэхүүн" : "Product")}</span>
+                      <span className="badge badge--soon">{(language === "mn" ? "Удахгүй" : "Coming soon")}</span>
                     </span>
                     <span className="module-tab__name">
-                      {t("Өгөгдлийн автоматжуулалт", "Data Automation")}
+                      {(language === "mn" ? "Өгөгдлийн автоматжуулалт" : "Data Automation")}
                     </span>
                     <span
                       aria-hidden="true"
@@ -764,9 +761,9 @@ export default function Home() {
                   >
                     <span className="module-tab__meta">
                       <span className="kind-swatch kind-swatch--service"></span>
-                      <span className="module-tab__kind">{t("Үйлчилгээ", "Service")}</span>
+                      <span className="module-tab__kind">{(language === "mn" ? "Үйлчилгээ" : "Service")}</span>
                     </span>
-                    <span className="module-tab__name">{t("Захиалгат дашбоард", "Custom Dashboard")}</span>
+                    <span className="module-tab__name">{(language === "mn" ? "Захиалгат дашбоард" : "Custom Dashboard")}</span>
                     <span
                       aria-hidden="true"
                       className="module-tab__progress"
@@ -784,10 +781,10 @@ export default function Home() {
                   >
                     <span className="module-tab__meta">
                       <span className="kind-swatch kind-swatch--service"></span>
-                      <span className="module-tab__kind">{t("Үйлчилгээ", "Service")}</span>
+                      <span className="module-tab__kind">{(language === "mn" ? "Үйлчилгээ" : "Service")}</span>
                     </span>
                     <span className="module-tab__name">
-                      {t("Өгөгдлийн агуулахын зөвлөх", "Data Warehouse Consulting")}
+                      {(language === "mn" ? "Өгөгдлийн агуулахын зөвлөх" : "Data Warehouse Consulting")}
                     </span>
                     <span
                       aria-hidden="true"
@@ -806,10 +803,10 @@ export default function Home() {
                   >
                     <span className="module-tab__meta">
                       <span className="kind-swatch kind-swatch--service"></span>
-                      <span className="module-tab__kind">{t("Үйлчилгээ", "Service")}</span>
+                      <span className="module-tab__kind">{(language === "mn" ? "Үйлчилгээ" : "Service")}</span>
                     </span>
                     <span className="module-tab__name">
-                      {t("Өгөгдлийн стратеги зөвлөх", "Data Strategy Consulting")}
+                      {(language === "mn" ? "Өгөгдлийн стратеги зөвлөх" : "Data Strategy Consulting")}
                     </span>
                     <span
                       aria-hidden="true"
@@ -818,7 +815,7 @@ export default function Home() {
                   </button>
                 </div>
                 <button
-                  aria-label={t("Автомат солигдолтыг зогсоох", "Pause automatic rotation")}
+                  aria-label={(language === "mn" ? "Автомат солигдолтыг зогсоох" : "Pause automatic rotation")}
                   className="autoplay-btn"
                   data-autoplay-toggle=""
                   type="button"
@@ -833,13 +830,13 @@ export default function Home() {
               </div>
               <div aria-hidden="true" className="flow-head">
                 <span className="stage-label">
-                  <span className="stage-num">1</span>{t("Эх үүсвэр", "Source")}
+                  <span className="stage-num">1</span>{(language === "mn" ? "Эх үүсвэр" : "Source")}
                 </span>
                 <span className="stage-label">
-                  <span className="stage-num">2</span>{t("Боловсруулалт", "Processing")}
+                  <span className="stage-num">2</span>{(language === "mn" ? "Боловсруулалт" : "Processing")}
                 </span>
                 <span className="stage-label">
-                  <span className="stage-num">3</span>{t("Үр дүн", "Result")}
+                  <span className="stage-num">3</span>{(language === "mn" ? "Үр дүн" : "Result")}
                 </span>
               </div>
 
@@ -852,7 +849,7 @@ export default function Home() {
                 <div className="flow">
                   <div className="flow__col flow__col--source">
                     <span className="stage-label">
-                      <span className="stage-num">1</span>{t("Эх үүсвэр", "Source")}
+                      <span className="stage-num">1</span>{(language === "mn" ? "Эх үүсвэр" : "Source")}
                     </span>
                     <div className="node node--source">
                       <span className="node__icon node__icon--green">
@@ -861,8 +858,8 @@ export default function Home() {
                         </svg>
                       </span>
                       <span className="node__text">
-                        <strong>{t("Excel файл", "Excel file")}</strong>
-                        <span>{t("Сар бүр оруулна", "Upload monthly")}</span>
+                        <strong>{(language === "mn" ? "Excel файл" : "Excel file")}</strong>
+                        <span>{(language === "mn" ? "Сар бүр оруулна" : "Upload monthly")}</span>
                       </span>
                     </div>
                     <div className="node node--source">
@@ -873,7 +870,7 @@ export default function Home() {
                       </span>
                       <span className="node__text">
                         <strong>SharePoint</strong>
-                        <span>{t("Автоматаар татна", "Automatically imported")}</span>
+                        <span>{(language === "mn" ? "Автоматаар татна" : "Automatically imported")}</span>
                       </span>
                     </div>
                   </div>
@@ -888,7 +885,7 @@ export default function Home() {
                   </div>
                   <div className="flow__col flow__col--process">
                     <span className="stage-label">
-                      <span className="stage-num">2</span>{t("Боловсруулалт", "Processing")}
+                      <span className="stage-num">2</span>{(language === "mn" ? "Боловсруулалт" : "Processing")}
                     </span>
                     <div className="node node--engine">
                       <div className="node__head">
@@ -899,19 +896,19 @@ export default function Home() {
                           <svg className="icon">
                             <use href="#i-check"></use>
                           </svg>
-                          {t("Файлыг шалгана", "Validate the file")}
+                          {(language === "mn" ? "Файлыг шалгана" : "Validate the file")}
                         </li>
                         <li>
                           <svg className="icon">
                             <use href="#i-check"></use>
                           </svg>
-                          {t("KPI-г тооцоолно", "Calculate KPIs")}
+                          {(language === "mn" ? "KPI-г тооцоолно" : "Calculate KPIs")}
                         </li>
                         <li>
                           <svg className="icon">
                             <use href="#i-check"></use>
                           </svg>
-                          {t("5 загварт тайлан бэлдэнэ", "Prepare reports in 5 templates")}
+                          {(language === "mn" ? "5 загварт тайлан бэлдэнэ" : "Prepare reports in 5 templates")}
                         </li>
                       </ul>
                     </div>
@@ -927,16 +924,13 @@ export default function Home() {
                   </div>
                   <div className="flow__col flow__col--output">
                     <span className="stage-label">
-                      <span className="stage-num">3</span>{t("Үр дүн", "Result")}
+                      <span className="stage-num">3</span>{(language === "mn" ? "Үр дүн" : "Result")}
                     </span>
                     <div className="node node--product">
                       <div className="node__text">
-                        <span className="node__title">{t("Сарын KPI тайлан", "Monthly KPI Report")}</span>
+                        <span className="node__title">{(language === "mn" ? "Сарын KPI тайлан" : "Monthly KPI Report")}</span>
                         <span className="node__sub">
-                          {t(
-                            "6 KPI · и-мэйлээр ирнэ",
-                            "6 KPIs · delivered by email"
-                          )}
+                          {(language === "mn" ? "6 KPI · и-мэйлээр ирнэ" : "6 KPIs · delivered by email")}
                         </span>
                       </div>
                       <div aria-hidden="true" className="bars">
@@ -951,7 +945,7 @@ export default function Home() {
                         ></span>
                       </div>
                       <div className="node__row">
-                        <span className="node__sub">{t("Орлого", "Revenue")}</span>
+                        <span className="node__sub">{(language === "mn" ? "Орлого" : "Revenue")}</span>
                         <strong>₮2.19bn ▲ 22.2%</strong>
                       </div>
                     </div>
@@ -959,11 +953,11 @@ export default function Home() {
                 </div>
                 <div className="flow-caption">
                   <p>
-                    <strong>{t("Сарын KPI тайлан.", "Monthly KPI Report.")}</strong> Excel-ээ оруулаад сар бүр
-                    бэлэн тайлан, мэдэгдэл аваарай.
+                    <strong>{(language === "mn" ? "Сарын KPI тайлан." : "Monthly KPI Report.")}</strong>{" "}
+                    {(language === "mn" ? "Excel-ээ оруулаад сар бүр бэлэн тайлан, мэдэгдэл аваарай." : "Upload your Excel file each month and receive ready-made reports and notifications.")}
                   </p>
                   <a className="link-arrow" data-solution="0" href="#solutions">
-                    {t("Дэлгэрэнгүй", "Learn more")}
+                    {(language === "mn" ? "Дэлгэрэнгүй" : "Learn more")}
                     <svg className="icon">
                       <use href="#i-arrow"></use>
                     </svg>
@@ -981,11 +975,11 @@ export default function Home() {
                 <div className="flow">
                   <div className="flow__col flow__col--source">
                     <span className="stage-label">
-                      <span className="stage-num">1</span>{t("Эх үүсвэр", "Source")}
+                      <span className="stage-num">1</span>{(language === "mn" ? "Эх үүсвэр" : "Source")}
                     </span>
                     <div className="source-group">
                       <span className="source-group__label">
-                        {t("Бүртгэлийн систем", "Accounting system")}
+                        {(language === "mn" ? "Бүртгэлийн систем" : "Accounting system")}
                       </span>
                       <span className="chip">
                         <svg className="icon">
@@ -1004,14 +998,14 @@ export default function Home() {
                           <use href="#i-db"></use>
                         </svg>
                         <span className="chip__label">Oracle</span>
-                        <span className="badge badge--soon">{t("Удахгүй", "Coming soon")}</span>
+                        <span className="badge badge--soon">{(language === "mn" ? "Удахгүй" : "Coming soon")}</span>
                       </span>
                       <span className="chip chip--soon">
                         <svg className="icon">
                           <use href="#i-db"></use>
                         </svg>
                         <span className="chip__label">SQL Server</span>
-                        <span className="badge badge--soon">{t("Удахгүй", "Coming soon")}</span>
+                        <span className="badge badge--soon">{(language === "mn" ? "Удахгүй" : "Coming soon")}</span>
                       </span>
                     </div>
                   </div>
@@ -1026,28 +1020,28 @@ export default function Home() {
                   </div>
                   <div className="flow__col flow__col--process">
                     <span className="stage-label">
-                      <span className="stage-num">2</span>{t("Боловсруулалт", "Processing")}
+                      <span className="stage-num">2</span>{(language === "mn" ? "Боловсруулалт" : "Processing")}
                     </span>
                     <div className="node node--product">
-                      <span className="badge badge--soon">{t("Удахгүй", "Coming soon")}</span>
+                      <span className="badge badge--soon">{(language === "mn" ? "Удахгүй" : "Coming soon")}</span>
                       <span className="node__title">
-                        {t("Өгөгдлийн автоматжуулалт", "Data Automation")}
+                        {(language === "mn" ? "Өгөгдлийн автоматжуулалт" : "Data Automation")}
                       </span>
                       <div className="step-rows stagger">
                         <div className="step-row">
-                          <span>{t("Татах query", "Extract query")}</span>
+                          <span>{(language === "mn" ? "Татах query" : "Extract query")}</span>
                           <span className="badge badge--outline-white">
-                            {t("Та бичнэ", "You write it")}
+                            {(language === "mn" ? "Та бичнэ" : "You write it")}
                           </span>
                         </div>
                         <div className="step-row">
-                          <span>{t("Хуваарь, давтан оролдлого", "Scheduling and retries")}</span>
-                          <span className="badge badge--white">{t("Автомат", "Automatic")}</span>
+                          <span>{(language === "mn" ? "Хуваарь, давтан оролдлого" : "Scheduling and retries")}</span>
+                          <span className="badge badge--white">{(language === "mn" ? "Автомат" : "Automatic")}</span>
                         </div>
                         <div className="step-row">
-                          <span>{t("Ачаалах query", "Load query")}</span>
+                          <span>{(language === "mn" ? "Ачаалах query" : "Load query")}</span>
                           <span className="badge badge--outline-white">
-                            {t("Та бичнэ", "You write it")}
+                            {(language === "mn" ? "Та бичнэ" : "You write it")}
                           </span>
                         </div>
                       </div>
@@ -1064,7 +1058,7 @@ export default function Home() {
                   </div>
                   <div className="flow__col flow__col--output">
                     <span className="stage-label">
-                      <span className="stage-num">3</span>{t("Үр дүн", "Result")}
+                      <span className="stage-num">3</span>{(language === "mn" ? "Үр дүн" : "Result")}
                     </span>
                     <div className="node">
                       <div className="node__head">
@@ -1073,24 +1067,24 @@ export default function Home() {
                             <use href="#i-db"></use>
                           </svg>
                         </span>
-                        <span className="node__title">{t("Өгөгдлийн агуулах", "Data warehouse")}</span>
+                        <span className="node__title">{(language === "mn" ? "Өгөгдлийн агуулах" : "Data warehouse")}</span>
                       </div>
                       <span className="node__sub">
-                        {t("Бүх систем нэг дор · Түүхэн дата хадгална", "All systems in one place · Historical data retained")}
+                        {(language === "mn" ? "Бүх систем нэг дор · Түүхэн дата хадгална" : "All systems in one place · Historical data retained")}
                       </span>
                       <span className="status">
-                        <span className="status__dot"></span>{t("Өдөр бүр 02:00 · Амжилттай", "Daily at 02:00 · Successful")}
+                        <span className="status__dot"></span>{(language === "mn" ? "Өдөр бүр 02:00 · Амжилттай" : "Daily at 02:00 · Successful")}
                       </span>
                     </div>
                   </div>
                 </div>
                 <div className="flow-caption">
                   <p>
-                    <strong>{t("Өгөгдлийн автоматжуулалт.", "Data Automation.")}</strong> Хоёр талын
-                    query-г бичээд, үлдсэнийг платформ хийнэ.
+                    <strong>{(language === "mn" ? "Өгөгдлийн автоматжуулалт." : "Data Automation.")}</strong>{" "}
+                    {(language === "mn" ? "Хоёр талын query-г бичээд, үлдсэнийг платформ хийнэ." : "Write the queries on both sides and the platform handles the rest.")}
                   </p>
                   <a className="link-arrow" data-solution="1" href="#solutions">
-                    {t("Дэлгэрэнгүй", "Learn more")}
+                    {(language === "mn" ? "Дэлгэрэнгүй" : "Learn more")}
                     <svg className="icon">
                       <use href="#i-arrow"></use>
                     </svg>
@@ -1108,10 +1102,10 @@ export default function Home() {
                 <div className="flow flow--navy">
                   <div className="flow__col flow__col--source">
                     <span className="stage-label">
-                      <span className="stage-num">1</span>{t("Эх үүсвэр", "Source")}
+                      <span className="stage-num">1</span>{(language === "mn" ? "Эх үүсвэр" : "Source")}
                     </span>
                     <div className="source-group">
-                      <span className="source-group__label">{t("Танай систем", "Your system")}</span>
+                      <span className="source-group__label">{(language === "mn" ? "Танай систем" : "Your system")}</span>
                       <span className="chip">
                         <svg className="icon">
                           <use href="#i-db"></use>
@@ -1128,7 +1122,7 @@ export default function Home() {
                         <svg className="icon">
                           <use href="#i-db"></use>
                         </svg>
-                        {t("Мэдээллийн сан", "Database")}
+                        {(language === "mn" ? "Мэдээллийн сан" : "Database")}
                       </span>
                       <span className="chip">
                         <svg className="icon">
@@ -1149,7 +1143,7 @@ export default function Home() {
                   </div>
                   <div className="flow__col flow__col--process">
                     <span className="stage-label">
-                      <span className="stage-num">2</span>{t("Боловсруулалт", "Processing")}
+                      <span className="stage-num">2</span>{(language === "mn" ? "Боловсруулалт" : "Processing")}
                     </span>
                     <div className="node">
                       <div className="node__head">
@@ -1158,26 +1152,26 @@ export default function Home() {
                             <use href="#i-users"></use>
                           </svg>
                         </span>
-                        <span className="node__title">{t("Манай баг", "Our team")}</span>
+                        <span className="node__title">{(language === "mn" ? "Манай баг" : "Our team")}</span>
                       </div>
                       <ul className="ticks ticks--navy stagger">
                         <li>
                           <svg className="icon">
                             <use href="#i-check"></use>
                           </svg>
-                          {t("Зөвхөн унших эрхээр холбоно", "Connect with read-only access")}
+                          {(language === "mn" ? "Зөвхөн унших эрхээр холбоно" : "Connect with read-only access")}
                         </li>
                         <li>
                           <svg className="icon">
                             <use href="#i-check"></use>
                           </svg>
-                          {t("Тоог нягтлангийн тоотой тулгана", "Reconcile with accounting figures")}
+                          {(language === "mn" ? "Тоог нягтлангийн тоотой тулгана" : "Reconcile with accounting figures")}
                         </li>
                         <li>
                           <svg className="icon">
                             <use href="#i-check"></use>
                           </svg>
-                          {t("Дашбоардыг угсарна", "Build the dashboard")}
+                          {(language === "mn" ? "Дашбоардыг угсарна" : "Build the dashboard")}
                         </li>
                       </ul>
                     </div>
@@ -1193,13 +1187,13 @@ export default function Home() {
                   </div>
                   <div className="flow__col flow__col--output">
                     <span className="stage-label">
-                      <span className="stage-num">3</span>{t("Үр дүн", "Result")}
+                      <span className="stage-num">3</span>{(language === "mn" ? "Үр дүн" : "Result")}
                     </span>
                     <div className="node node--service">
                       <div className="node__text">
-                        <span className="node__title">{t("Захиалгат дашбоард", "Custom Dashboard")}</span>
+                        <span className="node__title">{(language === "mn" ? "Захиалгат дашбоард" : "Custom Dashboard")}</span>
                         <span className="node__sub">
-                          {t("Танай хэрэгцээнд тохирсон", "Tailored to your needs")}
+                          {(language === "mn" ? "Танай хэрэгцээнд тохирсон" : "Tailored to your needs")}
                         </span>
                       </div>
                       <svg
@@ -1215,7 +1209,7 @@ export default function Home() {
                         ></path>
                       </svg>
                       <div className="node__row">
-                        <span className="node__sub">{t("Цэвэр ашиг", "Net profit")}</span>
+                        <span className="node__sub">{(language === "mn" ? "Цэвэр ашиг" : "Net profit")}</span>
                         <strong>
                           ₮549M <span className="up">▲ 66.4%</span>
                         </strong>
@@ -1225,15 +1219,15 @@ export default function Home() {
                 </div>
                 <div className="flow-caption">
                   <p>
-                    <strong>{t("Захиалгат дашбоард.", "Custom Dashboard.")}</strong> Танай системд
-                    холбогдсон, хэрэгцээнд тань тохирсон тайлан.
+                    <strong>{(language === "mn" ? "Захиалгат дашбоард." : "Custom Dashboard.")}</strong>{" "}
+                    {(language === "mn" ? "Танай системд холбогдсон, хэрэгцээнд тань тохирсон тайлан." : "A report connected to your systems and tailored to your needs.")}
                   </p>
                   <a
                     className="link-arrow link-arrow--navy"
                     data-solution="2"
                     href="#solutions"
                   >
-                    {t("Дэлгэрэнгүй", "Learn more")}
+                    {(language === "mn" ? "Дэлгэрэнгүй" : "Learn more")}
                     <svg className="icon">
                       <use href="#i-arrow"></use>
                     </svg>
@@ -1251,29 +1245,29 @@ export default function Home() {
                 <div className="flow flow--navy">
                   <div className="flow__col flow__col--source">
                     <span className="stage-label">
-                      <span className="stage-num">1</span>{t("Эх үүсвэр", "Source")}
+                      <span className="stage-num">1</span>{(language === "mn" ? "Эх үүсвэр" : "Source")}
                     </span>
                     <div className="source-group">
                       <span className="source-group__label">
-                        {t("ББСБ-ийн системүүд", "NBFI systems")}
+                        {(language === "mn" ? "ББСБ-ийн системүүд" : "NBFI systems")}
                       </span>
                       <span className="chip">
                         <svg className="icon">
                           <use href="#i-db"></use>
                         </svg>
-                        {t("Зээлийн систем", "Loan system")}
+                        {(language === "mn" ? "Зээлийн систем" : "Loan system")}
                       </span>
                       <span className="chip">
                         <svg className="icon">
                           <use href="#i-db"></use>
                         </svg>
-                        {t("Эргэн төлөлт", "Repayment")}
+                        {(language === "mn" ? "Эргэн төлөлт" : "Repayment")}
                       </span>
                       <span className="chip">
                         <svg className="icon">
                           <use href="#i-db"></use>
                         </svg>
-                        {t("Харилцагчийн бүртгэл", "Customer records")}
+                        {(language === "mn" ? "Харилцагчийн бүртгэл" : "Customer records")}
                       </span>
                     </div>
                   </div>
@@ -1288,20 +1282,20 @@ export default function Home() {
                   </div>
                   <div className="flow__col flow__col--process">
                     <span className="stage-label">
-                      <span className="stage-num">2</span>{t("Боловсруулалт", "Processing")}
+                      <span className="stage-num">2</span>{(language === "mn" ? "Боловсруулалт" : "Processing")}
                     </span>
                     <div className="node node--service">
                       <span className="badge badge--navy">
-                        {t("ББСБ-д data mart", "Data mart for NBFIs")}
+                        {(language === "mn" ? "ББСБ-д data mart" : "Data mart for NBFIs")}
                       </span>
-                      <span className="node__title">{t("Өгөгдлийн агуулах", "Data warehouse")}</span>
+                      <span className="node__title">{(language === "mn" ? "Өгөгдлийн агуулах" : "Data warehouse")}</span>
                       <div className="model stagger">
-                        <span className="model__fact">{t("Зээлийн гүйлгээ", "Loan transactions")}</span>
+                        <span className="model__fact">{(language === "mn" ? "Зээлийн гүйлгээ" : "Loan transactions")}</span>
                         <span className="model__dims">
-                          <span>{t("Харилцагч", "Customer")}</span>
-                          <span>{t("Салбар", "Branch")}</span>
-                          <span>{t("Бүтээгдэхүүн", "Product")}</span>
-                          <span>{t("Огноо", "Date")}</span>
+                          <span>{(language === "mn" ? "Харилцагч" : "Customer")}</span>
+                          <span>{(language === "mn" ? "Салбар" : "Branch")}</span>
+                          <span>{(language === "mn" ? "Бүтээгдэхүүн" : "Product")}</span>
+                          <span>{(language === "mn" ? "Огноо" : "Date")}</span>
                         </span>
                       </div>
                     </div>
@@ -1317,7 +1311,7 @@ export default function Home() {
                   </div>
                   <div className="flow__col flow__col--output">
                     <span className="stage-label">
-                      <span className="stage-num">3</span>{t("Үр дүн", "Result")}
+                      <span className="stage-num">3</span>{(language === "mn" ? "Үр дүн" : "Result")}
                     </span>
                     <div className="node">
                       <div className="node__head">
@@ -1326,26 +1320,26 @@ export default function Home() {
                             <use href="#i-doc"></use>
                           </svg>
                         </span>
-                        <span className="node__title">{t("Тайлан", "Report")}</span>
+                        <span className="node__title">{(language === "mn" ? "Тайлан" : "Report")}</span>
                       </div>
                       <ul className="ticks ticks--navy stagger">
                         <li>
                           <svg className="icon">
                             <use href="#i-check"></use>
                           </svg>
-                          {t("PAR тайлан", "PAR report")}
+                          {(language === "mn" ? "PAR тайлан" : "PAR report")}
                         </li>
                         <li>
                           <svg className="icon">
                             <use href="#i-check"></use>
                           </svg>
-                          {t("Эрсдэлийн сан", "Risk reserve")}
+                          {(language === "mn" ? "Эрсдэлийн сан" : "Risk reserve")}
                         </li>
                         <li>
                           <svg className="icon">
                             <use href="#i-check"></use>
                           </svg>
-                          {t("СЗХ-ны тайлан", "FRC report")}
+                          {(language === "mn" ? "СЗХ-ны тайлан" : "FRC report")}
                         </li>
                       </ul>
                     </div>
@@ -1353,15 +1347,15 @@ export default function Home() {
                 </div>
                 <div className="flow-caption">
                   <p>
-                    <strong>{t("Өгөгдлийн агуулахын зөвлөх.", "Data Warehouse Consulting.")}</strong> Зээл, эргэн
-                    төлөлт, тайлангийн мэдээллийг нэг загварт нэгтгэнэ.
+                    <strong>{(language === "mn" ? "Өгөгдлийн агуулахын зөвлөх." : "Data Warehouse Consulting.")}</strong> Зээл, эргэн
+                    {(language === "mn" ? "төлөлт, тайлангийн мэдээллийг нэг загварт нэгтгэнэ." : "repayment and reporting data into one model.")}
                   </p>
                   <a
                     className="link-arrow link-arrow--navy"
                     data-solution="3"
                     href="#solutions"
                   >
-                    {t("Дэлгэрэнгүй", "Learn more")}
+                    {(language === "mn" ? "Дэлгэрэнгүй" : "Learn more")}
                     <svg className="icon">
                       <use href="#i-arrow"></use>
                     </svg>
@@ -1379,29 +1373,29 @@ export default function Home() {
                 <div className="flow flow--navy">
                   <div className="flow__col flow__col--source">
                     <span className="stage-label">
-                      <span className="stage-num">1</span>{t("Эх үүсвэр", "Source")}
+                      <span className="stage-num">1</span>{(language === "mn" ? "Эх үүсвэр" : "Source")}
                     </span>
                     <div className="source-group">
                       <span className="source-group__label">
-                        {t("Одоогийн байдал", "Current state")}
+                        {(language === "mn" ? "Одоогийн байдал" : "Current state")}
                       </span>
                       <span className="chip">
                         <svg className="icon">
                           <use href="#i-db"></use>
                         </svg>
-                        {t("Системүүд", "Systems")}
+                        {(language === "mn" ? "Системүүд" : "Systems")}
                       </span>
                       <span className="chip">
                         <svg className="icon">
                           <use href="#i-shield-check"></use>
                         </svg>
-                        {t("Өгөгдлийн чанар", "Data quality")}
+                        {(language === "mn" ? "Өгөгдлийн чанар" : "Data quality")}
                       </span>
                       <span className="chip">
                         <svg className="icon">
                           <use href="#i-doc"></use>
                         </svg>
-                        {t("Тайлангийн хэрэгцээ", "Reporting needs")}
+                        {(language === "mn" ? "Тайлангийн хэрэгцээ" : "Reporting needs")}
                       </span>
                     </div>
                   </div>
@@ -1416,7 +1410,7 @@ export default function Home() {
                   </div>
                   <div className="flow__col flow__col--process">
                     <span className="stage-label">
-                      <span className="stage-num">2</span>{t("Боловсруулалт", "Processing")}
+                      <span className="stage-num">2</span>{(language === "mn" ? "Боловсруулалт" : "Processing")}
                     </span>
                     <div className="node node--service">
                       <div className="node__head">
@@ -1426,7 +1420,7 @@ export default function Home() {
                           </svg>
                         </span>
                         <span className="node__title">
-                          {t("Өгөгдлийн стратеги зөвлөх", "Data Strategy Consulting")}
+                          {(language === "mn" ? "Өгөгдлийн стратеги зөвлөх" : "Data Strategy Consulting")}
                         </span>
                       </div>
                       <ul className="ticks ticks--navy stagger">
@@ -1434,16 +1428,16 @@ export default function Home() {
                           <svg className="icon">
                             <use href="#i-check"></use>
                           </svg>
-                          Одоогийн байдлын үнэлгээ
+                          {(language === "mn" ? "Одоогийн байдлын үнэлгээ" : "Current-state assessment")}
                         </li>
                         <li>
                           <svg className="icon">
                             <use href="#i-check"></use>
                           </svg>
-                          Зорилтот бүтэц
+                          {(language === "mn" ? "Зорилтот бүтэц" : "Target architecture")}
                         </li>
                         <li className="ticks__note">
-                          Хэрэгжүүлэлт биш, зөвлөгөө
+                          {(language === "mn" ? "Хэрэгжүүлэлт биш, зөвлөгөө" : "Advisory, not implementation")}
                         </li>
                       </ul>
                     </div>
@@ -1459,12 +1453,12 @@ export default function Home() {
                   </div>
                   <div className="flow__col flow__col--output">
                     <span className="stage-label">
-                      <span className="stage-num">3</span>{t("Үр дүн", "Result")}
+                      <span className="stage-num">3</span>{(language === "mn" ? "Үр дүн" : "Result")}
                     </span>
                     <div className="node">
                       <div className="node__head node__head--between">
-                        <span className="node__title">Замын зураг</span>
-                        <span className="badge badge--muted">Жишээ</span>
+                        <span className="node__title">{(language === "mn" ? "Замын зураг" : "Roadmap")}</span>
+                        <span className="badge badge--muted">{(language === "mn" ? "Жишээ" : "Example")}</span>
                       </div>
                       <ol className="roadmap stagger">
                         <li>
@@ -1473,7 +1467,7 @@ export default function Home() {
                             <span className="roadmap__line"></span>
                           </span>
                           <span className="roadmap__label">
-                            Сарын KPI тайлан
+                            {(language === "mn" ? "Сарын KPI тайлан" : "Monthly KPI Report")}
                           </span>
                         </li>
                         <li>
@@ -1482,7 +1476,7 @@ export default function Home() {
                             <span className="roadmap__line"></span>
                           </span>
                           <span className="roadmap__label">
-                            {t("Өгөгдлийн автоматжуулалт", "Data Automation")}
+                            {(language === "mn" ? "Өгөгдлийн автоматжуулалт" : "Data Automation")}
                           </span>
                         </li>
                         <li>
@@ -1492,7 +1486,7 @@ export default function Home() {
                             </span>
                           </span>
                           <span className="roadmap__label">
-                            Өгөгдлийн агуулах
+                            {language === "mn" ? "Өгөгдлийн агуулах" : "Data warehouse"}
                           </span>
                         </li>
                       </ol>
@@ -1501,15 +1495,15 @@ export default function Home() {
                 </div>
                 <div className="flow-caption">
                   <p>
-                    <strong>Өгөгдлийн стратеги зөвлөх.</strong> Аль замаар,
-                    юунаас эхлэхийг хамт тодорхойлно.
+                    <strong>{(language === "mn" ? "Өгөгдлийн стратеги зөвлөх." : "Data Strategy Consulting.")}</strong>{" "}
+                    {(language === "mn" ? "Аль замаар, юунаас эхлэхийг хамт тодорхойлно." : "Together, we define the right path and where to start.")}
                   </p>
                   <a
                     className="link-arrow link-arrow--navy"
                     data-solution="4"
                     href="#solutions"
                   >
-                    {t("Дэлгэрэнгүй", "Learn more")}
+                    {(language === "mn" ? "Дэлгэрэнгүй" : "Learn more")}
                     <svg className="icon">
                       <use href="#i-arrow"></use>
                     </svg>
@@ -1523,8 +1517,8 @@ export default function Home() {
         <section className="section section--white" id="problem">
           <div className="container">
             <div className="section-head">
-              <span className="eyebrow">Асуудал</span>
-              <h2 className="h2">Та одоо хэрхэн шийдвэр гаргаж байна вэ?</h2>
+              <span className="eyebrow">{(language === "mn" ? "Асуудал" : "Problem")}</span>
+              <h2 className="h2">{(language === "mn" ? "Та одоо хэрхэн шийдвэр гаргаж байна вэ?" : "How do you make decisions today?")}</h2>
             </div>
             <ol className="problem-list">
               <li className="problem">
@@ -1532,11 +1526,10 @@ export default function Home() {
                   01
                 </span>
                 <div>
-                  <h3 className="problem__title">Тайлан хоцорч ирдэг</h3>
-                  <p className="problem__text">
-                    Мэдээллээ нэгтгэж дуусах хооронд шийдвэр гаргах хугацаа
-                    өнгөрчихдөг.
-                  </p>
+                  <h3 className="problem__title">{(language === "mn" ? "Тайлан хоцорч ирдэг" : "Reports arrive late")}</h3>
+                    <p className="problem__text">
+                      {(language === "mn" ? "Мэдээллээ нэгтгэж дуусах хооронд шийдвэр гаргах хугацаа өнгөрчихдөг." : "By the time the data is consolidated, the window for making a decision has passed.")}
+                    </p>
                 </div>
                 <a
                   className="module-link module-link--product"
@@ -1546,7 +1539,7 @@ export default function Home() {
                   <svg className="icon">
                     <use href="#i-arrow"></use>
                   </svg>
-                  Сарын KPI тайлан
+                  {(language === "mn" ? "Сарын KPI тайлан" : "Monthly KPI Report")}
                 </a>
               </li>
               <li className="problem">
@@ -1555,10 +1548,10 @@ export default function Home() {
                 </span>
                 <div>
                   <h3 className="problem__title">
-                    Өгөгдөл ачаалах ажил гараар хийгддэг
+                    {(language === "mn" ? "Өгөгдөл ачаалах ажил гараар хийгддэг" : "Data loading is done manually")}
                   </h3>
                   <p className="problem__text">
-                    Шөнө бүрийн ачаалал, скрипт, алдааг хүн хянаж суудаг.
+                    {(language === "mn" ? "Шөнө бүрийн ачаалал, скрипт, алдааг хүн хянаж суудаг." : "Someone has to monitor nightly loads, scripts and errors manually.")}
                   </p>
                 </div>
                 <a
@@ -1569,7 +1562,7 @@ export default function Home() {
                   <svg className="icon">
                     <use href="#i-arrow"></use>
                   </svg>
-                  {t("Өгөгдлийн автоматжуулалт", "Data Automation")}
+                  {(language === "mn" ? "Өгөгдлийн автоматжуулалт" : "Data Automation")}
                 </a>
               </li>
               <li className="problem">
@@ -1578,18 +1571,17 @@ export default function Home() {
                 </span>
                 <div>
                   <h3 className="problem__title">
-                    Бэлэн тайлан хэрэгцээнд нийцдэггүй
+                    {(language === "mn" ? "Бэлэн тайлан хэрэгцээнд нийцдэггүй" : "Standard reports do not fit your needs")}
                   </h3>
                   <p className="problem__text">
-                    Системийн стандарт тайлан танай бизнесийн асуултад
-                    хариулдаггүй.
+                    {language === "mn" ? "Системийн стандарт тайлан танай бизнесийн асуултад                     хариулдаггүй." : "Standard system reports do not answer your business questions."}
                   </p>
                 </div>
                 <a className="module-link" data-solution="2" href="#solutions">
                   <svg className="icon">
                     <use href="#i-arrow"></use>
                   </svg>
-                  Захиалгат дашбоард
+                  {(language === "mn" ? "Захиалгат дашбоард" : "Custom Dashboard")}
                 </a>
               </li>
               <li className="problem">
@@ -1597,17 +1589,16 @@ export default function Home() {
                   04
                 </span>
                 <div>
-                  <h3 className="problem__title">Мэдээлэл олон газар тарсан</h3>
+                  <h3 className="problem__title">{(language === "mn" ? "Мэдээлэл олон газар тарсан" : "Data is scattered across multiple places")}</h3>
                   <p className="problem__text">
-                    Зээл, эргэн төлөлт, тайлангийн тоо өөр өөр системд байдаг
-                    тул нэгтгэхэд цаг ордог.
+                    {language === "mn" ? "Зээл, эргэн төлөлт, тайлангийн тоо өөр өөр системд байдаг                     тул нэгтгэхэд цаг ордог." : "Loan, repayment and reporting data live in different systems, so consolidating them takes time."}
                   </p>
                 </div>
                 <a className="module-link" data-solution="3" href="#solutions">
                   <svg className="icon">
                     <use href="#i-arrow"></use>
                   </svg>
-                  {t("Өгөгдлийн агуулахын зөвлөх", "Data Warehouse Consulting")}
+                  {(language === "mn" ? "Өгөгдлийн агуулахын зөвлөх" : "Data Warehouse Consulting")}
                 </a>
               </li>
               <li className="problem">
@@ -1616,18 +1607,17 @@ export default function Home() {
                 </span>
                 <div>
                   <h3 className="problem__title">
-                    Өгөгдөл өсөж, систем олширсон
+                    {(language === "mn" ? "Өгөгдөл өсөж, систем олширсон" : "Data and systems have grown")}
                   </h3>
                   <p className="problem__text">
-                    Нэгдсэн бүтэц байхгүй тул шинэ хэрэгцээ бүр шинэ төсөл
-                    болдог.
+                    {language === "mn" ? "Нэгдсэн бүтэц байхгүй тул шинэ хэрэгцээ бүр шинэ төсөл                     болдог." : "Without a unified structure, every new requirement becomes a new project."}
                   </p>
                 </div>
                 <a className="module-link" data-solution="4" href="#solutions">
                   <svg className="icon">
                     <use href="#i-arrow"></use>
                   </svg>
-                  {t("Өгөгдлийн стратеги зөвлөх", "Data Strategy Consulting")}
+                  {(language === "mn" ? "Өгөгдлийн стратеги зөвлөх" : "Data Strategy Consulting")}
                 </a>
               </li>
             </ol>
@@ -1637,12 +1627,12 @@ export default function Home() {
         <section className="section" id="solutions">
           <div className="container">
             <div className="section-head">
-              <span className="eyebrow">Шийдэл</span>
-              <h2 className="h2">Танд тохирох шийдэл</h2>
-              <p>2 бүтээгдэхүүн, 3 үйлчилгээ. Хэрэгцээндээ тааруулж сонгоно.</p>
+              <span className="eyebrow">{(language === "mn" ? "Шийдэл" : "Solutions")}</span>
+              <h2 className="h2">{(language === "mn" ? "Танд тохирох шийдэл" : "A solution that fits you")}</h2>
+              <p>{(language === "mn" ? "2 бүтээгдэхүүн, 3 үйлчилгээ. Хэрэгцээндээ тааруулж сонгоно." : "2 products and 3 services. Choose what fits your needs.")}</p>
             </div>
             <div
-              aria-label="Шийдлүүд"
+              aria-label={(language === "mn" ? "Шийдлүүд" : "Solutions")}
               className="solution-tabs"
               data-solutions=""
               role="tablist"
@@ -1657,9 +1647,9 @@ export default function Home() {
                 type="button"
               >
                 <span className="solution-tab__meta">
-                  <span className="solution-tab__kind">{t("Бүтээгдэхүүн", "Product")}</span>
+                  <span className="solution-tab__kind">{(language === "mn" ? "Бүтээгдэхүүн" : "Product")}</span>
                 </span>
-                <span className="solution-tab__name">{t("Сарын KPI тайлан", "Monthly KPI Report")}</span>
+                <span className="solution-tab__name">{(language === "mn" ? "Сарын KPI тайлан" : "Monthly KPI Report")}</span>
               </button>
               <button
                 aria-controls="sol-panel-1"
@@ -1672,11 +1662,11 @@ export default function Home() {
                 type="button"
               >
                 <span className="solution-tab__meta">
-                  <span className="solution-tab__kind">{t("Бүтээгдэхүүн", "Product")}</span>
-                  <span className="badge badge--soon">{t("Удахгүй", "Coming soon")}</span>
+                  <span className="solution-tab__kind">{(language === "mn" ? "Бүтээгдэхүүн" : "Product")}</span>
+                  <span className="badge badge--soon">{(language === "mn" ? "Удахгүй" : "Coming soon")}</span>
                 </span>
                 <span className="solution-tab__name">
-                  {t("Өгөгдлийн автоматжуулалт", "Data Automation")}
+                  {(language === "mn" ? "Өгөгдлийн автоматжуулалт" : "Data Automation")}
                 </span>
               </button>
               <button
@@ -1690,9 +1680,9 @@ export default function Home() {
                 type="button"
               >
                 <span className="solution-tab__meta">
-                  <span className="solution-tab__kind">{t("Үйлчилгээ", "Service")}</span>
+                  <span className="solution-tab__kind">{(language === "mn" ? "Үйлчилгээ" : "Service")}</span>
                 </span>
-                <span className="solution-tab__name">{t("Захиалгат дашбоард", "Custom Dashboard")}</span>
+                <span className="solution-tab__name">{(language === "mn" ? "Захиалгат дашбоард" : "Custom Dashboard")}</span>
               </button>
               <button
                 aria-controls="sol-panel-3"
@@ -1705,10 +1695,10 @@ export default function Home() {
                 type="button"
               >
                 <span className="solution-tab__meta">
-                  <span className="solution-tab__kind">{t("Үйлчилгээ", "Service")}</span>
+                  <span className="solution-tab__kind">{(language === "mn" ? "Үйлчилгээ" : "Service")}</span>
                 </span>
                 <span className="solution-tab__name">
-                  {t("Өгөгдлийн агуулахын зөвлөх", "Data Warehouse Consulting")}
+                  {(language === "mn" ? "Өгөгдлийн агуулахын зөвлөх" : "Data Warehouse Consulting")}
                 </span>
               </button>
               <button
@@ -1722,10 +1712,10 @@ export default function Home() {
                 type="button"
               >
                 <span className="solution-tab__meta">
-                  <span className="solution-tab__kind">{t("Үйлчилгээ", "Service")}</span>
+                  <span className="solution-tab__kind">{(language === "mn" ? "Үйлчилгээ" : "Service")}</span>
                 </span>
                 <span className="solution-tab__name">
-                  {t("Өгөгдлийн стратеги зөвлөх", "Data Strategy Consulting")}
+                  {(language === "mn" ? "Өгөгдлийн стратеги зөвлөх" : "Data Strategy Consulting")}
                 </span>
               </button>
             </div>
@@ -1738,83 +1728,83 @@ export default function Home() {
             >
               <div className="solution-panel__body">
                 <div className="solution-panel__intro">
-                  <span className="pill pill--green">Туршилтын шат</span>
-                  <h3>{t("Сарын KPI тайлан", "Monthly KPI Report")}</h3>
+                  <span className="pill pill--green">{(language === "mn" ? "Туршилтын шат" : "Pilot stage")}</span>
+                  <h3>{(language === "mn" ? "Сарын KPI тайлан" : "Monthly KPI Report")}</h3>
                   <p className="solution-panel__lead">
-                    Excel-ээ сар бүр оруулаад, бэлэн тайлан, мэдэгдэл аваарай.
+                    {(language === "mn" ? "Excel-ээ сар бүр оруулаад, бэлэн тайлан, мэдэгдэл аваарай." : "Upload Excel each month and receive ready reports and notifications.")}
                   </p>
                 </div>
                 <dl className="facts">
                   <div>
-                    <dt>Хэнд тохирох</dt>
-                    <dd>Жижиг, дунд бизнесийн захирал, нягтлан</dd>
+                    <dt>{(language === "mn" ? "Хэнд тохирох" : "Best for")}</dt>
+                    <dd>{(language === "mn" ? "Жижиг, дунд бизнесийн захирал, нягтлан" : "Owners and accountants of small and medium businesses")}</dd>
                   </div>
                   <div>
-                    <dt>Юу багтах</dt>
+                    <dt>{(language === "mn" ? "Юу багтах" : "What's included")}</dt>
                     <dd>
                       <ul className="ticks ticks--lg">
                         <li>
                           <svg className="icon">
                             <use href="#i-check"></use>
                           </svg>
-                          5 тайлангийн загвар
+                          {(language === "mn" ? "5 тайлангийн загвар" : "5 report templates")}
                         </li>
                         <li>
                           <svg className="icon">
                             <use href="#i-check"></use>
                           </svg>
-                          Excel загвар, SharePoint холболт
+                          {(language === "mn" ? "Excel загвар, SharePoint холболт" : "Excel template and SharePoint connection")}
                         </li>
                         <li>
                           <svg className="icon">
                             <use href="#i-check"></use>
                           </svg>
-                          Тайлан шинэчлэгдэхэд мэдэгдэл
+                          {(language === "mn" ? "Тайлан шинэчлэгдэхэд мэдэгдэл" : "Notification when reports are updated")}
                         </li>
                       </ul>
                     </dd>
                   </div>
                 </dl>
                 <a className="btn btn--primary" href="#contact">
-                  Туршилтад бүртгүүлэх
+                  {(language === "mn" ? "Туршилтад бүртгүүлэх" : "Join the trial")}
                 </a>
               </div>
               <div aria-hidden="true" className="mock">
                 <div className="mock__head">
                   <div>
-                    <div className="mock__company">Монголын Компани ХХК</div>
-                    <div className="mock__title">Сарын KPI тайлан, 2026/07</div>
+                    <div className="mock__company">{(language === "mn" ? "Монголын Компани ХХК" : "Mongolian Company LLC")}</div>
+                    <div className="mock__title">{(language === "mn" ? "Сарын KPI тайлан, 2026/07" : "Monthly KPI Report, 2026/07")}</div>
                   </div>
                   <span className="badge badge--green badge--lg">
-                    Автоматаар шинэчлэгдсэн
+                    {(language === "mn" ? "Автоматаар шинэчлэгдсэн" : "Automatically updated")}
                   </span>
                 </div>
                 <div className="mock__tabs">
-                  <span className="mock__tab is-active">Удирдлагын тойм</span>
-                  <span className="mock__tab">Санхүү</span>
-                  <span className="mock__tab">Борлуулалт</span>
-                  <span className="mock__tab">Авлага/Өглөг</span>
-                  <span className="mock__tab">Мөнгөн урсгал</span>
+                  <span className="mock__tab is-active">{(language === "mn" ? "Удирдлагын тойм" : "Management overview")}</span>
+                  <span className="mock__tab">{(language === "mn" ? "Санхүү" : "Finance")}</span>
+                  <span className="mock__tab">{(language === "mn" ? "Борлуулалт" : "Sales")}</span>
+                  <span className="mock__tab">{(language === "mn" ? "Авлага/Өглөг" : "Receivables/Payables")}</span>
+                  <span className="mock__tab">{(language === "mn" ? "Мөнгөн урсгал" : "Cash flow")}</span>
                 </div>
                 <div className="kpis">
                   <div className="kpi">
-                    <span className="kpi__label">{t("Орлого", "Revenue")}</span>
+                    <span className="kpi__label">{(language === "mn" ? "Орлого" : "Revenue")}</span>
                     <span className="kpi__value">₮2.19bn</span>
                     <span className="kpi__delta kpi__delta--good">▲ 22.2%</span>
                   </div>
                   <div className="kpi">
-                    <span className="kpi__label">Зардал</span>
+                    <span className="kpi__label">{(language === "mn" ? "Зардал" : "Expenses")}</span>
                     <span className="kpi__value">₮1.64bn</span>
                     <span className="kpi__delta kpi__delta--bad">▲ 12.3%</span>
                   </div>
                   <div className="kpi">
-                    <span className="kpi__label">{t("Цэвэр ашиг", "Net profit")}</span>
+                    <span className="kpi__label">{(language === "mn" ? "Цэвэр ашиг" : "Net profit")}</span>
                     <span className="kpi__value">₮549M</span>
                     <span className="kpi__delta kpi__delta--good">▲ 66.4%</span>
                   </div>
                 </div>
                 <div className="panel-box">
-                  <span className="panel-box__title">Орлого, сараар</span>
+                  <span className="panel-box__title">{(language === "mn" ? "Орлого, сараар" : "Revenue by month")}</span>
                   <div className="col-chart">
                     <span style={{ "--h": "66%" }}></span>
                     <span style={{ "--h": "51%" }}></span>
@@ -1841,7 +1831,7 @@ export default function Home() {
                   <svg className="icon">
                     <use href="#i-mail"></use>
                   </svg>
-                  Тайлан 2026/08/01-нд bat@company.mn руу илгээгдлээ
+                  {(language === "mn" ? "Тайлан 2026/08/01-нд bat@company.mn руу илгээгдлээ" : "Report sent to bat@company.mn on 2026/08/01")}
                 </div>
               </div>
             </div>
@@ -1855,88 +1845,88 @@ export default function Home() {
             >
               <div className="solution-panel__body">
                 <div className="solution-panel__intro">
-                  <span className="pill pill--soon">{t("Удахгүй", "Coming soon")}</span>
-                  <h3>{t("Өгөгдлийн автоматжуулалт", "Data Automation")}</h3>
+                  <span className="pill pill--soon">{(language === "mn" ? "Удахгүй" : "Coming soon")}</span>
+                  <h3>{(language === "mn" ? "Өгөгдлийн автоматжуулалт" : "Data Automation")}</h3>
                   <p className="solution-panel__lead">
-                    Хоёр талын query-г бичээд, үлдсэнийг платформ хийнэ.
+                    {(language === "mn" ? "Хоёр талын query-г бичээд, үлдсэнийг платформ хийнэ." : "Write the queries on both sides and the platform handles the rest.")}
                   </p>
                 </div>
                 <dl className="facts">
                   <div>
-                    <dt>Хэнд тохирох</dt>
-                    <dd>Банк, ББСБ, дунд компанийн IT баг</dd>
+                    <dt>{(language === "mn" ? "Хэнд тохирох" : "Best for")}</dt>
+                    <dd>{(language === "mn" ? "Банк, ББСБ, дунд компанийн IT баг" : "IT teams at banks, NBFIs and mid-sized companies")}</dd>
                   </div>
                   <div>
-                    <dt>Юу багтах</dt>
+                    <dt>{(language === "mn" ? "Юу багтах" : "What's included")}</dt>
                     <dd>
                       <ul className="ticks ticks--lg">
                         <li>
                           <svg className="icon">
                             <use href="#i-check"></use>
                           </svg>
-                          Хуваарь, давтан оролдлого, шинэ өгөгдлийн ачаалал
+                          {(language === "mn" ? "Хуваарь, давтан оролдлого, шинэ өгөгдлийн ачаалал" : "Scheduling, retries and incremental data loading")}
                         </li>
                         <li>
                           <svg className="icon">
                             <use href="#i-check"></use>
                           </svg>
-                          Ажиллалтын түүх, алдааны мэдэгдэл
+                          {(language === "mn" ? "Ажиллалтын түүх, алдааны мэдэгдэл" : "Run history and error notifications")}
                         </li>
                         <li>
                           <svg className="icon">
                             <use href="#i-check"></use>
                           </svg>
-                          Танай сервер дээр ажиллана
+                          {(language === "mn" ? "Танай сервер дээр ажиллана" : "Runs on your server")}
                         </li>
                       </ul>
                     </dd>
                   </div>
                 </dl>
                 <a className="btn btn--primary" href="#contact">
-                  Танилцуулга авах
+                  {(language === "mn" ? "Танилцуулга авах" : "Request a demo")}
                 </a>
               </div>
               <div aria-hidden="true" className="mock">
                 <div className="mock__head mock__head--center">
                   <div className="mock__title mock__title--sm">
-                    Pipeline · Odoo → Агуулах
+                    {(language === "mn" ? "Pipeline · Odoo → Агуулах" : "Pipeline · Odoo → Warehouse")}
                   </div>
                   <span className="badge badge--green badge--lg">
-                    <span className="status__dot"></span>Идэвхтэй
+                    <span className="status__dot"></span>{(language === "mn" ? "Идэвхтэй" : "Active")}
                   </span>
                 </div>
                 <ol className="pipeline">
                   <li className="pipeline__step">
                     <span className="pipeline__num">1</span>
-                    <span className="pipeline__name">Эх систем</span>
+                    <span className="pipeline__name">{(language === "mn" ? "Эх систем" : "Source system")}</span>
                     <span className="pipeline__meta">Odoo, 1C</span>
                   </li>
                   <li className="pipeline__step">
                     <span className="pipeline__num">2</span>
-                    <span className="pipeline__name">{t("Татах query", "Extract query")}</span>
-                    <span className="badge badge--outline-navy">{t("Та бичнэ", "You write it")}</span>
+                    <span className="pipeline__name">{(language === "mn" ? "Татах query" : "Extract query")}</span>
+                    <span className="badge badge--outline-navy">{(language === "mn" ? "Та бичнэ" : "You write it")}</span>
                   </li>
                   <li className="pipeline__step">
                     <span className="pipeline__num">3</span>
                     <span className="pipeline__name">Staging</span>
-                    <span className="badge badge--solid-green">{t("Автомат", "Automatic")}</span>
+                    <span className="badge badge--solid-green">{(language === "mn" ? "Автомат" : "Automatic")}</span>
                   </li>
                   <li className="pipeline__step">
                     <span className="pipeline__num">4</span>
-                    <span className="pipeline__name">{t("Ачаалах query", "Load query")}</span>
-                    <span className="badge badge--outline-navy">{t("Та бичнэ", "You write it")}</span>
+                    <span className="pipeline__name">{(language === "mn" ? "Ачаалах query" : "Load query")}</span>
+                    <span className="badge badge--outline-navy">{(language === "mn" ? "Та бичнэ" : "You write it")}</span>
                   </li>
                   <li className="pipeline__step">
                     <span className="pipeline__num">5</span>
-                    <span className="pipeline__name">{t("Өгөгдлийн агуулах", "Data warehouse")}</span>
-                    <span className="badge badge--solid-green">{t("Автомат", "Automatic")}</span>
+                    <span className="pipeline__name">{(language === "mn" ? "Өгөгдлийн агуулах" : "Data warehouse")}</span>
+                    <span className="badge badge--solid-green">{(language === "mn" ? "Автомат" : "Automatic")}</span>
                   </li>
                 </ol>
                 <div className="mock__foot">
                   <svg className="icon">
                     <use href="#i-clock"></use>
                   </svg>
-                  Хуваарь: өдөр бүр 02:00 · Сүүлийн ажиллалт амжилттай
+                  {(language === "mn" ? "Хуваарь: өдөр бүр 02:00 · Сүүлийн ажиллалт амжилттай" : "Schedule: daily at 02:00 · Last run successful")}
                 </div>
               </div>
             </div>
@@ -1950,69 +1940,69 @@ export default function Home() {
             >
               <div className="solution-panel__body">
                 <div className="solution-panel__intro">
-                  <span className="pill pill--navy">{t("Үйлчилгээ", "Service")}</span>
-                  <h3>{t("Захиалгат дашбоард", "Custom Dashboard")}</h3>
+                  <span className="pill pill--navy">{(language === "mn" ? "Үйлчилгээ" : "Service")}</span>
+                  <h3>{(language === "mn" ? "Захиалгат дашбоард" : "Custom Dashboard")}</h3>
                   <p className="solution-panel__lead">
-                    Танай системд холбогдсон, хэрэгцээнд тань тохирсон тайлан.
+                    {(language === "mn" ? "Танай системд холбогдсон, хэрэгцээнд тань тохирсон тайлан." : "A report connected to your systems and tailored to your needs.")}
                   </p>
                 </div>
                 <dl className="facts">
                   <div>
-                    <dt>Хэнд тохирох</dt>
-                    <dd>Бэлэн загвар хүрэлцэхгүй байгаа компани</dd>
+                    <dt>{(language === "mn" ? "Хэнд тохирох" : "Best for")}</dt>
+                    <dd>{(language === "mn" ? "Бэлэн загвар хүрэлцэхгүй байгаа компани" : "Companies that need more than standard templates")}</dd>
                   </div>
                   <div>
-                    <dt>Юу багтах</dt>
+                    <dt>{(language === "mn" ? "Юу багтах" : "What's included")}</dt>
                     <dd>
                       <ul className="ticks ticks--lg ticks--navy">
                         <li>
                           <svg className="icon">
                             <use href="#i-check"></use>
                           </svg>
-                          Power BI эсвэл веб тайлан
+                          {(language === "mn" ? "Power BI эсвэл веб тайлан" : "Power BI or web reports")}
                         </li>
                         <li>
                           <svg className="icon">
                             <use href="#i-check"></use>
                           </svg>
-                          Odoo, 1C, мэдээллийн сантай холболт
+                          {(language === "mn" ? "Odoo, 1C, мэдээллийн сантай холболт" : "Odoo, 1C and database connections")}
                         </li>
                         <li>
                           <svg className="icon">
                             <use href="#i-check"></use>
                           </svg>
-                          Тоо тулгалт, сургалт
+                          {(language === "mn" ? "Тоо тулгалт, сургалт" : "Reconciliation and training")}
                         </li>
                       </ul>
                     </dd>
                   </div>
                 </dl>
                 <a className="btn btn--navy" href="#contact">
-                  Зөвлөгөө авах
+                  {(language === "mn" ? "Зөвлөгөө авах" : "Request consultation")}
                 </a>
               </div>
               <div aria-hidden="true" className="mock">
                 <div className="mock__head">
                   <div>
-                    <div className="mock__company">Монголын Компани ХХК</div>
+                    <div className="mock__company">{(language === "mn" ? "Монголын Компани ХХК" : "Mongolian Company LLC")}</div>
                     <div className="mock__title mock__title--sm">
-                      Санхүүгийн хяналт
+                      {(language === "mn" ? "Санхүүгийн хяналт" : "Financial control")}
                     </div>
                   </div>
-                  <span className="mock__filter">2026 он · Бүх салбар</span>
+                  <span className="mock__filter">{(language === "mn" ? "2026 он · Бүх салбар" : "2026 · All branches")}</span>
                 </div>
                 <div className="panel-box">
                   <div className="panel-box__head">
                     <span className="panel-box__title">
-                      Орлого ба зардал, сараар
+                      {(language === "mn" ? "Орлого ба зардал, сараар" : "Revenue and expenses by month")}
                     </span>
                     <span className="legend">
                       <span>
-                        <i className="legend__line"></i>Орлого
+                        <i className="legend__line"></i>{(language === "mn" ? "Орлого" : "Revenue")}
                       </span>
                       <span>
                         <i className="legend__line legend__line--dashed"></i>
-                        Зардал
+                        {(language === "mn" ? "Зардал" : "Expenses")}
                       </span>
                     </span>
                   </div>
@@ -2045,7 +2035,7 @@ export default function Home() {
                   </div>
                 </div>
                 <div className="panel-box">
-                  <span className="panel-box__title">Авлагын насжилт</span>
+                  <span className="panel-box__title">{(language === "mn" ? "Авлагын насжилт" : "Receivables aging")}</span>
                   <div className="aging">
                     <span className="aging__1" style={{ "--w": "52%" }}></span>
                     <span className="aging__2" style={{ "--w": "24%" }}></span>
@@ -2054,7 +2044,7 @@ export default function Home() {
                   </div>
                   <div className="aging-legend">
                     <span>
-                      <i className="aging__1"></i>1-30 хоног · 52%
+                      <i className="aging__1"></i>{(language === "mn" ? "1-30 хоног · 52%" : "1-30 days · 52%")}
                     </span>
                     <span>
                       <i className="aging__2"></i>31-60 · 24%
@@ -2079,72 +2069,70 @@ export default function Home() {
             >
               <div className="solution-panel__body">
                 <div className="solution-panel__intro">
-                  <span className="pill pill--navy">{t("Үйлчилгээ", "Service")}</span>
-                  <h3>{t("Өгөгдлийн агуулахын зөвлөх", "Data Warehouse Consulting")}</h3>
+                  <span className="pill pill--navy">{(language === "mn" ? "Үйлчилгээ" : "Service")}</span>
+                  <h3>{(language === "mn" ? "Өгөгдлийн агуулахын зөвлөх" : "Data Warehouse Consulting")}</h3>
                   <p className="solution-panel__lead">
-                    Зээл, эргэн төлөлт, тайлангийн мэдээллийг нэг загварт
-                    нэгтгэнэ.
+                    {language === "mn" ? "Зээл, эргэн төлөлт, тайлангийн мэдээллийг нэг загварт                     нэгтгэнэ." : "Bring loan, repayment and reporting data together in one model."}
                   </p>
                 </div>
                 <dl className="facts">
                   <div>
-                    <dt>Хэнд тохирох</dt>
-                    <dd>ББСБ, санхүүгийн байгууллага</dd>
+                    <dt>{(language === "mn" ? "Хэнд тохирох" : "Best for")}</dt>
+                    <dd>{(language === "mn" ? "ББСБ, санхүүгийн байгууллага" : "NBFIs and financial institutions")}</dd>
                   </div>
                   <div>
-                    <dt>Юу багтах</dt>
+                    <dt>{(language === "mn" ? "Юу багтах" : "What's included")}</dt>
                     <dd>
                       <ul className="ticks ticks--lg ticks--navy">
                         <li>
                           <svg className="icon">
                             <use href="#i-check"></use>
                           </svg>
-                          Стандарт өгөгдлийн загвар
+                          {(language === "mn" ? "Стандарт өгөгдлийн загвар" : "Standard data model")}
                         </li>
                         <li>
                           <svg className="icon">
                             <use href="#i-check"></use>
                           </svg>
-                          Хугацаа хэтэрсэн зээл (PAR), эрсдэлийн сан, СЗХ-ны
-                          тайлан
+                          {(language === "mn" ? "Хугацаа хэтэрсэн зээл (PAR), эрсдэлийн сан, СЗХ-ны тайлан" : "PAR, loan-loss provisions and FRC reports")}
                         </li>
                         <li>
                           <svg className="icon">
                             <use href="#i-check"></use>
                           </svg>
-                          Өдөр бүрийн автомат ачаалал
+                          {(language === "mn" ? "Өдөр бүрийн автомат ачаалал" : "Daily automated loading")}
                         </li>
                       </ul>
                     </dd>
                   </div>
                 </dl>
                 <a className="btn btn--navy" href="#contact">
-                  Зөвлөгөө авах
+                  {(language === "mn" ? "Зөвлөгөө авах" : "Request consultation")}
                 </a>
               </div>
               <div aria-hidden="true" className="mock">
                 <div className="mock__title mock__title--sm">
-                  Өгөгдлийн загвар, жишээ
+                  {(language === "mn" ? "Өгөгдлийн загвар, жишээ" : "Data model example")}
                 </div>
                 <div className="star">
-                  <span className="star__dim">{t("Харилцагч", "Customer")}</span>
+                  <span className="star__dim">{(language === "mn" ? "Харилцагч" : "Customer")}</span>
                   <span className="star__v"></span>
                   <div className="star__row">
-                    <span className="star__dim">{t("Салбар", "Branch")}</span>
+                    <span className="star__dim">{(language === "mn" ? "Салбар" : "Branch")}</span>
                     <span className="star__h"></span>
-                    <span className="star__fact">{t("Зээлийн гүйлгээ", "Loan transactions")}</span>
+                    <span className="star__fact">{(language === "mn" ? "Зээлийн гүйлгээ" : "Loan transactions")}</span>
                     <span className="star__h"></span>
-                    <span className="star__dim">{t("Бүтээгдэхүүн", "Product")}</span>
+                    <span className="star__dim">{(language === "mn" ? "Бүтээгдэхүүн" : "Product")}</span>
                   </div>
                   <span className="star__v"></span>
-                  <span className="star__dim">{t("Огноо", "Date")}</span>
+                  <span className="star__dim">{(language === "mn" ? "Огноо" : "Date")}</span>
                 </div>
                 <div className="outputs">
-                  <span className="outputs__label">Гаралт</span>
+                  <span className="outputs__label">{(language === "mn" ? "Гаралт" : "Outputs")}</span>
                   <div className="tags">
-                    <span className="tag">{t("PAR тайлан", "PAR report")}</span>
-                    <span className="tag">{t("Эрсдэлийн сан", "Risk reserve")}</span>
-                    <span className="tag">{t("СЗХ-ны тайлан", "FRC report")}</span>
+                    <span className="tag">{(language === "mn" ? "PAR тайлан" : "PAR report")}</span>
+                    <span className="tag">{(language === "mn" ? "Эрсдэлийн сан" : "Risk reserve")}</span>
+                    <span className="tag">{(language === "mn" ? "СЗХ-ны тайлан" : "FRC report")}</span>
                   </div>
                 </div>
               </div>
@@ -2159,51 +2147,50 @@ export default function Home() {
             >
               <div className="solution-panel__body">
                 <div className="solution-panel__intro">
-                  <span className="pill pill--navy">{t("Үйлчилгээ", "Service")}</span>
-                  <h3>{t("Өгөгдлийн стратеги зөвлөх", "Data Strategy Consulting")}</h3>
+                  <span className="pill pill--navy">{(language === "mn" ? "Үйлчилгээ" : "Service")}</span>
+                  <h3>{(language === "mn" ? "Өгөгдлийн стратеги зөвлөх" : "Data Strategy Consulting")}</h3>
                   <p className="solution-panel__lead">
-                    Одоогийн байдлаа үнэлүүлж, дараагийн алхмын замын зурагтай
-                    болно. Хэрэгжүүлэлт биш, зөвлөгөө.
+                    {language === "mn" ? "Одоогийн байдлаа үнэлүүлж, дараагийн алхмын замын зурагтай болно. Хэрэгжүүлэлт биш, зөвлөгөө." : "Assess your current state and get a roadmap for the next steps. Advisory, not implementation."}
                   </p>
                 </div>
                 <dl className="facts">
                   <div>
-                    <dt>Хэнд тохирох</dt>
-                    <dd>Олон систем, өсөж буй өгөгдөлтэй компани</dd>
+                    <dt>{(language === "mn" ? "Хэнд тохирох" : "Best for")}</dt>
+                    <dd>{(language === "mn" ? "Олон систем, өсөж буй өгөгдөлтэй компани" : "Companies with multiple systems and growing data")}</dd>
                   </div>
                   <div>
-                    <dt>Юу багтах</dt>
+                    <dt>{(language === "mn" ? "Юу багтах" : "What's included")}</dt>
                     <dd>
                       <ul className="ticks ticks--lg ticks--navy">
                         <li>
                           <svg className="icon">
                             <use href="#i-check"></use>
                           </svg>
-                          Одоогийн байдлын үнэлгээ
+                          {(language === "mn" ? "Одоогийн байдлын үнэлгээ" : "Current-state assessment")}
                         </li>
                         <li>
                           <svg className="icon">
                             <use href="#i-check"></use>
                           </svg>
-                          Өгөгдлийн чанар, засаглалын зөвлөмж
+                          {(language === "mn" ? "Өгөгдлийн чанар, засаглалын зөвлөмж" : "Data quality and governance recommendations")}
                         </li>
                         <li>
                           <svg className="icon">
                             <use href="#i-check"></use>
                           </svg>
-                          Үе шаттай замын зураг
+                          {(language === "mn" ? "Үе шаттай замын зураг" : "Phased roadmap")}
                         </li>
                       </ul>
                     </dd>
                   </div>
                 </dl>
                 <a className="btn btn--navy" href="#contact">
-                  Зөвлөгөө авах
+                  {(language === "mn" ? "Зөвлөгөө авах" : "Request consultation")}
                 </a>
               </div>
               <div aria-hidden="true" className="mock">
                 <div className="mock__title mock__title--sm">
-                  Зөвлөгөөний явц
+                  {(language === "mn" ? "Зөвлөгөөний явц" : "Consulting process")}
                 </div>
                 <ol className="timeline">
                   <li>
@@ -2212,9 +2199,9 @@ export default function Home() {
                       <span className="timeline__line"></span>
                     </span>
                     <span className="timeline__body">
-                      <span className="timeline__title">Үнэлгээ</span>
+                      <span className="timeline__title">{(language === "mn" ? "Үнэлгээ" : "Assessment")}</span>
                       <span className="timeline__text">
-                        Одоогийн систем, өгөгдлийн чанар, тайлангийн хэрэгцээ
+                        {(language === "mn" ? "Одоогийн систем, өгөгдлийн чанар, тайлангийн хэрэгцээ" : "Current systems, data quality and reporting needs")}
                       </span>
                     </span>
                   </li>
@@ -2224,9 +2211,9 @@ export default function Home() {
                       <span className="timeline__line"></span>
                     </span>
                     <span className="timeline__body">
-                      <span className="timeline__title">Зорилтот бүтэц</span>
+                      <span className="timeline__title">{(language === "mn" ? "Зорилтот бүтэц" : "Target architecture")}</span>
                       <span className="timeline__text">
-                        Танай хэмжээнд тохирох өгөгдлийн бүтэц
+                        {(language === "mn" ? "Танай хэмжээнд тохирох өгөгдлийн бүтэц" : "A data architecture suited to your scale")}
                       </span>
                     </span>
                   </li>
@@ -2237,9 +2224,9 @@ export default function Home() {
                       </span>
                     </span>
                     <span className="timeline__body">
-                      <span className="timeline__title">Замын зураг</span>
+                      <span className="timeline__title">{(language === "mn" ? "Замын зураг" : "Roadmap")}</span>
                       <span className="timeline__text">
-                        Үе шаттай төлөвлөгөө, аль модулиас эхлэх
+                        {(language === "mn" ? "Үе шаттай төлөвлөгөө, аль модулиас эхлэх" : "A phased plan and which module to start with")}
                       </span>
                     </span>
                   </li>
@@ -2248,7 +2235,7 @@ export default function Home() {
                   <svg className="icon">
                     <use href="#i-doc"></use>
                   </svg>
-                  Үр дүн: үнэлгээний тайлан, замын зураг
+                  {(language === "mn" ? "Үр дүн: үнэлгээний тайлан, замын зураг" : "Outcome: assessment report and roadmap")}
                 </div>
               </div>
             </div>
@@ -2258,8 +2245,8 @@ export default function Home() {
         <section className="section section--white" id="why">
           <div className="container">
             <div className="section-head">
-              <span className="eyebrow">{t("Яагаад DataView?", "Why DataView?")}</span>
-              <h2 className="h2">Бусдаас юугаараа ялгаатай вэ?</h2>
+              <span className="eyebrow">{(language === "mn" ? "Яагаад DataView?" : "Why DataView?")}</span>
+              <h2 className="h2">{(language === "mn" ? "Бусдаас юугаараа ялгаатай вэ?" : "What makes us different?")}</h2>
             </div>
             <div className="why-grid">
               <article className="why-feature">
@@ -2269,10 +2256,9 @@ export default function Home() {
                       <use href="#i-trending"></use>
                     </svg>
                   </span>
-                  <h3>Цогц платформ, алхам алхмаар</h3>
+                  <h3>{(language === "mn" ? "Цогц платформ, алхам алхмаар" : "One platform, step by step")}</h3>
                   <p>
-                    Сарын тайлангаас эхэлж, хэрэгцээ өсөхөд өгөгдлийн агуулах
-                    руу нэг багтайгаа өргөжинө. Том төсөл эхлүүлэх шаардлагагүй.
+                    {(language === "mn" ? "Сарын тайлангаас эхэлж, хэрэгцээ өсөхөд өгөгдлийн агуулах руу нэг багтайгаа өргөжинө. Том төсөл эхлүүлэх шаардлагагүй." : "Start with monthly reports and expand to a data warehouse as your needs grow, with one team. No need to launch a large project.")}
                   </p>
                 </div>
                 <ol className="growth">
@@ -2281,7 +2267,7 @@ export default function Home() {
                       <span className="growth__dot growth__dot--filled"></span>
                       <span className="growth__line"></span>
                     </span>
-                    <span className="growth__label">{t("Сарын KPI тайлан", "Monthly KPI Report")}</span>
+                    <span className="growth__label">{(language === "mn" ? "Сарын KPI тайлан" : "Monthly KPI Report")}</span>
                   </li>
                   <li>
                     <span className="growth__rail">
@@ -2289,14 +2275,14 @@ export default function Home() {
                       <span className="growth__line"></span>
                     </span>
                     <span className="growth__label">
-                      {t("Өгөгдлийн автоматжуулалт", "Data Automation")}
+                      {(language === "mn" ? "Өгөгдлийн автоматжуулалт" : "Data Automation")}
                     </span>
                   </li>
                   <li>
                     <span className="growth__rail">
                       <span className="growth__dot"></span>
                     </span>
-                    <span className="growth__label">{t("Өгөгдлийн агуулах", "Data warehouse")}</span>
+                    <span className="growth__label">{(language === "mn" ? "Өгөгдлийн агуулах" : "Data warehouse")}</span>
                   </li>
                 </ol>
               </article>
@@ -2306,9 +2292,9 @@ export default function Home() {
                     <use href="#i-building"></use>
                   </svg>
                 </span>
-                <h3>Монгол бизнест тохирсон</h3>
+                <h3>{(language === "mn" ? "Монгол бизнест тохирсон" : "Built for Mongolian businesses")}</h3>
                 <p>
-                  НӨАТ, СЗХ-ны тайлан, Цагаан сарын улирал — бүгд монгол хэлээр.
+                  {(language === "mn" ? "НӨАТ, СЗХ-ны тайлан, Цагаан сарын улирал — бүгд монгол хэлээр." : "VAT, FRC reporting and Lunar New Year seasonality — all supported in Mongolian.")}
                 </p>
               </article>
               <article className="card">
@@ -2317,10 +2303,9 @@ export default function Home() {
                     <use href="#i-db"></use>
                   </svg>
                 </span>
-                <h3>Ашигладаг мэдээлэл дээрээ ажиллана</h3>
+                <h3>{(language === "mn" ? "Ашигладаг мэдээлэл дээрээ ажиллана" : "Works with the data you already use")}</h3>
                 <p>
-                  Excel, 1C, Odoo болон мэдээллийн сангуудтай холбох боломжийг
-                  шалгаж, танайд тохирох хувилбарыг санал болгоно.
+                  {language === "mn" ? "Excel, 1C, Odoo болон мэдээллийн сангуудтай холбох боломжийг                   шалгаж, танайд тохирох хувилбарыг санал болгоно." : "We assess connectivity with Excel, 1C, Odoo and databases, then recommend the option that fits your needs."}
                 </p>
               </article>
               <article className="card">
@@ -2329,10 +2314,9 @@ export default function Home() {
                     <use href="#i-layout"></use>
                   </svg>
                 </span>
-                <h3>Бэлэн загвараас, танай хэрэгцээнд</h3>
+                <h3>{(language === "mn" ? "Бэлэн загвараас, танай хэрэгцээнд" : "Start from templates, tailor to your needs")}</h3>
                 <p>
-                  Таван загвараас сонгож, танд хэрэгтэй үзүүлэлт, хүснэгт,
-                  графикийг тохируулна.
+                  {language === "mn" ? "Таван загвараас сонгож, танд хэрэгтэй үзүүлэлт, хүснэгт,                   графикийг тохируулна." : "Choose from five templates and customize the metrics, tables and charts you need."}
                 </p>
               </article>
               <article className="card">
@@ -2341,10 +2325,9 @@ export default function Home() {
                     <use href="#i-message"></use>
                   </svg>
                 </span>
-                <h3>Хэрэгцээ, зардлаа эхлээд ярилцъя</h3>
+                <h3>{(language === "mn" ? "Хэрэгцээ, зардлаа эхлээд ярилцъя" : "Let's discuss your needs and cost first")}</h3>
                 <p>
-                  Сонгох тайлан, мэдээллийн холболт, нэмэлт тохиргооноос
-                  хамаарах ажлын хүрээ болон үнийг тодорхой болгоно.
+                  {language === "mn" ? "Сонгох тайлан, мэдээллийн холболт, нэмэлт тохиргооноос                   хамаарах ажлын хүрээ болон үнийг тодорхой болгоно." : "We define the scope and price based on your selected reports, data connections and additional customization."}
                 </p>
               </article>
             </div>
@@ -2355,11 +2338,11 @@ export default function Home() {
           <div className="container">
             <div className="how-head">
               <div className="section-head">
-                <span className="eyebrow">{t("Хэрхэн ажилладаг", "How it works")}</span>
-                <h2 className="h2">Хэрхэн ажилладаг вэ?</h2>
+                <span className="eyebrow">{(language === "mn" ? "Хэрхэн ажилладаг" : "How it works")}</span>
+                <h2 className="h2">{(language === "mn" ? "Хэрхэн ажилладаг вэ?" : "How does it work?")}</h2>
               </div>
               <div
-                aria-label="Шийдлийн төрөл"
+                aria-label={(language === "mn" ? "Шийдлийн төрөл" : "Solution type")}
                 className="segmented"
                 data-how=""
                 role="tablist"
@@ -2372,7 +2355,7 @@ export default function Home() {
                   role="tab"
                   type="button"
                 >
-                  Сарын KPI тайлан
+                  {(language === "mn" ? "Сарын KPI тайлан" : "Monthly KPI Report")}
                 </button>
                 <button
                   aria-controls="how-panel-1"
@@ -2383,7 +2366,7 @@ export default function Home() {
                   tabIndex="-1"
                   type="button"
                 >
-                  {t("Өгөгдлийн автоматжуулалт", "Data Automation")}
+                  {(language === "mn" ? "Өгөгдлийн автоматжуулалт" : "Data Automation")}
                 </button>
                 <button
                   aria-controls="how-panel-2"
@@ -2394,7 +2377,7 @@ export default function Home() {
                   tabIndex="-1"
                   type="button"
                 >
-                  Үйлчилгээ
+                  {(language === "mn" ? "Үйлчилгээ" : "Service")}
                 </button>
               </div>
             </div>
@@ -2410,32 +2393,32 @@ export default function Home() {
                     <span className="step__num">1</span>
                     <span className="step__line"></span>
                   </span>
-                  <h3>Загвараа сонгоно</h3>
-                  <p>Хэрэгтэй тайлангаа сонгоно.</p>
+                  <h3>{(language === "mn" ? "Загвараа сонгоно" : "Choose a template")}</h3>
+                  <p>{(language === "mn" ? "Хэрэгтэй тайлангаа сонгоно." : "Choose the report you need.")}</p>
                 </li>
                 <li className="step">
                   <span className="step__head">
                     <span className="step__num">2</span>
                     <span className="step__line"></span>
                   </span>
-                  <h3>Excel загвар авна</h3>
-                  <p>Манай бэлэн Excel загварыг татна.</p>
+                  <h3>{(language === "mn" ? "Excel загвар авна" : "Get the Excel template")}</h3>
+                  <p>{(language === "mn" ? "Манай бэлэн Excel загварыг татна." : "Download our ready-made Excel template.")}</p>
                 </li>
                 <li className="step">
                   <span className="step__head">
                     <span className="step__num">3</span>
                     <span className="step__line"></span>
                   </span>
-                  <h3>{t("Сар бүр оруулна", "Upload monthly")}</h3>
-                  <p>Файлаа оруулна эсвэл SharePoint-оос автоматаар.</p>
+                  <h3>{(language === "mn" ? "Сар бүр оруулна" : "Upload monthly")}</h3>
+                  <p>{(language === "mn" ? "Файлаа оруулна эсвэл SharePoint-оос автоматаар." : "Upload your file or import it automatically from SharePoint.")}</p>
                 </li>
                 <li className="step">
                   <span className="step__head">
                     <span className="step__num">4</span>
                     <span className="step__line"></span>
                   </span>
-                  <h3>Тайлан, мэдэгдэл авна</h3>
-                  <p>Тайлан шинэчлэгдэж, мэдэгдэл ирнэ.</p>
+                  <h3>{(language === "mn" ? "Тайлан, мэдэгдэл авна" : "Receive reports and notifications")}</h3>
+                  <p>{(language === "mn" ? "Тайлан шинэчлэгдэж, мэдэгдэл ирнэ." : "Your report is updated and you receive a notification.")}</p>
                 </li>
               </ol>
             </div>
@@ -2452,32 +2435,32 @@ export default function Home() {
                     <span className="step__num">1</span>
                     <span className="step__line"></span>
                   </span>
-                  <h3>Эх үүсвэрээ холбоно</h3>
-                  <p>Odoo, 1C эсвэл мэдээллийн сантай зөвхөн унших эрхээр.</p>
+                  <h3>{(language === "mn" ? "Эх үүсвэрээ холбоно" : "Connect your source")}</h3>
+                  <p>{(language === "mn" ? "Odoo, 1C эсвэл мэдээллийн сантай зөвхөн унших эрхээр." : "Connect to Odoo, 1C or a database with read-only access.")}</p>
                 </li>
                 <li className="step">
                   <span className="step__head">
                     <span className="step__num">2</span>
                     <span className="step__line"></span>
                   </span>
-                  <h3>Татах query бичнэ</h3>
-                  <p>Ямар датаг авахаа тодорхойлно.</p>
+                  <h3>{(language === "mn" ? "Татах query бичнэ" : "Write the extract query")}</h3>
+                  <p>{(language === "mn" ? "Ямар датаг авахаа тодорхойлно." : "Define which data to retrieve.")}</p>
                 </li>
                 <li className="step">
                   <span className="step__head">
                     <span className="step__num">3</span>
                     <span className="step__line"></span>
                   </span>
-                  <h3>Ачаалах query бичнэ</h3>
-                  <p>Агуулах руу хэрхэн ачаалахаа тодорхойлно.</p>
+                  <h3>{(language === "mn" ? "Ачаалах query бичнэ" : "Write the load query")}</h3>
+                  <p>{(language === "mn" ? "Агуулах руу хэрхэн ачаалахаа тодорхойлно." : "Define how the data is loaded into the warehouse.")}</p>
                 </li>
                 <li className="step">
                   <span className="step__head">
                     <span className="step__num">4</span>
                     <span className="step__line"></span>
                   </span>
-                  <h3>Үлдсэнийг платформ хийнэ</h3>
-                  <p>Хуваарь, давтан оролдлого, алдааны мэдэгдэл.</p>
+                  <h3>{(language === "mn" ? "Үлдсэнийг платформ хийнэ" : "The platform handles the rest")}</h3>
+                  <p>{(language === "mn" ? "Хуваарь, давтан оролдлого, алдааны мэдэгдэл." : "Scheduling, retries and error notifications.")}</p>
                 </li>
               </ol>
             </div>
@@ -2494,32 +2477,32 @@ export default function Home() {
                     <span className="step__num">1</span>
                     <span className="step__line"></span>
                   </span>
-                  <h3>Танилцах</h3>
-                  <p>Ашигладаг систем, хэрэгтэй тайлангаа хэлнэ.</p>
+                  <h3>{(language === "mn" ? "Танилцах" : "Discovery")}</h3>
+                  <p>{(language === "mn" ? "Ашигладаг систем, хэрэгтэй тайлангаа хэлнэ." : "Tell us which systems you use and which reports you need.")}</p>
                 </li>
                 <li className="step">
                   <span className="step__head">
                     <span className="step__num">2</span>
                     <span className="step__line"></span>
                   </span>
-                  <h3>Дата холболт</h3>
-                  <p>Зөвхөн унших эрхээр холбогдож, бүтцийг судална.</p>
+                  <h3>{(language === "mn" ? "Дата холболт" : "Data connection")}</h3>
+                  <p>{(language === "mn" ? "Зөвхөн унших эрхээр холбогдож, бүтцийг судална." : "We connect with read-only access and review the structure.")}</p>
                 </li>
                 <li className="step">
                   <span className="step__head">
                     <span className="step__num">3</span>
                     <span className="step__line"></span>
                   </span>
-                  <h3>Угсрах, тулгах</h3>
-                  <p>Бодит датаар бүтээж, тоог нягтлангийн тоотой тулгана.</p>
+                  <h3>{(language === "mn" ? "Угсрах, тулгах" : "Build and reconcile")}</h3>
+                  <p>{(language === "mn" ? "Бодит датаар бүтээж, тоог нягтлангийн тоотой тулгана." : "We build with real data and reconcile figures with accounting.")}</p>
                 </li>
                 <li className="step">
                   <span className="step__head">
                     <span className="step__num">4</span>
                     <span className="step__line"></span>
                   </span>
-                  <h3>Хүлээлгэн өгөх</h3>
-                  <p>Танилцуулж, санал авч, эцсийн тохиргоо хийнэ.</p>
+                  <h3>{(language === "mn" ? "Хүлээлгэн өгөх" : "Handover")}</h3>
+                  <p>{(language === "mn" ? "Танилцуулж, санал авч, эцсийн тохиргоо хийнэ." : "We present the result, collect feedback and finalize the configuration.")}</p>
                 </li>
               </ol>
             </div>
@@ -2529,8 +2512,8 @@ export default function Home() {
         <section className="section section--navy" id="trust">
           <div className="container">
             <div className="section-head">
-              <span className="eyebrow">{t("Бидний баталгаа", "Our guarantee")}</span>
-              <h2 className="h2">{t("Бидэнд итгэж болох шалтгаан", "Why you can trust us")}</h2>
+              <span className="eyebrow">{(language === "mn" ? "Бидний баталгаа" : "Our guarantee")}</span>
+              <h2 className="h2">{(language === "mn" ? "Бидэнд итгэж болох шалтгаан" : "Why you can trust us")}</h2>
             </div>
             <div className="trust-grid">
               <article className="card card--dark">
@@ -2539,10 +2522,9 @@ export default function Home() {
                     <use href="#i-shield-check"></use>
                   </svg>
                 </span>
-                <h3>{t("Зөвхөн унших эрх", "Read-only access")}</h3>
+                <h3>{(language === "mn" ? "Зөвхөн унших эрх" : "Read-only access")}</h3>
                 <p>
-                  Танай системд зөвхөн унших эрхээр холбогдож, мэдээллийг
-                  өөрчлөхгүй. Дамжуулах, хадгалахдаа шифрлэнэ.
+                  {language === "mn" ? "Танай системд зөвхөн унших эрхээр холбогдож, мэдээллийг                   өөрчлөхгүй. Дамжуулах, хадгалахдаа шифрлэнэ." : "We connect with read-only access and never modify your data. Data is encrypted in transit and at rest."}
                 </p>
               </article>
               <article className="card card--dark">
@@ -2551,10 +2533,9 @@ export default function Home() {
                     <use href="#i-clipboard-check"></use>
                   </svg>
                 </span>
-                <h3>{t("Тоо тулгасан тайлан", "Reconciled reports")}</h3>
+                <h3>{(language === "mn" ? "Тоо тулгасан тайлан" : "Reconciled reports")}</h3>
                 <p>
-                  Тайланг танай нягтлангийн тоотой тулгаж шалгасны дараа
-                  хүлээлгэн өгнө.
+                  {language === "mn" ? "Тайланг танай нягтлангийн тоотой тулгаж шалгасны дараа                   хүлээлгэн өгнө." : "Reports are reconciled against your accounting figures before delivery."}
                 </p>
               </article>
               <article className="card card--dark">
@@ -2563,10 +2544,9 @@ export default function Home() {
                     <use href="#i-award"></use>
                   </svg>
                 </span>
-                <h3>{t("Санхүүгийн өгөгдлийн туршлага", "Financial data experience")}</h3>
+                <h3>{(language === "mn" ? "Санхүүгийн өгөгдлийн туршлага" : "Financial data experience")}</h3>
                 <p>
-                  Банкны ETL, Power BI, санхүүгийн тайлангийн систем дээр 5+ жил
-                  ажилласан инженерүүд.
+                  {language === "mn" ? "Банкны ETL, Power BI, санхүүгийн тайлангийн систем дээр 5+ жил                   ажилласан инженерүүд." : "Engineers with 5+ years of experience in banking ETL, Power BI and financial reporting systems."}
                 </p>
               </article>
               <article className="card card--dark">
@@ -2575,8 +2555,8 @@ export default function Home() {
                     <use href="#i-gift"></use>
                   </svg>
                 </span>
-                <h3>{t("Эхний харилцагчдад", "For our first customers")}</h3>
-                <p>{t("Эхний 5 байгууллагад сунгасан дэмжлэг.", "Extended support for the first 5 organizations.")}</p>
+                <h3>{(language === "mn" ? "Эхний харилцагчдад" : "For our first customers")}</h3>
+                <p>{(language === "mn" ? "Эхний 5 байгууллагад сунгасан дэмжлэг." : "Extended support for the first 5 organizations.")}</p>
               </article>
             </div>
           </div>
@@ -2585,16 +2565,16 @@ export default function Home() {
         <section className="section section--white" id="faq">
           <div className="container faq-layout">
             <div className="section-head">
-              <span className="eyebrow">Түгээмэл асуулт</span>
-              <h2 className="h2">Асуулт хариулт</h2>
+              <span className="eyebrow">{(language === "mn" ? "Түгээмэл асуулт" : "Frequently asked questions")}</span>
+              <h2 className="h2">{(language === "mn" ? "Асуулт хариулт" : "Questions & answers")}</h2>
               <p>
-                Өөр асуулт байвал <a href="#contact">бидэнтэй холбогдоорой</a>.
+                {(language === "mn" ? "Өөр асуулт байвал " : "Have another question? ")}<a href="#contact">{(language === "mn" ? "бидэнтэй холбогдоорой" : "Contact us")}</a>.
               </p>
             </div>
             <div className="faq" data-faq="">
               <details name="faq" open="">
                 <summary>
-                  <span>Манай ашигладаг системтэй холбогдох уу?</span>
+                  <span>{(language === "mn" ? "Манай ашигладаг системтэй холбогдох уу?" : "Can you connect to the systems we use?")}</span>
                   <span aria-hidden="true" className="faq__icon">
                     <svg className="icon">
                       <use href="#i-chevron"></use>
@@ -2602,14 +2582,12 @@ export default function Home() {
                   </span>
                 </summary>
                 <p className="faq__answer">
-                  Excel, 1C, Odoo-той бэлэн ажиллана. Oracle, SQL Server зэрэг
-                  бусад мэдээллийн сантай холбох боломжийг тухай бүр шалгаж
-                  өгнө. Та ашигладаг системээ хэлээрэй.
+                  {language === "mn" ? "Excel, 1C, Odoo-той бэлэн ажиллана. Oracle, SQL Server зэрэг                   бусад мэдээллийн сантай холбох боломжийг тухай бүр шалгаж                   өгнө. Та ашигладаг системээ хэлээрэй." : "We support Excel, 1C and Odoo. Connectivity with Oracle, SQL Server and other databases is assessed case by case. Tell us which systems you use."}
                 </p>
               </details>
               <details name="faq">
                 <summary>
-                  <span>Хэзээнээс тайлангаа үзэж эхлэх вэ?</span>
+                  <span>{(language === "mn" ? "Хэзээнээс тайлангаа үзэж эхлэх вэ?" : "When can we start viewing our reports?")}</span>
                   <span aria-hidden="true" className="faq__icon">
                     <svg className="icon">
                       <use href="#i-chevron"></use>
@@ -2617,14 +2595,12 @@ export default function Home() {
                   </span>
                 </summary>
                 <p className="faq__answer">
-                  Сарын KPI тайлан: Excel файлаа оруулмагц тайлан бэлэн болно.
-                  Үйлчилгээний хувьд системийн төрлөөс хамаарч хугацааг эхний
-                  уулзалтаар тохирно.
+                  {language === "mn" ? "Сарын KPI тайлан: Excel файлаа оруулмагц тайлан бэлэн болно.                   Үйлчилгээний хувьд системийн төрлөөс хамаарч хугацааг эхний                   уулзалтаар тохирно." : "Monthly KPI Report: your report is ready after you upload the Excel file. For services, the timeline depends on your systems and is agreed during the first meeting."}
                 </p>
               </details>
               <details name="faq">
                 <summary>
-                  <span>Манай талаас юу бэлдэх хэрэгтэй вэ?</span>
+                  <span>{(language === "mn" ? "Манай талаас юу бэлдэх хэрэгтэй вэ?" : "What do we need to prepare?")}</span>
                   <span aria-hidden="true" className="faq__icon">
                     <svg className="icon">
                       <use href="#i-chevron"></use>
@@ -2632,14 +2608,12 @@ export default function Home() {
                   </span>
                 </summary>
                 <p className="faq__answer">
-                  KPI тайлангийн хувьд манай Excel загварыг бөглөхөд хангалттай.
-                  Системийн холболтод зөвхөн унших эрх нээж өгнө, бусдыг нь бид
-                  хийнэ.
+                  {language === "mn" ? "KPI тайлангийн хувьд манай Excel загварыг бөглөхөд хангалттай.                   Системийн холболтод зөвхөн унших эрх нээж өгнө, бусдыг нь бид                   хийнэ." : "For KPI reports, simply fill in our Excel template. For system connections, provide read-only access and we handle the rest."}
                 </p>
               </details>
               <details name="faq">
                 <summary>
-                  <span>Манай мэдээллийг хэрхэн хамгаалах вэ?</span>
+                  <span>{(language === "mn" ? "Манай мэдээллийг хэрхэн хамгаалах вэ?" : "How do you protect our data?")}</span>
                   <span aria-hidden="true" className="faq__icon">
                     <svg className="icon">
                       <use href="#i-chevron"></use>
@@ -2647,13 +2621,12 @@ export default function Home() {
                   </span>
                 </summary>
                 <p className="faq__answer">
-                  Танай системд зөвхөн унших эрхээр холбогдож, мэдээллийг
-                  өөрчлөхгүй. Дата дамжуулах болон хадгалах үедээ шифрлэгдэнэ.
+                  {language === "mn" ? "Танай системд зөвхөн унших эрхээр холбогдож, мэдээллийг                   өөрчлөхгүй. Дата дамжуулах болон хадгалах үедээ шифрлэгдэнэ." : "We connect with read-only access and do not modify your data. Data is encrypted during transfer and storage."}
                 </p>
               </details>
               <details name="faq">
                 <summary>
-                  <span>Тайлангаа өөрийн хэрэгцээнд тохируулж болох уу?</span>
+                  <span>{(language === "mn" ? "Тайлангаа өөрийн хэрэгцээнд тохируулж болох уу?" : "Can reports be customized to our needs?")}</span>
                   <span aria-hidden="true" className="faq__icon">
                     <svg className="icon">
                       <use href="#i-chevron"></use>
@@ -2661,14 +2634,12 @@ export default function Home() {
                   </span>
                 </summary>
                 <p className="faq__answer">
-                  Таван загвараас сонгоод үзүүлэлт, хүснэгт, графикаа
-                  тохируулна. Бүрэн өөр тайлан хэрэгтэй бол Захиалгат дашбоард
-                  үйлчилгээг сонгоорой.
+                  {language === "mn" ? "Таван загвараас сонгоод үзүүлэлт, хүснэгт, графикаа                   тохируулна. Бүрэн өөр тайлан хэрэгтэй бол Захиалгат дашбоард                   үйлчилгээг сонгоорой." : "Choose from five templates and customize your metrics, tables and charts. If you need a completely different report, choose the Custom Dashboard service."}
                 </p>
               </details>
               <details name="faq">
                 <summary>
-                  <span>Үйлчилгээгээ зогсоох бол яах вэ?</span>
+                  <span>{(language === "mn" ? "Үйлчилгээгээ зогсоох бол яах вэ?" : "What happens if we stop the service?")}</span>
                   <span aria-hidden="true" className="faq__icon">
                     <svg className="icon">
                       <use href="#i-chevron"></use>
@@ -2677,7 +2648,7 @@ export default function Home() {
                 </summary>
 
                 <p className="faq__answer">
-                  [Гэрээ цуцлах нөхцөл, датаг буцааж өгөх, устгах журам]
+                  {(language === "mn" ? "[Гэрээ цуцлах нөхцөл, датаг буцааж өгөх, устгах журам]" : "[Contract termination terms, data return and deletion procedure]")}
                 </p>
               </details>
             </div>
@@ -2688,11 +2659,10 @@ export default function Home() {
           <div className="container contact-grid">
             <div>
               <div className="section-head">
-                <span className="eyebrow">{t("Холбоо барих", "Contact")}</span>
-                <h2 className="h2">{t("Бидэнтэй холбогдох", "Contact us")}</h2>
+                <span className="eyebrow">{(language === "mn" ? "Холбоо барих" : "Contact")}</span>
+                <h2 className="h2">{(language === "mn" ? "Бидэнтэй холбогдох" : "Contact us")}</h2>
                 <p>
-                  Маягт бөглөөд илгээнэ үү, бид 1–3 ажлын өдрийн дотор хариу
-                  өгнө.
+                  {(language === "mn" ? "Маягт бөглөөд илгээнэ үү, бид 1–3 ажлын өдрийн дотор хариу өгнө." : "Submit the form and we will respond within 1–3 business days.")}
                 </p>
               </div>
               <ul className="contact-info">
@@ -2703,7 +2673,7 @@ export default function Home() {
                     </svg>
                   </span>
                   <span>
-                    <span className="contact-item__label">{t("Утас", "Phone")}</span>
+                    <span className="contact-item__label">{(language === "mn" ? "Утас" : "Phone")}</span>
                     <a className="contact-item__value" href="tel:+97677000000">
                       +976 7700 0000
                     </a>
@@ -2716,7 +2686,7 @@ export default function Home() {
                     </svg>
                   </span>
                   <span>
-                    <span className="contact-item__label">{t("Имэйл", "Email")}</span>
+                    <span className="contact-item__label">{(language === "mn" ? "Имэйл" : "Email")}</span>
                     <a
                       className="contact-item__value"
                       href="mailto:hello@dataview.mn"
@@ -2732,9 +2702,9 @@ export default function Home() {
                     </svg>
                   </span>
                   <span>
-                    <span className="contact-item__label">Хаяг</span>
+                    <span className="contact-item__label">{(language === "mn" ? "Хаяг" : "Address")}</span>
                     <span className="contact-item__value">
-                      Улаанбаатар, Хан-Уул дүүрэг
+                      {(language === "mn" ? "Улаанбаатар, Хан-Уул дүүрэг" : "Khan-Uul District, Ulaanbaatar")}
                     </span>
                   </span>
                 </li>
@@ -2745,7 +2715,7 @@ export default function Home() {
               <div className="field-grid">
                 <div className="field">
                   <label className="label" htmlFor="c-name">
-                    {t("Нэр", "Name")}
+                    {(language === "mn" ? "Нэр" : "Name")}
                   </label>
                   <input
                     aria-describedby="c-name-error"
@@ -2753,7 +2723,7 @@ export default function Home() {
                     className="input"
                     id="c-name"
                     name="name"
-                    placeholder="Бат-Эрдэнэ"
+                    placeholder={(language === "mn" ? "Бат-Эрдэнэ" : "Bat-Erdene")}
                     required=""
                     type="text"
                   />
@@ -2765,20 +2735,20 @@ export default function Home() {
                 </div>
                 <div className="field">
                   <label className="label" htmlFor="c-company">
-                    {t("Компани", "Company")}
+                    {(language === "mn" ? "Компани" : "Company")}
                   </label>
                   <input
                     autoComplete="organization"
                     className="input"
                     id="c-company"
                     name="company"
-                    placeholder="ХХК нэр"
+                    placeholder={(language === "mn" ? "ХХК нэр" : "Company name")}
                     type="text"
                   />
                 </div>
                 <div className="field">
                   <label className="label" htmlFor="c-phone">
-                    {t("Утас", "Phone")}
+                    {(language === "mn" ? "Утас" : "Phone")}
                   </label>
                   <input
                     aria-describedby="c-phone-error"
@@ -2798,7 +2768,7 @@ export default function Home() {
                 </div>
                 <div className="field">
                   <label className="label" htmlFor="c-email">
-                    {t("Имэйл", "Email")}
+                    {(language === "mn" ? "Имэйл" : "Email")}
                   </label>
                   <input
                     aria-describedby="c-email-error"
@@ -2819,61 +2789,61 @@ export default function Home() {
               </div>
               <fieldset className="choice-group">
                 <legend className="label">
-                  Ямар шийдэл сонирхож байна вэ?
+                  {(language === "mn" ? "Ямар шийдэл сонирхож байна вэ?" : "Which solution are you interested in?")}
                 </legend>
                 <div className="choices">
                   <button
                     aria-pressed="false"
                     className="choice"
-                    data-choice={t("Сарын KPI тайлан", "Monthly KPI Report")}
+                    data-choice={(language === "mn" ? "Сарын KPI тайлан" : "Monthly KPI Report")}
                     type="button"
                   >
-                    Сарын KPI тайлан
+                    {(language === "mn" ? "Сарын KPI тайлан" : "Monthly KPI Report")}
                   </button>
                   <button
                     aria-pressed="false"
                     className="choice"
-                    data-choice={t("Өгөгдлийн автоматжуулалт", "Data Automation")}
+                    data-choice={(language === "mn" ? "Өгөгдлийн автоматжуулалт" : "Data Automation")}
                     type="button"
                   >
-                    {t("Өгөгдлийн автоматжуулалт", "Data Automation")}
+                    {(language === "mn" ? "Өгөгдлийн автоматжуулалт" : "Data Automation")}
                   </button>
                   <button
                     aria-pressed="false"
                     className="choice"
-                    data-choice={t("Захиалгат дашбоард", "Custom Dashboard")}
+                    data-choice={(language === "mn" ? "Захиалгат дашбоард" : "Custom Dashboard")}
                     type="button"
                   >
-                    Захиалгат дашбоард
+                    {(language === "mn" ? "Захиалгат дашбоард" : "Custom Dashboard")}
                   </button>
                   <button
                     aria-pressed="false"
                     className="choice"
-                    data-choice={t("Өгөгдлийн агуулахын зөвлөх", "Data Warehouse Consulting")}
+                    data-choice={(language === "mn" ? "Өгөгдлийн агуулахын зөвлөх" : "Data Warehouse Consulting")}
                     type="button"
                   >
-                    {t("Өгөгдлийн агуулахын зөвлөх", "Data Warehouse Consulting")}
+                    {(language === "mn" ? "Өгөгдлийн агуулахын зөвлөх" : "Data Warehouse Consulting")}
                   </button>
                   <button
                     aria-pressed="false"
                     className="choice"
-                    data-choice={t("Өгөгдлийн стратеги зөвлөх", "Data Strategy Consulting")}
+                    data-choice={(language === "mn" ? "Өгөгдлийн стратеги зөвлөх" : "Data Strategy Consulting")}
                     type="button"
                   >
-                    {t("Өгөгдлийн стратеги зөвлөх", "Data Strategy Consulting")}
+                    {(language === "mn" ? "Өгөгдлийн стратеги зөвлөх" : "Data Strategy Consulting")}
                   </button>
                 </div>
                 <input name="solutions" type="hidden" value="" />
               </fieldset>
               <div className="field">
                 <label className="label" htmlFor="c-note">
-                  {t("Дэлгэрэнгүй", "Learn more")} <span className="optional">(заавал биш)</span>
+                  {(language === "mn" ? "Дэлгэрэнгүй" : "Learn more")} <span className="optional">(заавал биш)</span>
                 </label>
                 <textarea
                   className="input"
                   id="c-note"
                   name="note"
-                  placeholder="Ямар систем ашигладаг, юу хэрэгтэй байгаагаа товч бичээрэй"
+                  placeholder={(language === "mn" ? "Ямар систем ашигладаг, юу хэрэгтэй байгаагаа товч бичээрэй" : "Briefly describe the systems you use and what you need")}
                   rows="4"
                 ></textarea>
               </div>
@@ -2882,7 +2852,7 @@ export default function Home() {
                 data-submit=""
                 type="submit"
               >
-                <span data-submit-label="">{t("Илгээх", "Send")}</span>
+                <span data-submit-label="">{(language === "mn" ? "Илгээх" : "Send")}</span>
                 <svg className="icon">
                   <use href="#i-arrow"></use>
                 </svg>
