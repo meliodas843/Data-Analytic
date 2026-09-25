@@ -650,7 +650,7 @@ export default function Home() {
               <div className="hero__lead">
                 <p>
                   Өнөөдөр Excel тайлангаар эхэлж, маргааш өгөгдлийн агуулах руу
-                  өсөөрэй. Бэлэн бүтээгдэхүүн, туршлагатай баг.
+                  өсөөрэй.
                 </p>
                 <div className="hero__actions">
                   <a className="btn btn--primary btn--lg" href="#contact">

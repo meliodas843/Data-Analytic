@@ -1,11 +1,4 @@
-/* ==========================================================================
-   DataView Mongolia — Нүүр хуудас
-   Breakpoints: 1120 (цэс) · 1024 (таблет) · 960 (урсгал босоо) · 767 · 600 · 480
-   ========================================================================== */
-
-/* ---------- 1. Tokens ---------- */
 :root {
-  /* Брэнд */
   --green: #15803d;
   --green-600: #16a34a;
   --green-700: #166534;
@@ -14,11 +7,9 @@
   --green-100: #dcfce7;
   --green-200: #bbf7d0;
   --green-300: #86efac;
-  --navy: #1e3a6e;
-  --navy-900: #152b52;
+  --navy: #1E3A6E;
+  --navy-900: #1E3A6E;
   --navy-50: #e8eef7;
-
-  /* Текст, хүрээ, дэвсгэр */
   --ink: #1e293b;
   --text: #334155;
   --muted: #475569;
@@ -338,7 +329,6 @@ main section[id] {
   color: var(--navy);
 }
 
-/* ---------- 4. Section scaffolding ---------- */
 .section {
   padding: var(--section-y) 0;
 }
@@ -599,6 +589,7 @@ main section[id] {
   letter-spacing: -0.035em;
   color: var(--navy);
   text-wrap: balance;
+  margin-top: -50px;
 }
 
 .hero__lead {
@@ -608,7 +599,7 @@ main section[id] {
   gap: 32px;
 }
 .hero__lead > p {
-  max-width: 620px;
+  max-width: 800px;
   font-size: clamp(17px, 0.6vw + 12px, 20px);
   line-height: 1.6;
   color: var(--muted);
@@ -3095,7 +3086,6 @@ textarea.input {
   }
 }
 
-/* ---------- 17. Хөдөлгөөн багасгах тохиргоо ---------- */
 @media (prefers-reduced-motion: reduce) {
   html {
     scroll-behavior: auto;
